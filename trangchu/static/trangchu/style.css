@@ -1,0 +1,1100 @@
+
+
+/* 🌸 Cài đặt tổng thể */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+
+/* 🌸 Thanh topbar mới (Giờ làm việc + Chuông + Đăng nhập/Đăng ký) */
+.topbar {
+    background-color: #f8aebc; /* Hồng đậm toàn thanh */
+    color: #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px;      /* tăng padding để cao hơn một chút */
+    font-size: 18px;         /* 💥 chữ to hơn */
+    font-weight: 600;        /* 💥 chữ đậm hơn */
+}
+
+/* 🌸 Bên trái: Giờ làm việc */
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topbar-left i {
+    color: #333;
+    font-size: 20px;          /* icon to hơn chút cho cân */
+}
+
+.topbar-left strong {
+    font-weight: 700;
+    color: #000;
+    font-size: 18px;          /* 💥 chữ “Giờ làm việc” to và nổi bật */
+}
+
+/* 🌸 Bên phải: Chuông + Đăng nhập/Đăng ký */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.topbar-right a {
+    color: #000;
+    font-weight: 600;
+    font-size: 17px;          /* 💥 chữ Đăng nhập/Đăng ký to đều */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.topbar-right a:hover {
+    color: #ff5c8d;
+}
+
+/* 🌸 Icon chuông thông báo */
+.notify-icon {
+    font-size: 22px;          /* 💥 chuông to cho cân chữ */
+    cursor: pointer;
+    color: #a01940;
+}
+
+
+/* 🌸 Header chính (logo, menu, tìm kiếm) */
+header.navbar {
+    background-color: #ffeef2; /* nền hồng phủ toàn vùng header */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* 🌸 Logo Punky Spa */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+    margin-right: 8px;
+}
+
+.logo h1 {
+    font-size: 24px;
+    color: #5a5a5a;
+    margin: 0;
+}
+
+.logo .pink {
+    color: #f06277;
+    font-weight: bold;
+}
+
+/* 🌸 Menu điều hướng */
+nav a {
+    margin: 0 20px;              /* tăng khoảng cách giữa các mục */
+    text-decoration: none;
+    font-weight: 700;            /* chữ đậm hơn */
+    color: #333;
+    font-size: 18px;             /* 💥 chữ to hơn */
+    transition: color 0.2s, transform 0.2s;
+}
+
+nav a.active,
+nav a:hover {
+    color: #f06277;
+    transform: scale(1.05);      /* 💫 hiệu ứng phóng nhẹ khi hover */
+}
+
+
+/* 🌸 Ô tìm kiếm */
+.search {
+    display: flex;
+    align-items: center;
+}
+
+.search input {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 6px 12px;
+    outline: none;
+}
+
+.search button {
+    background-color: #f06277;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 50%;
+    margin-left: 6px;
+    cursor: pointer;
+}
+
+/* 🌸 Banner toàn màn hình */
+.banner-full {
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.banner-full img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+/* 🌸 Hiệu ứng nổi nhẹ cho banner */
+.banner-full {
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-full img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+/* Khi rê chuột vào banner */
+.banner-full:hover img {
+  transform: scale(1.03); /* phóng nhẹ 3% */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.05); /* sáng hơn nhẹ */
+}
+
+
+
+
+/* 🌸 Phần Giới thiệu dính sát banner */
+.intro {
+  background-color: #fff5f7;
+  padding: 15px 0 45px; /* 🌸 giảm thêm khoảng trống phía trên */
+  margin-top: -70px;    /* 🌸 kéo lên sát banner hơn (tăng từ -40px lên -70px) */
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  border-radius: 25px 25px 0 0;
+  box-shadow: 0 -3px 8px rgba(255, 92, 141, 0.08);
+}
+
+
+
+/* 🌸 Tiêu đề Giới thiệu có nền hồng */
+.intro h2 {
+    display: inline-block;
+    background-color: #ffd6de;
+    padding: 10px 30px;
+    border-radius: 10px;
+    color: #000;
+    font-size: 26px;
+    margin-bottom: 35px;
+}
+
+/* 🌸 Bộ sưu tập ảnh thú cưng */
+.gallery {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px; /* khoảng cách giữa các ảnh */
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+/* 🌸 Ảnh thú cưng */
+.gallery img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover; /* giữ tỷ lệ không méo */
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* 🌸 Hiệu ứng khi rê chuột vào ảnh */
+.gallery img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 🌸 Tùy chọn responsive cho màn nhỏ */
+@media (max-width: 768px) {
+    header.navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .gallery img {
+        width: 90%;
+        height: auto;
+    }
+}
+
+
+
+/* 🌸 FOOTER Chuẩn 3 cột nền hồng */
+.footer {
+    background-color: #f8aebc; /* nền hồng đậm bên ngoài */
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-container {
+    background-color: #ffd6de; /* nền hồng sáng bên trong */
+    width: 90%;
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 25px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 250px;
+    margin: 10px 20px;
+}
+
+/* 🌸 FOOTER CHỮ TO RÕ HƠN */
+.footer-column h4 {
+    font-size: 18px;          /* 💥 Tăng tiêu đề cột */
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #000;
+}
+
+.footer-column p {
+    margin: 6px 0;
+    color: #222;
+    line-height: 1.7;
+    font-size: 16px;          /* 💥 Tăng cỡ chữ nội dung */
+}
+
+
+/* 🌸 Khi thu nhỏ màn hình, các cột xếp dọc */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: left;
+    }
+}
+/* 🌸 Popup chỉ hiển thị form, không có nền trắng phủ */
+.modal {
+    display: none; /* Ẩn mặc định */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 80px;
+
+    /* 🔹 Không có màu nền */
+    background: transparent !important;
+    backdrop-filter: none !important;
+    pointer-events: none; /* Cho phép click vào nền phía sau */
+}
+
+/* 🌸 Hộp nội dung form (hiển thị) */
+.modal-content {
+    background: #fddce2;
+    border-radius: 20px;
+    padding: 30px;
+    width: 400px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    position: relative;
+    animation: popup 0.3s ease-out;
+    z-index: 1000;
+    pointer-events: all; /* Cho phép click trong form */
+}
+
+/* 🌸 Hiệu ứng bật popup */
+@keyframes popup {
+    from { transform: translateY(-15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 🌸 Dấu X đóng form */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 26px;
+    cursor: pointer;
+    color: #000;
+    transition: 0.3s;
+}
+.close:hover {
+    color: #a01940;
+}
+/* 🌸 Form đăng nhập overlay */
+.auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* 🌸 Khung form */
+.auth-box {
+    background: #fddce2;
+    border-radius: 20px;
+    padding: 40px 45px;
+    width: 420px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    text-align: center;
+    animation: popup 0.3s ease-out;
+}
+
+@keyframes popup {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.auth-box h2 {
+    color: #a01940;
+    margin-bottom: 20px;
+}
+
+/* 🌸 Input */
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+}
+
+.input-group input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 15px;
+}
+
+.input-group-text {
+    margin-right: 8px;
+    color: #a01940;
+}
+
+.toggle {
+    color: #a01940;
+    cursor: pointer;
+}
+
+.btn-main {
+    background: #a01940;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-main:hover {
+    background: #801332;
+}
+
+.divider {
+    margin: 15px 0;
+    font-size: 14px;
+    color: #444;
+}
+
+.social-login {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+.social-btn.fb { background: #3b5998; }
+.social-btn.gg { background: #db4a39; }
+
+/* 🌸 Trang Đăng nhập */
+/* 🌸 Dạng mặc định: căn giữa (dùng cho đăng ký và quên mật khẩu) */
+.auth-options {
+    display: flex;
+    justify-content: center; /* Căn giữa mặc định */
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.auth-options p {
+    margin: 0;
+}
+
+.auth-options a {
+    color: #a01940;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.auth-options a:hover {
+    text-decoration: underline;
+}
+
+/* 🌸 Dạng riêng cho trang Đăng nhập */
+.login-options {
+    justify-content: space-between; /* Căn 2 bên */
+    padding: 0 15px;                /* Thêm khoảng cách 2 bên */
+    margin-bottom: 10px;            /* Cách nhẹ với nút Đăng nhập */
+}
+
+.login-options p {
+    margin: 0;
+    flex: 1;                        /* Giúp căn đều */
+}
+
+.login-options p:first-child {
+    text-align: left;
+}
+
+.login-options p:last-child {
+    text-align: right;
+}
+
+
+
+/* 🌸 Thông báo chú thích trong form quên mật khẩu */
+.note {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 15px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+
+/* 🌸 TOPBAR USER MENU GỌN GÀNG */
+.topbar .right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    justify-content: flex-end;
+}
+
+/* 🌸 Nút user (tên người dùng) */
+.user-menu {
+    position: relative;
+}
+
+.user-btn {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    transition: all 0.3s ease;
+}
+
+.user-btn:hover {
+    background-color: #ffe6eb;
+    border-color: #f06277;
+    color: #d6336c;
+}
+
+/* 🌸 Menu xổ xuống */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    min-width: 200px;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 14px;
+    border-bottom: 1px solid #f3f3f3;
+    transition: 0.2s;
+}
+
+.dropdown-menu a i {
+    color: #f06277;
+    margin-right: 8px;
+}
+
+.dropdown-menu a:hover {
+    background-color: #ffeef2;
+    color: #d6336c;
+}
+
+/* 🌸 Link trong topbar */
+.topbar a {
+    text-decoration: none;
+    color: #d6336c;
+    font-weight: 500;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.topbar a:hover {
+    color: #a01940;
+    text-decoration: underline;
+}
+
+/* 🌸 Làm icon và chữ có khoảng cách đều nhau */
+.dropdown-menu a i,
+.topbar i {
+    vertical-align: middle;
+}
+
+/* 🌸 Fix màu icon toàn khu tài khoản */
+.topbar .fa,
+.dropdown-menu .fa {
+    color: #f06277;
+}
+/* 🌸 Chỉ đổi màu chữ trong menu tài khoản thành đen */
+.dropdown-menu a {
+    color: #000 !important;  /* chữ đen */
+}
+
+.dropdown-menu a:hover {
+    background-color: #ffeef2;
+    color: #000 !important;
+}
+
+/* 🌸 Giữ icon hồng như cũ */
+.dropdown-menu a i {
+    color: #f06277;
+}
+
+
+
+/* 🌸 Nút đăng nhập/đăng ký trong popup thông báo */
+.notify-content .btn {
+    background-color: #fff;       /* nền trắng */
+    color: #000;                  /* chữ đen */
+    border: 1px solid #ffb6c1;    /* viền hồng nhạt */
+    border-radius: 8px;
+    padding: 7px 14px;
+    margin: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.notify-content .btn:hover {
+    background-color: #ffe6eb;    /* hồng pastel nhẹ khi hover */
+    border-color: #ff8da1;
+    transform: translateY(-1px);
+}
+
+
+/* 🌸 Hiệu ứng mượt khi hiện */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🔔 Hộp thông báo cơ bản */
+    .notify-box {
+        position: relative;
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    .notify-icon {
+        font-size: 18px;
+        cursor: pointer;
+        color: #a01940;
+    }
+
+    .notify-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 25px;
+        width: 250px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+        z-index: 1000;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .notify-box:hover .notify-content {
+        display: block;
+    }
+    /* 🎨 Tùy chỉnh thanh cuộn */
+    .notify-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    .notify-list::-webkit-scrollbar-thumb {
+      background-color: #ffb6c1; /* hồng nhẹ */
+      border-radius: 5px;
+    }
+    .notify-list::-webkit-scrollbar-thumb:hover {
+      background-color: #ff91a4;
+    }
+    .notify-item {
+        border-bottom: 1px solid #eee;
+        padding: 6px;
+    }
+
+    .notify-item:hover {
+        background: #fff5f8;
+    }
+
+    .view-all {
+        display: block;
+        text-align: center;
+        color: #ff5c8d;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 6px;
+    }
+
+    .view-all:hover {
+        text-decoration: underline;
+    }
+
+
+
+/* 🌸 Nút gọi và chat nổi */
+.floating-icons {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    z-index: 999;
+}
+
+.phone-icon, .chat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ff5c8d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 22px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: transform 0.3s;
+}
+
+.phone-icon:hover, .chat-icon:hover {
+    transform: scale(1.1);
+}
+
+/* 🌸 Icon chat là hình logo nhỏ */
+.chat-icon img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+}
+
+/* 🌸 Hộp chat */
+.chatbox {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 25px;
+    width: 330px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    overflow: hidden;
+    z-index: 1000;
+    animation: popIn 0.3s ease-out;
+}
+
+/* 🌸 Header chat */
+.chat-header {
+    background-color: #ffd6de;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+}
+
+.chat-header img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-header h4 {
+    flex: 1;
+    margin: 0;
+    color: #a01940;
+    font-size: 15px;
+}
+
+.chat-header span {
+    cursor: pointer;
+    color: #333;
+    font-size: 18px;
+}
+
+/* 🌸 Nội dung chat */
+.chat-body {
+    padding: 10px 15px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px 14px;
+    border-radius: 15px;
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+.message.bot {
+    background: #ffeef2;
+    color: #333;
+    align-self: flex-start;
+}
+
+.message.user {
+    background: #f8aebc;
+    color: #fff;
+    align-self: flex-end;
+    text-align: right;
+}
+
+/* 🌸 Nút lựa chọn */
+.options {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.options button {
+    border: none;
+    background: #fff;
+    border-radius: 20px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 13px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.options button:hover {
+    background: #ffd6de;
+}
+
+@keyframes popIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 🌸 Ô nhập chat */
+.chat-input {
+    display: flex;
+    border-top: 1px solid #eee;
+    background: #fff;
+    padding: 8px 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 8px 10px;
+    border-radius: 20px;
+    background: #f7f7f7;
+    font-size: 14px;
+}
+
+.chat-input button {
+    background-color: #f06277;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.chat-input button:hover {
+    background-color: #d94c66;
+}
+
+/* 🌸 Ô nhập tin nhắn */
+.chat-input {
+  display: flex;
+  border-top: 1px solid #eee;
+  background: #fff;
+  padding: 10px;
+  align-items: center;
+}
+
+.chat-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: #f7f7f7;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.chat-input button {
+  background-color: #f06277;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chat-input button:hover {
+  background-color: #d94c66;
+}
+
+/* 🌸 Bổ sung cho chat-body để khung tin nhắn tự dãn chiều cao đẹp hơn */
+.chat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 60px; /* tránh bị che bởi ô nhập */
+}
+
+/* 🌸 Tin nhắn người dùng (căn phải) */
+.message.user {
+  background-color: #f06277;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  text-align: right;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+/* 🌸 Tin nhắn bot (căn trái) */
+.message.bot {
+  background-color: #ffeef2;
+  color: #333;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+/* 🌸 Làm phần input gửi chat cân đối hơn */
+.chat-input-area {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #eee;
+  background: #fff;
+  padding: 8px 10px;
+}
+
+.chat-input-area input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: #f7f7f7;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.chat-input-area button {
+  background-color: #f06277;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chat-input-area button:hover {
+  background-color: #d6336c;
+}
+
+    .notify-image {
+      width: 90px;
+      height: auto;
+      display: block;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      background-color: #ffe6ec; /* nền hồng pastel nhẹ */
+      padding: 10px;
+      box-shadow: 0 2px 8px rgba(255, 92, 141, 0.2);
+    }
+
+<<<<<<< HEAD
+/* 🌸 Submenu trong menu người dùng */
+.submenu {
+  position: relative;
+}
+
+.submenu-items {
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  margin-top: 5px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.submenu-items a {
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  border-bottom: 1px solid #f2f2f2;
+  background-color: #fff;
+}
+
+.submenu-items a:hover {
+  background: #ffe6ec;
+  color: #a01940;
+}
+
+.submenu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.submenu-toggle i.fa-caret-down {
+  transition: transform 0.3s ease;
+}
+
+.submenu-toggle.active i.fa-caret-down {
+  transform: rotate(180deg);
+}
+
+/* Hiện submenu khi thêm class 'show' */
+.submenu-items.show {
+  display: flex !important;
+}
+
+/* 🌸 Hiệu ứng chân mèo rơi */
+.paw-fall {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* để không chặn click */
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.paw-item {
+  position: absolute;
+  top: -50px;
+  animation: paw-fall linear forwards;
+}
+
+@keyframes paw-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
+/* static/TB/style.css */
+.thongbao-container {
+  width: 70%;
+  margin: 40px auto;
+  background: #fffafc;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(255,92,141,0.3);
+}
+.thongbao-item {
+  border-left: 4px solid #ff5c8d;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+.chua-doc {
+  background-color: #fff0f3;
+  border-left: 4px solid #ff7aa5;
+}
+
+.notify-item:hover {
+  background-color: #ffe6eb;
+  transform: translateX(2px);
+}
+=======
+>>>>>>> origin/main
+

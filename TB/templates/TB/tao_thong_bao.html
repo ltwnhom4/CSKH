@@ -1,0 +1,11 @@
+{% extends "trangchu/index.html" %}
+{% block content %}
+<h2 style="text-align:center; color:#ff5c8d; margin-top:20px;">📝 Tạo thông báo mới</h2>
+<div style="max-width:600px;margin:20px auto;background:white;padding:20px;border-radius:15px;box-shadow:0 0 10px rgba(0,0,0,0.1);">
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" style="background:#ff5c8d;color:white;padding:8px 15px;border:none;border-radius:6px;">Lưu</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% block title %}Điểm Tích Lũy Của Bạn - Punky Spa{% endblock %}
+{% load static %}
+
+{% block content %}
+<style>
+/* 🌸 Nền tổng thể */
+body {
+  background-color: #fff5f8;
+}
+
+/* 🌸 Container chính */
+.container-tichdiem {
+  max-width: 800px;
+  margin: 60px auto;
+  background: linear-gradient(145deg, #ffe6ed, #fff);
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(255, 118, 160, 0.25);
+  padding: 50px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Trang trí paw */
+.container-tichdiem::before {
+  content: "🐾";
+  font-size: 60px;
+  color: rgba(255, 183, 197, 0.2);
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  transform: rotate(-20deg);
+}
+.container-tichdiem::after {
+  content: "🐾";
+  font-size: 60px;
+  color: rgba(255, 183, 197, 0.2);
+  position: absolute;
+  bottom: 10px;
+  right: 40px;
+  transform: rotate(15deg);
+}
+
+/* 🌸 Tiêu đề */
+h2 {
+  color: #a01940;
+  font-weight: 800;
+  font-size: 28px;
+  margin-bottom: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+h2 i {
+  color: #ff4f7b;
+  font-size: 28px;
+}
+
+/* 🌸 Thông tin chính */
+.info-box {
+  background: #ffffff;
+  border: 2px solid #ffd6de;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 5px 15px rgba(255, 92, 141, 0.15);
+  animation: fadeIn 1s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.info-row {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #444;
+}
+.info-row span {
+  font-weight: 700;
+  color: #a01940;
+}
+
+/* 🌸 Badge cấp bậc */
+.rank-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff4f7b, #ff80a1);
+  color: #fff;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-left: 10px;
+  box-shadow: 0 3px 6px rgba(255, 118, 160, 0.25);
+}
+
+/* 🌸 Nút quay lại */
+.btn-back {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 25px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #ff729f, #d6336c);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(255, 92, 141, 0.3);
+}
+.btn-back:hover {
+  background: linear-gradient(135deg, #ff92b0, #a01940);
+  transform: scale(1.05);
+}
+    /* 🌸 Lịch sử tích điểm */
+.history-box {
+  margin-top: 40px;
+  background: #fff;
+  border: 2px solid #ffd6de;
+  border-radius: 20px;
+  padding: 25px 30px;
+  box-shadow: 0 5px 15px rgba(255, 118, 160, 0.15);
+  animation: fadeIn 1s ease;
+}
+.history-box h3 {
+  color: #a01940;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.history-table th {
+  background: #ffd6de;
+  color: #a01940;
+  padding: 10px;
+  border-bottom: 2px solid #ffaec4;
+  text-align: center;
+}
+.history-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #f7c9d4;
+}
+.plus { color: #28a745; font-weight: 600; }
+.minus { color: #d6336c; font-weight: 600; }
+.no-history {
+  text-align: center;
+  color: #a01940;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.lichsu-box {
+  max-height: 230px;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 2px solid #ffd6de;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(255, 92, 141, 0.15);
+  margin-top: 10px;
+}
+
+/* 🌸 Thanh cuộn pastel */
+.lichsu-box::-webkit-scrollbar {
+  width: 8px;
+}
+.lichsu-box::-webkit-scrollbar-track {
+  background: #ffeef4;
+  border-radius: 10px;
+}
+.lichsu-box::-webkit-scrollbar-thumb {
+  background-color: #ff80a1;
+  border-radius: 10px;
+}
+
+/* 🌸 Bảng */
+.lichsu-box table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.lichsu-box th {
+  background-color: #ffe6ed;
+  color: #a01940;
+  font-weight: 600;
+  padding: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.lichsu-box td {
+  padding: 10px;
+  border-bottom: 1px solid #ffd6de;
+}
+.lichsu-box td.plus { color: green; font-weight: 600; }
+.lichsu-box td.minus { color: #d6336c; font-weight: 600; }
+
+.no-history {
+  margin-top: 20px;
+  color: #e94e77;
+  font-weight: 600;
+}
+</style>
+
+<div class="container-tichdiem">
+  <h2><i class="fa fa-bullseye"></i> Điểm Tích Lũy Của Bạn</h2>
+
+  {% if tich_diem %}
+  <div class="info-box">
+    <div class="info-row">👤 <span>Khách hàng:</span> {{ khach.ho_ten }}</div>
+    <div class="info-row">📞 <span>Số điện thoại:</span> {{ khach.so_dien_thoai }}</div>
+    <div class="info-row">⭐ <span>Tổng điểm:</span> {{ tich_diem.tong_diem }}</div>
+    <div class="info-row">🎖️ <span>Cấp bậc:</span> {{ tich_diem.cap_bac }}
+      {% if tich_diem.cap_bac == "Kim cương 💎" %}
+         <span class="badge" style="background:linear-gradient(135deg,#0099ff,#66ccff);">VIP 💎</span>
+      {% elif tich_diem.cap_bac == "Vàng 🏆" %}
+         <span class="badge" style="background:linear-gradient(135deg,#ffd700,#ffb300);">Gold 🏆</span>
+      {% elif tich_diem.cap_bac == "Bạc" %}
+         <span class="rank-badge" style="background:linear-gradient(135deg,#c0c0c0,#e0e0e0);">Silver</span>
+      {% else %}
+         <span class="badge" style="background:linear-gradient(135deg,#ff80a1,#ff4f7b);">Newbie 💗</span>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if lich_su %}
+  <h3 style="color:#a01940;margin-top:25px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:20px;">
+    <i class="fa fa-history"></i> Lịch sử tích điểm
+  </h3>
+
+  <!-- 🌸 Bọc phần bảng bằng khung có thanh cuộn -->
+  <div class="lichsu-box">
+    <table>
+      <thead>
+        <tr>
+          <th>Ngày cập nhật</th>
+          <th>Điểm</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ls in lich_su %}
+          <tr>
+            <td>{{ ls.ngay_cap_nhat|date:"d/m/Y H:i" }}</td>
+            {% if ls.so_diem >= 0 %}
+              <td class="plus">+{{ ls.so_diem }}</td>
+            {% else %}
+              <td class="minus">{{ ls.so_diem }}</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+  <p class="no-history">Chưa có lịch sử giao dịch điểm nào.</p>
+  {% endif %}
+
+  <a href="{% url 'home' %}" class="btn-back">← Quay lại trang chủ</a>
+
+  {% else %}
+    <p style="color:#d6336c;font-weight:600;">Không tìm thấy thông tin tích điểm của bạn.</p>
+  {% endif %}
+</div>
+{% endblock %}

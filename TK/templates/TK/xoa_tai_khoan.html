@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Khóa tài khoản - Punky Spa{% endblock %}
+
+{% block content %}
+<div class="container-khoa">
+  <div class="khoa-box">
+    <h2><i class="fa fa-lock"></i> Khóa tài khoản</h2>
+
+    <form method="POST">
+      {% csrf_token %}
+      <label for="ly_do">Lý do khóa tài khoản:</label>
+      <textarea name="ly_do" id="ly_do" rows="4" placeholder="Nhập lý do..." required></textarea>
+
+      <div class="btn-area">
+        <button type="submit" class="btn-khoa">
+           Khóa tài khoản
+        </button>
+        <a href="{% url 'home' %}" class="btn-cancel">Hủy</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'TK/khoaTK.css' %}">
+{% endblock %}

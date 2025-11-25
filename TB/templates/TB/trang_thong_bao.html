@@ -1,0 +1,295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách thông báo</title>
+  <link rel="stylesheet" href="{% static 'lichhen/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+  background: #fff7fa;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.tb-container {
+  display: flex;
+  max-width: 1100px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+  overflow: hidden;
+}
+
+/* Sidebar */
+.tb-sidebar {
+  width: 25%;
+  background-color: #fbd2d9 !important; /* 🎨 Hồng phẳng, ép ưu tiên cao nhất */
+  padding: 25px;
+  text-align: center;
+  color: #333;
+  box-shadow: 2px 0 6px rgba(255, 182, 193, 0.3);
+  transition: background 0.3s ease;
+}
+
+.tb-sidebar img {
+  width: 80px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.tb-sidebar h3 {
+  color: #ff4f7b;
+  margin: 0;
+}
+.brand-main {
+  color: #ff4f7b;   /* Hồng nổi bật, đồng bộ với nút và tiêu đề */
+  font-weight: 700;
+}
+
+.brand-sub {
+  color: #333;      /* Giữ chữ Spa màu đen nhẹ để cân bằng */
+  font-weight: 600;
+}
+
+.tb-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.tb-sidebar li {
+  margin: 10px 0;
+}
+
+.tb-sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.tb-sidebar a:hover,
+.tb-sidebar a.active {
+  background: #ff7aa5;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(255, 105, 140, 0.3);
+}
+
+/* Nhóm con của Thông báo */
+.tb-sidebar ul li:nth-child(3),
+.tb-sidebar ul li:nth-child(4),
+.tb-sidebar ul li:nth-child(5) {
+  margin-left: 20px;
+  font-weight: 500;
+}
+
+/* Main content */
+.tb-main {
+  flex: 1;
+  padding: 25px 40px;
+  background: #fff7fa;
+}
+
+.tb-main h2 {
+  color: #ff4f7b;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Notification list */
+.tb-list {
+  display: none;
+}
+.tb-list.active {
+  display: block;
+}
+
+.tb-item {
+  background: #fff;
+  border-left: 5px solid #ff9dbb;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(255, 182, 193, 0.25);
+  transition: all 0.2s ease;
+}
+
+.tb-item:hover {
+  background: #fff0f4;
+  transform: scale(1.01);
+}
+
+.tb-item h4 {
+  margin: 0;
+  color: #ff4f7b;
+  font-weight: 600;
+}
+
+.tb-item small {
+  color: #888;
+  font-size: 13px;
+}
+
+.tb-detail {
+  text-decoration: none;
+  background: #ff5e88;
+  color: white;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tb-detail:hover {
+  background: #e75480;
+  transform: scale(1.03);
+}
+
+.no-data {
+  text-align: center;
+  color: #aaa;
+  font-style: italic;
+  margin-top: 15px;
+}
+
+  </style>
+</head>
+
+<body>
+<div class="tb-container">
+  <!-- Sidebar -->
+  <div class="tb-sidebar">
+    <img src="{% static 'trangchu/logo.png' %}" alt="Logo">
+    <h3>
+      <span class="brand-main">Punky</span>
+      <span class="brand-sub">Spa</span>
+    </h3>
+    <div class="user-info">
+      <i class="fa fa-user"></i>{{ request.user.username }}
+    </div>
+
+    <ul>
+      <li><a href="{% url 'home' %}"><i class="fa fa-home"></i> Trang chủ</a></li>
+      <li><a href="{% url 'TB:trang_thong_bao' %}"  class="menu-title" disabled><i class="fa fa-bell"></i> Thông báo</a></li>
+      <li><a href="#" class="menu-item active" data-target="lichhen"><i class="fa fa-calendar"></i> Lịch hẹn</a></li>
+      <li><a href="#" class="menu-item" data-target="khuyenmai"><i class="fa fa-gift"></i> Khuyến mãi</a></li>
+      <li><a href="#" class="menu-item" data-target="hethong"><i class="fa fa-cog"></i> Hệ thống</a></li>
+    </ul>
+  </div>
+
+  <!-- Main -->
+  <div class="tb-main">
+    <h2>DANH SÁCH THÔNG BÁO</h2>
+
+
+
+    <!-- Lịch hẹn -->
+    <div class="tb-list active" id="lichhen">
+      {% for tb in thongbao_lichhen %}
+        <div class="tb-item">
+          <div>
+            <h4>{{ tb.tieu_de }}</h4>
+            <p>{{ tb.noi_dung }}</p>
+            <small>{{ tb.ngay_tao|date:"d/m/Y H:i" }}</small>
+          </div>
+          <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
+        </div>
+      {% empty %}
+        <p class="no-data">Không có thông báo lịch hẹn nào.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Khuyến mãi -->
+    {% if messages %}
+      <div class="messages" style="max-width:900px; margin:0 auto 25px;">
+        {% for message in messages %}
+          <div style="
+            background-color:#ffe4ec;
+            color:#d63384;
+            border-left:6px solid #ff8fb1;
+            padding:12px 20px;
+            border-radius:10px;
+            margin-bottom:10px;
+            text-align:center;
+            font-weight:600;
+            box-shadow:0 2px 8px rgba(255,182,193,0.25);">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div class="tb-list" id="khuyenmai">
+      {% if user.is_staff %}
+          <div class="text-end mb-3" style="text-align:right; margin-bottom:20px;">
+            <a href="{% url 'TB:tao_khuyen_mai' %}"
+               class="btn"
+               style="background-color:#ff4f7b; color:white; font-weight:600; padding:10px 20px; border-radius:10px; text-decoration:none;">
+               <i class="fa fa-plus"></i> Tạo khuyến mãi mới
+            </a>
+          </div>
+      {% endif %}
+      {% for tb in thongbao_khuyenmai %}
+        <div class="tb-item">
+          <div>
+            <h4>{{ tb.tieu_de }}</h4>
+            <p>{{ tb.noi_dung }}</p>
+            <small>{{ tb.ngay_tao|date:"d/m/Y H:i" }}</small>
+          </div>
+          <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
+        </div>
+      {% empty %}
+        <p class="no-data">Không có thông báo khuyến mãi nào.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Hệ thống -->
+    <div class="tb-list" id="hethong">
+      {% for tb in thongbao_hethong %}
+        <div class="tb-item">
+          <div>
+            <h4>{{ tb.tieu_de }}</h4>
+            <p>{{ tb.noi_dung }}</p>
+            <small>{{ tb.ngay_tao|date:"d/m/Y H:i" }}</small>
+          </div>
+          <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
+        </div>
+      {% empty %}
+        <p class="no-data">Không có thông báo hệ thống nào.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Khi click menu => hiển thị danh sách tương ứng
+  const menuItems = document.querySelectorAll('.menu-item');
+  const lists = document.querySelectorAll('.tb-list');
+
+  menuItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Bỏ active cũ
+      menuItems.forEach(i => i.classList.remove('active'));
+      lists.forEach(list => list.classList.remove('active'));
+      // Thêm active mới
+      item.classList.add('active');
+      document.getElementById(item.dataset.target).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

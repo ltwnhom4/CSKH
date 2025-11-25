@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Punky Spa{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static 'KhieunaiDanhgia/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+<div class="container">
+  <!-- 🌸 SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="{% static 'trangchu/logo.png' %}" alt="Punky Spa">
+    </div>
+
+    <div class="brand-name">
+      <span class="pink">Punky</span> <span class="gray">Spa</span>
+    </div>
+
+    <div class="user-info">
+      <i class="fa fa-user"></i> {{ request.user.first_name|default:request.user.username }}
+    </div>
+
+    <nav>
+      <!-- Trang chủ -->
+      <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">
+        <i class="fa fa-house"></i> Trang chủ
+      </a>
+
+      <!-- Lịch hẹn -->
+      <a href="{% url 'lich_hen_sap_toi' %}" class="{% if 'lich-hen' in request.path %}active{% endif %}">
+        <i class="fa-regular fa-calendar-check"></i> Lịch hẹn
+      </a>
+      <div class="dropdown-content">
+        <a href="{% url 'lich_hen_sap_toi' %}" class="{% if 'sap-toi' in request.path %}active{% endif %}">Lịch hẹn sắp tới</a>
+        <a href="{% url 'lich_su_lich_hen' %}" class="{% if 'lich-su' in request.path %}active{% endif %}">Lịch sử lịch hẹn</a>
+        <a href="{% url 'lich_da_huy' %}" class="{% if 'da-huy' in request.path %}active{% endif %}">Lịch đã hủy</a>
+      </div>
+
+      <!-- Khiếu nại -->
+      <a href="{% url 'danh_sach_khieu_nai' %}" class="{% if 'khieu-nai' in request.path %}active{% endif %}">
+        <i class="fa-solid fa-comment-dots"></i> Khiếu nại
+      </a>
+      <div class="dropdown-content">
+        <a href="{% url 'danh_sach_khieu_nai' %}" class="{% if 'khieu-nai' in request.path %}active{% endif %}">
+          Lịch sử khiếu nại
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 🌸 MAIN CONTENT -->
+  <main class="main-content">
+    {% block content %}
+    {% endblock %}
+  </main>
+</div>
+</body>
+</html>

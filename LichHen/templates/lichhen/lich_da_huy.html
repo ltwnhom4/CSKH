@@ -1,0 +1,44 @@
+{% extends 'LichHen/base_lh_kn.html' %}
+{% load static %}
+
+{% block title %}Lịch hẹn đã hủy - Punky Spa{% endblock %}
+
+{% block content %}
+
+<h2 style="color:#ff5c8d;"></h2>
+
+{% for lh in lich_hens %}
+    <div class="event">
+
+        <!-- Thời gian -->
+        <div class="event-time">⏱ {{ lh.thoi_gian|date:"H:i d/m/Y" }}</div>
+
+        <!-- Tên thú cưng -->
+        <div class="event-pet">🐶 {{ lh.thu_cung.ten_thucung }}</div>
+
+
+        <!-- Dịch vụ -->
+        <div class="event-row">
+            <b>💈 Dịch vụ:</b>
+            {% for dv in lh.dv_lichhen_set.all %}
+                {{ dv.dich_vu.ten_dich_vu }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Nhân viên -->
+        <div class="event-row">
+            <b>🧑‍💼 Nhân viên:</b>
+            {{ lh.nhan_vien.ho_ten|default:"-" }}
+        </div>
+
+        <!-- Lý do hủy -->
+        <div class="event-row">
+            <b>❌ Lý do hủy:</b> {{ lh.ly_do_huy|default:"Không có" }}
+        </div>
+
+    </div>
+{% empty %}
+    <p>Không có lịch hẹn bị hủy.</p>
+{% endfor %}
+
+{% endblock %}

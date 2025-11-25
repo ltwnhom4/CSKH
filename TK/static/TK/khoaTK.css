@@ -1,0 +1,96 @@
+/* 🌸 Tổng thể */
+body {
+  background-color: #ffe5ee; /* đậm hơn 1 chút */
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* 🌸 Khung trung tâm */
+.container-khoa {
+  max-width: 400px;
+  margin: 60px auto;
+  background: linear-gradient(145deg, #ffc7d8, #ffdbe6); /* nền đậm hơn */
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(255, 92, 141, 0.4);
+  padding: 45px 55px;
+  animation: fadeIn 0.6s ease;
+}
+
+/* 🌸 Tiêu đề căn giữa */
+.khoa-box h2 {
+  color: #000;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 26px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* 🌸 Label và textarea */
+label {
+  font-weight: 600;
+  color: #222;
+  display: block;
+  margin-bottom: 8px;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1.5px solid #f3b8ca;
+  background-color: #fff9fb;
+  padding: 12px;
+  font-size: 15px;
+  transition: 0.2s;
+  resize: none;
+  box-sizing: border-box;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #e75480;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(231, 84, 128, 0.3);
+}
+
+/* 🌸 Khu vực nút */
+.btn-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 25px;
+}
+
+/* 🌸 Nút khóa */
+.btn-khoa {
+  background: linear-gradient(135deg, #d6336c, #b51b4f);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(179, 0, 70, 0.3);
+}
+
+.btn-khoa:hover {
+  background: linear-gradient(135deg, #ff80a1, #a01940);
+  transform: scale(1.05);
+}
+
+/* 🌸 Nút hủy */
+.btn-cancel {
+  color: #555;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.btn-cancel:hover {
+  color: #a01940;
+}

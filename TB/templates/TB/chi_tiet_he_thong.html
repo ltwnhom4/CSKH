@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết hệ thống</title>
+  <style>
+    body { background:#fff5f8; font-family:'Poppins',sans-serif; padding:40px; }
+    .sys-box {
+      max-width:800px; margin:auto; background:#fff; padding:30px;
+      border-radius:12px; box-shadow:0 2px 8px rgba(255,182,193,0.3);
+    }
+    h2 { color:#ff4f7b; }
+    p { margin:6px 0; }
+  </style>
+</head>
+<body>
+  <div class="sys-box">
+    <h2>⚙️ {{ tb.tieu_de }}</h2>
+    <p>{{ tb.noi_dung }}</p>
+    <p><small>Ngày gửi: {{ tb.ngay_tao|date:"H:i d/m/Y" }}</small></p>
+    <a href="{% url 'TB:trang_thong_bao' %}" class="back">← Quay lại</a>
+  </div>
+</body>
+</html>

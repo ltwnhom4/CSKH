@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng ký - Punky Spa</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'TK/style.css' %}">
+</head>
+<body>
+  <div class="register-wrapper">
+
+    <!-- 🌸 FORM BÊN TRÁI -->
+    <div class="register-left">
+      <a href="{% url 'home' %}" class="back-btn"><i class="fa fa-arrow-left"></i></a>
+
+      <h2>Đăng ký tài khoản</h2>
+      <p class="sub">Tạo tài khoản mới để trải nghiệm dịch vụ <strong>Punky Spa 💕</strong></p>
+
+      {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+        <p class="text-danger">{{ message }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="input-group">
+          <i class="fa fa-user"></i>
+          <input type="text" name="username" placeholder="Tên đăng nhập" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fa fa-envelope"></i>
+          <input type="email" name="email" placeholder="Email" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fa fa-lock"></i>
+          <input type="password" name="password1" id="password1" placeholder="Mật khẩu" required>
+          <i class="fa fa-eye-slash toggle-eye" onclick="togglePassword('password1', this)"></i>
+        </div>
+
+        <div class="input-group">
+          <i class="fa fa-lock"></i>
+          <input type="password" name="password2" id="password2" placeholder="Nhập lại mật khẩu" required>
+          <i class="fa fa-eye-slash toggle-eye" onclick="togglePassword('password2', this)"></i>
+        </div>
+
+        <button type="submit" class="btn-register">ĐĂNG KÝ</button>
+
+        <div class="form-links">
+          <span>Đã có tài khoản? <a href="{% url 'dangnhap' %}">Đăng nhập</a></span>
+        </div>
+      </form>
+    </div>
+
+    <!-- 🌸 ẢNH BÊN PHẢI -->
+    <div class="register-right">
+      <img src="{% static 'TK/meo_dangky.png' %}" alt="Punky Spa">
+    </div>
+  </div>
+
+  <script>
+    function togglePassword(id, icon) {
+      const input = document.getElementById(id);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      } else {
+        input.type = "password";
+        icon.classList.add("fa-eye-slash");
+        icon.classList.remove("fa-eye");
+      }
+    }
+  </script>
+</body>
+</html>

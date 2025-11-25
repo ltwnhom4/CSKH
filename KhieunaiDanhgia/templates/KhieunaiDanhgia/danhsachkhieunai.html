@@ -1,0 +1,99 @@
+{% extends 'base_lhkn.html' %}
+{% load static %}
+{% block title %}Lịch sử khiếu nại - Punky Spa{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+  <h2 class="page-title">LỊCH SỬ KHIẾU NẠI</h2>
+
+  <div class="table-container">
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Thời gian</th>
+
+          {% if request.user.is_staff or request.user.is_superuser %}
+            <th>Tên khách hàng</th>
+            <th>SĐT</th>
+          {% endif %}
+
+          <th>Tên thú cưng</th>
+          <th>Dịch vụ</th>
+          <th>Nhân viên phụ trách</th>
+          <th>Lý do khiếu nại</th>
+          <th>Minh chứng</th>
+          <th>Trạng thái</th>
+          <th>Phản hồi</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% if khieu_nai_list %}
+          {% for k in khieu_nai_list %}
+          <tr>
+            <td>{{ k.lich_hen.thoi_gian|date:"H:i d/m/Y" }}</td>
+
+            {% if request.user.is_staff or request.user.is_superuser %}
+              <td>{{ k.lich_hen.khach_hang.ho_ten }}</td>
+              <td>{{ k.lich_hen.so_dien_thoai }}</td>
+            {% endif %}
+
+            <td>{{ k.lich_hen.thu_cung.ten_thucung }}</td>
+
+            <td>
+              {% for dv_lh in k.lich_hen.dv_lichhen_set.all %}
+                {{ dv_lh.dich_vu.ten_dich_vu }}{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                <em>Không có</em>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% if k.nhan_vien_phu_trach %}
+                {{ k.nhan_vien_phu_trach.username }}
+              {% else %}
+                <em>Chưa phân công</em>
+              {% endif %}
+            </td>
+
+            <td>{{ k.noi_dung }}</td>
+
+            <td>
+              {% if k.minh_chung %}
+                <a href="{{ k.minh_chung.url }}" target="_blank" class="link-view">Xem</a>
+              {% else %}
+                <em>-</em>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if k.trang_thai == "Chờ xử lý" %}
+                <span class="status wait">🕓 {{ k.trang_thai }}</span>
+              {% elif k.trang_thai == "Đang xử lý" %}
+                <span class="status processing">🔴 {{ k.trang_thai }}</span>
+              {% else %}
+                <span class="status done">✅ {{ k.trang_thai }}</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if k.phan_hoi %}
+                {{ k.phan_hoi }}
+              {% else %}
+                <em>Chưa có phản hồi</em>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="10" class="empty-text">
+              Hiện tại bạn chưa có khiếu nại nào.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

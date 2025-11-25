@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Thông tin nhân viên - Punky Spa{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'TK/thongtinnv.css' %}">
+
+<div class="container-profile">
+  <!-- 🔹 Phần đầu -->
+  <div class="profile-header">
+    <div class="avatar"><i class="fa fa-user-tie"></i></div>
+    <div>
+      <h2>{{ user.username }}</h2>
+      <p>{{ user.email|default:"(Chưa có email)" }}</p>
+    </div>
+  </div>
+
+  <!-- 🔹 Thông báo -->
+  {% if messages %}
+  <div class="message-container">
+    {% for message in messages %}
+      <div class="alert alert-success">
+        <i class="fa fa-check-circle"></i> {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- 🔹 Form cập nhật thông tin nhân viên -->
+  <form method="POST" action="">
+    {% csrf_token %}
+    <div class="profile-content">
+      <div class="row">
+        <div class="col">
+          <label>Họ tên</label>
+          {{ form.ho_ten }}
+        </div>
+        <div class="col">
+          <label>Email</label>
+          {{ form.email }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Số điện thoại</label>
+          {{ form.so_dien_thoai }}
+        </div>
+        <div class="col">
+          <label>Địa chỉ</label>
+          {{ form.dia_chi }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Ngày vào làm</label>
+          {{ form.ngay_vao_lam }}
+        </div>
+      </div>
+
+      <!-- 🔹 Nút cập nhật -->
+      <div class="update-container">
+        <button type="submit" class="update-btn">
+          <i class="fa fa-pen"></i> Cập nhật
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

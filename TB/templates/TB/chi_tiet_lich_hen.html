@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết lịch hẹn</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: #fff5f8;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 50px 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .detail-container {
+      background: #fff;
+      width: 85%;
+      max-width: 950px;
+      border-radius: 18px;
+      padding: 40px 50px;
+      box-shadow: 0 4px 16px rgba(255, 182, 193, 0.35);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #ff4f7b;
+      font-weight: 700;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 25px;
+    }
+
+    h2 i { color: #ff4f7b; }
+
+    .info {
+      background: #fff9fb;
+      border-left: 6px solid #ffb6c1;
+      border-radius: 12px;
+      padding: 25px 30px;
+      box-shadow: 0 2px 6px rgba(255, 182, 193, 0.2);
+      line-height: 1.8;
+      font-size: 16px;
+      color: #333;
+      transition: 0.3s;
+    }
+
+    .info:hover {
+      transform: scale(1.01);
+      box-shadow: 0 3px 8px rgba(255, 182, 193, 0.3);
+    }
+
+    .info p {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info strong {
+      color: #ff4f7b;
+      min-width: 150px;
+      display: inline-block;
+    }
+
+    .info i {
+      color: #ff7aa5;
+      width: 22px;
+      text-align: center;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      background: #ff7aa5;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .back-btn:hover {
+      background: #e75480;
+      transform: scale(1.05);
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="detail-container">
+    <h2><i class="fa-solid fa-paw"></i> Chi tiết lịch hẹn</h2>
+
+    <div class="info">
+      <p><i class="fa-solid fa-dog"></i> <strong>Thú cưng:</strong>{{ lich_hen.thu_cung.ten_thucung|default:"Không rõ" }}</p>
+      <p><i class="fa-solid fa-scissors"></i>
+        <strong>Dịch vụ:</strong>
+        {% for dv in dich_vu_list %}
+          {{ dv.dich_vu.ten_dich_vu }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+          (Không có dịch vụ)
+        {% endfor %}
+      </p>
+
+      <p><i class="fa-regular fa-clock"></i>
+        <strong>Thời gian hẹn:</strong>
+        {{ lich_hen.thoi_gian|date:"H:i d/m/Y" }}
+      </p>
+
+      <p><i class="fa-solid fa-clipboard-check"></i>
+        <strong>Trạng thái:</strong>
+        {{ lich_hen.get_trang_thai_display }}
+      </p>
+
+      <p><i class="fa-solid fa-pen"></i>
+        <strong>Ghi chú:</strong>
+        {{ lich_hen.ghi_chu|default:"(Không có ghi chú)" }}
+      </p>
+    </div>
+
+    <a href="{% url 'TB:trang_thong_bao' %}" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> Quay lại
+    </a>
+  </div>
+
+</body>
+</html>

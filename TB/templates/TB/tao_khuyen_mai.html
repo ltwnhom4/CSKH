@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Tạo khuyến mãi mới{% endblock %}
+{% block content %}
+<div class="container" style="max-width:700px; margin:50px auto; background:#fff; padding:40px; border-radius:16px; box-shadow:0 4px 15px rgba(255,182,193,0.3);">
+  <h2 style="color:#ff4f7b; text-align:center; margin-bottom:25px;">🎁 Tạo thông báo khuyến mãi</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div style="text-align:center;">
+      <button type="submit" style="background-color:#ff4f7b; border:none; color:white; padding:10px 20px; border-radius:8px; cursor:pointer;">
+        <i class="fa fa-paper-plane"></i> Gửi khuyến mãi
+      </button>
+      <a href="{% url 'TB:trang_thong_bao' %}" style="margin-left:10px; text-decoration:none; color:#ff4f7b;">Quay lại</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% load static %}
+
+<!-- 🌸 CHATBOX HỖ TRỢ PUNKY SPA -->
+<div class="chatbox" id="chatBox">
+  <div class="chat-header">
+    <img src="{% static 'trangchu/logo.png' %}" alt="Logo">
+    <h4>Punky Spa hỗ trợ 🐾</h4>
+    <span id="closeChat">✖</span>
+  </div>
+
+  <div class="chat-body" id="chatBody">
+    <div class="message bot">
+      Xin chào 👋, chào mừng bạn đã đến với <b>Punky Spa</b>!<br>
+      Bạn cần được hỗ trợ về dịch vụ nào ạ?
+      <div class="options">
+        <button onclick="sendOption('Báo giá dịch vụ')">Báo giá dịch vụ</button>
+        <button onclick="sendOption('Hỏi đáp nhanh (FAQ)')">Hỏi đáp nhanh</button>
+        <button onclick="sendOption('Tư vấn trực tiếp')">Tư vấn trực tiếp</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <input type="text" id="chat-input" placeholder="Nhập tin nhắn của bạn..." />
+    <button id="chat-send"><i class="fa fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<!-- 🌸 CHATBOX SCRIPT -->
+<script>
+const chatToggle = document.getElementById("chatToggle");
+const chatBox = document.getElementById("chatBox");
+const closeChat = document.getElementById("closeChat");
+const chatBody = document.getElementById("chatBody");
+const chatInput = document.getElementById("chat-input");
+const chatSend = document.getElementById("chat-send");
+
+if (chatToggle) chatToggle.addEventListener("click", () => chatBox.style.display = "block");
+if (closeChat) closeChat.addEventListener("click", () => chatBox.style.display = "none");
+
+if (chatSend) chatSend.addEventListener("click", sendMessage);
+if (chatInput) chatInput.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
+
+function appendMessage(content, sender) {
+  const msg = document.createElement("div");
+  msg.className = `message ${sender}`;
+  msg.innerHTML = content;
+  chatBody.appendChild(msg);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  appendMessage(text, "user");
+  chatInput.value = "";
+  setTimeout(() => appendMessage(getBotReply(text), "bot"), 600);
+}
+
+function sendOption(option) {
+  appendMessage(option, "user");
+  setTimeout(() => appendMessage(autoReply(option), "bot"), 500);
+}
+
+function autoReply(option) {
+  if (option === "Báo giá dịch vụ") {
+    return `
+    Bạn muốn xem báo giá cho dịch vụ nào?
+    <div class="options">
+      <button onclick="sendOption('Tắm rửa')">Tắm rửa</button>
+      <button onclick="sendOption('Cắt tỉa lông')">Cắt tỉa lông</button>
+      <button onclick="sendOption('Nhuộm lông')">Nhuộm lông</button>
+      <button onclick="sendOption('Tư vấn sức khỏe')">Tư vấn sức khỏe</button>
+      <button onclick="sendOption('Tiêm phòng')">Tiêm phòng</button>
+      <button onclick="sendOption('Triệt sản')">Triệt sản</button>
+    </div>`;
+  }
+
+  if (option === "Hỏi đáp nhanh (FAQ)") {
+    return `
+      💬 Bạn có thể hỏi tôi:<br><br>
+      🐶 “Punky Spa có nhận chó mèo ngoài giờ không?”<br>
+      💖 “Sau khi tắm có sấy khô và chải lông không?”<br>
+      🌸 “Có được mang dầu gội riêng cho bé không?”<br><br>
+      Hoặc bạn có thể chọn <b>Tư vấn trực tiếp</b> để gặp nhân viên 💕`;
+  }
+
+  if (option === "Tư vấn trực tiếp") {
+    return "📞 Gọi ngay <b>1900 6750</b> để được nhân viên Punky Spa hỗ trợ tận tình 💕";
+  }
+
+  return getBotReply(option);
+}
+
+function getBotReply(text) {
+  text = text.trim().toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  if (text.includes("tam")) {
+    return `🐱 <b>Tắm rửa</b> có giá khoảng <b>150,000 VND</b>.<br>
+    Dịch vụ tắm hữu cơ dịu nhẹ, sấy khô riêng và massage thư giãn.<br>
+    <a href="/dichvu/6/" class="btn">👉 Xem chi tiết</a>`;
+  }
+
+  if (text.includes("cat") || text.includes("tia long")) {
+    return `🐩 <b>Cắt tỉa lông</b> có giá khoảng <b>200,000 VND</b>.<br>
+    Tạo kiểu lông dễ thương, dụng cụ chuyên nghiệp.<br>
+    <a href="/dichvu/2/" class="btn">👉 Xem chi tiết</a>`;
+  }
+
+  if (text.includes("nhuom")) {
+    return `🎨 <b>Nhuộm lông</b> có giá khoảng <b>300,000 VND</b>.<br>
+    Màu nhuộm an toàn, không độc hại – cho bé thêm nổi bật.<br>
+    <a href="/dichvu/4/" class="btn">👉 Xem chi tiết</a>`;
+  }
+
+  if (text.includes("tu van") || text.includes("suc khoe")) {
+    return `🐶 <b>Tư vấn sức khỏe</b> có giá khoảng <b>100,000 VND</b>.<br>
+    Bác sĩ thú y tư vấn dinh dưỡng, chăm sóc da lông định kỳ.<br>
+    <a href="/dichvu/5/" class="btn">👉 Xem chi tiết</a>`;
+  }
+
+  if (text.includes("tiem") || text.includes("phong")) {
+    return `💉 <b>Tiêm phòng</b> có giá khoảng <b>250,000 VND</b>.<br>
+    Vaccine nhập khẩu, theo dõi sức khỏe kỹ lưỡng sau tiêm.<br>
+    <a href="/dichvu/3/" class="btn">👉 Xem chi tiết</a>`;
+  }
+
+  if (text.includes("triet") || text.includes("san")) {
+    return `🐕‍🦺 <b>Triệt sản</b> có giá khoảng <b>700,000 VND</b>.<br>
+    Quy trình an toàn, vô trùng, bé hồi phục nhanh chóng.<br>
+    <a href="/dichvu/1/" class="btn">👉 Xem chi tiết</a>`;
+  }
+
+  // FAQ mở rộng
+  if (text.includes("ngoai gio")) {
+    return "⏰ Spa mở cửa từ <b>09h00 đến 21h00</b>. Ngoài giờ bạn có thể đặt lịch trước 💕";
+  }
+
+  if (text.includes("tai nha")) {
+    return "🚗 Hiện Punky Spa <b>chưa hỗ trợ chăm sóc tại nhà</b> 😿, nhưng bạn có thể đặt lịch để được phục vụ sớm nhất 💕";
+  }
+
+  if (text.includes("say") || text.includes("cham soc sau tam")) {
+    return "Dạ có ạ 💕 Bé sau khi tắm được sấy khô riêng và chải lông nhẹ nhàng 🐾";
+  }
+
+  if (text.includes("dau goi")) {
+    return "🌿 Punky Spa có <b>dầu gội hữu cơ</b> cho da nhạy cảm, và bạn có thể mang dầu riêng cho bé 💚";
+  }
+
+  return "💗 Cảm ơn bạn đã liên hệ Punky Spa! Bạn có thể hỏi về giá, dịch vụ, hoặc chọn mục 'Báo giá dịch vụ' để xem chi tiết nhé. Nếu có thắc mắc khác tình yêu vui lòng chờ tí để nhân viên check tin nhắn nha💕";
+}
+</script>

@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Hủy lịch hẹn - Punky Spa</title>
+  <link rel="stylesheet" href="{% static 'lichhen/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #fff5f7;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .cancel-container {
+      background-color: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      padding: 40px 45px;
+      width: 480px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    h2 {
+      color: #a61028;
+      font-size: 24px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    h2 i {
+      color: #ff5c8d;
+      font-size: 22px;
+    }
+
+    p {
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    label {
+      font-weight: bold;
+      color: #a61028;
+      display: block;
+      text-align: left;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      border: 1.5px solid #ffd6e0;
+      border-radius: 10px;
+      padding: 10px;
+      resize: none;
+      font-size: 14px;
+      background-color: #fff8fa;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #ff7da6;
+      box-shadow: 0 0 5px rgba(255, 92, 141, 0.4);
+      background-color: #fff;
+    }
+
+    .btn-confirm {
+      background-color: #ff5c8d;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 25px;
+      transition: background 0.2s;
+    }
+
+    .btn-confirm:hover {
+      background-color: #ff7da6;
+    }
+
+    .btn-cancel {
+      display: inline-block;
+      margin-left: 15px;
+      color: #a61028;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .btn-cancel:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cancel-container">
+    <h2> Xác nhận hủy Lịch hẹn</h2>
+    <p>Bạn có chắc muốn hủy lịch hẹn của
+      <strong>{{ lich_hen.thu_cung.ten_thucung }}</strong>
+      vào lúc <strong>{{ lich_hen.thoi_gian|date:"H:i d/m/Y" }}</strong> không?</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <label for="ly_do_huy">Lý do hủy:</label>
+      {{ form.ly_do_huy }}
+      <div>
+        <button type="submit" class="btn-confirm">Xác nhận hủy</button>
+        <a href="{% url 'lich_hen_sap_toi' %}" class="btn-cancel">Quay lại</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập - Punky Spa</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'TK/style.css' %}">
+</head>
+<body>
+  <div class="login-wrapper">
+    <!-- 🌸 BÊN TRÁI: FORM -->
+    <div class="login-left">
+      <a href="{% url 'home' %}" class="back-btn"><i class="fa fa-arrow-left"></i></a>
+
+      <h2>Đăng nhập tài khoản</h2>
+      <p class="sub">Chào mừng bạn quay lại với <strong>Punky Spa 💕</strong></p>
+
+      {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+        <p class="text-danger">{{ message }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+          <i class="fa fa-user"></i>
+          <input type="text" name="username" placeholder="Tên đăng nhập" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fa fa-lock"></i>
+          <input type="password" name="password" id="password" placeholder="Mật khẩu" required>
+          <i class="fa fa-eye-slash toggle-eye" onclick="togglePassword('password', this)"></i>
+        </div>
+
+        <div class="form-links">
+          <span>Chưa có tài khoản? <a href="{% url 'dangky' %}">Đăng ký</a></span>
+          <a href="{% url 'quenmatkhau' %}">Quên mật khẩu?</a>
+        </div>
+
+        <button type="submit" class="btn-login">ĐĂNG NHẬP</button>
+      </form>
+    </div>
+
+    <!-- 🌸 BÊN PHẢI: ẢNH -->
+    <div class="login-right">
+      <img src="{% static 'TK/meo_dangnhap.png' %}" alt="welcome to punky">
+    </div>
+  </div>
+
+  <script>
+    function togglePassword(id, icon) {
+      const input = document.getElementById(id);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      } else {
+        input.type = "password";
+        icon.classList.add("fa-eye-slash");
+        icon.classList.remove("fa-eye");
+      }
+    }
+  </script>
+</body>
+</html>

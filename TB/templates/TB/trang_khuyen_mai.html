@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Khuyến mãi - Punky Spa{% endblock %}
+
+{% block content %}
+<div class="promo-page" style="background-color:#fff7fa;">
+
+  <!-- 🌸 Banner chính -->
+  <div class="promo-banner" style="text-align:center; margin:30px auto;">
+    <img src="{% static 'TB/banner KM.png' %}"
+         alt="Hôm nay có gì"
+         style="width:90%; border-radius:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+  </div>
+
+  <!-- 🌸 Tiêu đề -->
+  <div style="text-align:center; margin:30px;">
+    <h2 style="color:#ff4f7b; font-weight:700;">🎀 CHƯƠNG TRÌNH KHUYẾN MÃI 🎀</h2>
+    <p style="color:#555;">Khuyến mãi tưng bừng – ngại gì không thử 💗</p>
+  </div>
+
+  <!-- 🌸 Danh sách khuyến mãi -->
+  <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:25px; max-width:1100px; margin:0 auto;">
+    {% for km in thongbao_khuyenmai %}
+      {% if km.id %}
+      <div class="promo-card"
+           style="background:#fff; border-radius:16px; box-shadow:0 3px 10px rgba(255,182,193,0.4);
+                  width:320px; overflow:hidden; transition:0.3s;">
+        <img src="{% static 'TB/1.KM tamgoi.png' %}"
+             alt="Khuyến mãi"
+             style="width:100%; height:180px; object-fit:cover;">
+        <div style="padding:15px;">
+          <h3 style="color:#ff4f7b; font-size:18px; font-weight:700;">{{ km.tieu_de }}</h3>
+          <p style="color:#444; font-size:14px;">{{ km.noi_dung|truncatechars:100 }}</p>
+          <small style="color:#888;">📅 {{ km.ngay_tao|date:"d/m/Y H:i" }}</small>
+          <br>
+          <a href="{% url 'TB:chi_tiet_thong_bao' km.id %}"
+             style="display:inline-block; margin-top:10px; background:#ff4f7b; color:#fff;
+                    padding:8px 14px; border-radius:8px; text-decoration:none;">Xem chi tiết</a>
+        </div>
+      </div>
+      {% endif %}
+    {% empty %}
+      <p style="text-align:center; color:#999;">Hiện chưa có khuyến mãi nào 💗</p>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

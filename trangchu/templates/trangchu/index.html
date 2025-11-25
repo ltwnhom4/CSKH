@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Trang chủ - Punky Spa{% endblock %}
+
+{% block content %}
+<!-- 🌸 BANNER -->
+<section class="banner-full">
+  <img src="{% static 'trangchu/banner.png' %}" alt="Banner Punky Spa">
+</section>
+
+<!-- 🌸 GIỚI THIỆU -->
+<section class="intro">
+  <h2>Giới thiệu</h2>
+  <p style="text-align:center; font-size:18px; color:#555;">
+    🌸 Chăm sóc tận tâm – Thấu hiểu từng bé yêu tại <strong>Punky Spa</strong> 🌸
+  </p>
+
+  <div class="gallery">
+    <img src="{% static 'trangchu/cat1.png' %}" alt="">
+    <img src="{% static 'trangchu/cat2.png' %}" alt="">
+    <img src="{% static 'trangchu/cat3.png' %}" alt="">
+  </div>
+</section>
+{% endblock %}

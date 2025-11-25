@@ -1,0 +1,46 @@
+{% extends 'LichHen/base_lh_kn.html' %}
+{% load static %}
+
+{% block title %}Lịch sử lịch hẹn - Punky Spa{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title"></h2>
+
+{% for lh in lich_hens %}
+<div class="event">
+
+    <div class="event-time">⏱ {{ lh.thoi_gian|date:"H:i d/m/Y" }}</div>
+
+    <div class="event-row">
+        🐶 <b>{{ lh.thu_cung.ten_thucung }}</b>
+    </div>
+
+    <div class="event-row">
+        <b>✂️ Dịch vụ:</b>
+        {% for dv in lh.dv_lichhen_set.all %}
+            {{ dv.dich_vu.ten_dich_vu }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="event-row">
+        <b>👩‍💼 Nhân viên:</b>
+        {% if lh.nhan_vien %}
+            {{ lh.nhan_vien.ho_ten }}
+        {% else %}
+            -
+        {% endif %}
+    </div>
+
+    <div class="action-wrapper">
+        <a href="{% url 'tao_danh_gia' lh.id %}" class="action-btn">Đánh giá</a>
+        <a href="{% url 'tao_khieu_nai' lh.id %}" class="action-btn">Khiếu nại</a>
+    </div>
+
+
+    </div>
+    {% empty %}
+        <p class="empty-text">Bạn chưa có lịch hẹn hoàn thành.</p>
+    {% endfor %}
+
+    {% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'LichHen/base_lh_kn.html' %}
+
+{% block title %}Lịch hẹn sắp tới{% endblock %}
+
+{% block add_button %}
+<a href="{% url 'them_lich_hen' %}" class="btn-add">+ Thêm lịch</a>
+{% endblock %}
+
+{% block content %}
+
+    {% regroup lich_hens by thoi_gian.date as date_groups %}
+
+    {% for group in date_groups %}
+        <div class="date-title">{{ group.grouper|date:"l — d/m/Y" }}</div>
+
+        {% for lich in group.list %}
+            <div class="event">
+                <div class="event-time">⏱ {{ lich.thoi_gian|date:"H:i" }}</div>
+                <div class="event-pet">🐶 {{ lich.thu_cung.ten_thucung }}</div>
+
+                <div class="event-row">
+                    <b>✂️ Dịch vụ:</b>
+                    {% for dv in lich.dv_lichhen_set.all %}
+                        {{ dv.dich_vu.ten_dich_vu }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="event-row">
+                    <b>👩‍💼 Nhân viên:</b>
+                    {% if lich.nhan_vien %}
+                        {{ lich.nhan_vien.ho_ten }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+
+                <a href="{% url 'xoa_lich_hen' lich.id %}">
+                    <button class="cancel-btn">Hủy lịch</button>
+                </a>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}

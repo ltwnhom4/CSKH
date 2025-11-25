@@ -1,0 +1,167 @@
+/* 🌸 Nền tổng thể */
+body {
+  background-color: #ffeef4;
+}
+
+/* 🌸 Khung thông tin nhân viên */
+.container-profile {
+  max-width: 900px;
+  margin: 50px auto;
+  background: linear-gradient(145deg, #ffd9e4, #fff0f5);
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(255, 118, 160, 0.35);
+  padding: 40px 50px;
+  position: relative;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🌸 Header phần thông tin */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.avatar i {
+  font-size: 75px;
+  color: #222; /* icon đen */
+}
+
+.profile-header h2 {
+  margin: 0;
+  color: #222;
+  font-weight: 700;
+}
+
+.profile-header p {
+  color: #444;
+  font-size: 15px;
+}
+
+/* 🌸 Form nội dung */
+.profile-content {
+  margin-top: 15px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 18px;
+}
+
+.col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+/* 🌸 Input và select */
+.profile-content input,
+.profile-content select {
+  width: 90%; /* thu ngắn toàn bộ ô cho gọn và cân xứng */
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #f3b8ca;
+  background-color: #fff9fb;
+  font-size: 15px;
+  transition: 0.2s;
+  box-sizing: border-box;
+}
+
+.profile-content input:focus,
+.profile-content select:focus {
+  outline: none;
+  border-color: #e75480;
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(231, 84, 128, 0.3);
+}
+
+/* 🌸 Nút cập nhật */
+.update-container {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.update-btn {
+  background: linear-gradient(135deg, #e75480, #d6336c);
+  color: white;
+  border: none;
+  padding: 12px 35px;
+  border-radius: 25px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 118, 160, 0.35);
+}
+
+.update-btn:hover {
+  background: linear-gradient(135deg, #ff92b0, #a01940);
+  transform: scale(1.05);
+}
+
+/* 🌸 Thông báo */
+.message-container {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  animation: fadeInMsg 0.4s ease-in-out;
+}
+
+/* 🌿 Thông báo thành công - màu xanh dịu */
+.alert-success {
+  background-color: #e9f8ef;        /* nền xanh pastel */
+  border: 1px solid #9ed8b5;        /* viền xanh mint */
+  color: #3d8758;                   /* chữ xanh lá đậm */
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Icon nhỏ xinh */
+.alert-success i {
+  color: #3d8758;
+}
+
+/* 🌿 Hiệu ứng chỉ trượt từ trên xuống (không trôi ngang) */
+@keyframes fadeInMsg {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* 🌸 Hiệu ứng mờ dần khi ẩn */
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+    display: none;
+  }
+}

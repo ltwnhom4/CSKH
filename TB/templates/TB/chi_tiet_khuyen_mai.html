@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết khuyến mãi</title>
+  <style>
+    body { background:#fff5f8; font-family:'Poppins',sans-serif; padding:40px; }
+    .promo-box {
+      max-width:800px; margin:auto; background:#fff; padding:30px;
+      border-radius:12px; box-shadow:0 2px 8px rgba(255,182,193,0.3);
+    }
+    h2 { color:#ff4f7b; }
+    .highlight { background:#fff0f3; padding:10px; border-radius:6px; }
+    a.back {
+      display:inline-block; margin-top:20px; background:#ff7aa5; color:white;
+      padding:8px 14px; border-radius:6px; text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="promo-box">
+    <h2>🎁 {{ tb.tieu_de }}</h2>
+    <div class="highlight">
+      <p>{{ tb.noi_dung }}</p>
+    </div>
+    <p><strong>Ngày thông báo:</strong> {{ tb.ngay_tao|date:"d/m/Y" }}</p>
+    <a href="{% url 'TB:trang_thong_bao' %}" class="back">← Quay lại</a>
+  </div>
+</body>
+</html>

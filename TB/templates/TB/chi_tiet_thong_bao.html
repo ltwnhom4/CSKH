@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ km.tieu_de }} - Punky Spa{% endblock %}
+
+{% block content %}
+<div style="max-width:800px; margin:40px auto; background:#fff0f5; border-radius:16px; padding:40px;
+            box-shadow:0 4px 10px rgba(255,182,193,0.4);">
+  <h2 style="color:#ff4f7b;">{{ km.tieu_de }}</h2>
+  <p style="color:#444; line-height:1.8; margin-top:20px;">{{ km.noi_dung }}</p>
+  <small style="color:#888;">📅 {{ km.ngay_tao|date:"d/m/Y H:i" }}</small>
+  <div style="margin-top:25px;">
+    <a href="{% url 'TB:danh_sach_khuyen_mai' %}"
+       style="background:#ff4f7b; color:#fff; padding:10px 16px; border-radius:8px; text-decoration:none;">⬅ Quay lại</a>
+  </div>
+</div>
+{% endblock %}

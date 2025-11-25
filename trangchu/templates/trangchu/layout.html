@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Punky Spa</title>
+
+    <!-- 🌸 Liên kết CSS -->
+    <link rel="stylesheet" href="{% static 'trangchu/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<!-- 🐾 Hiệu ứng chân mèo rơi -->
+<div class="paw-fall"></div>
+
+<script>
+  const pawFallContainer = document.querySelector(".paw-fall");
+  const pawSrc = "{% static 'trangchu/chanmeo.png' %}"; // ảnh bạn đã gửi nha
+
+  function createPaw() {
+    const paw = document.createElement("img");
+    paw.src = pawSrc;
+    paw.classList.add("paw-item");
+
+    // vị trí & kích thước ngẫu nhiên
+    paw.style.left = Math.random() * 100 + "vw";
+    paw.style.width = 25 + Math.random() * 20 + "px";
+    paw.style.animationDuration = 5 + Math.random() * 4 + "s";
+    paw.style.opacity = 0.6 + Math.random() * 0.4;
+
+    pawFallContainer.appendChild(paw);
+
+    // xóa khi rơi xong
+    setTimeout(() => paw.remove(), 9000);
+  }
+
+  setInterval(createPaw, 500); // cứ 0.5s rơi 1 dấu chân
+</script>
+
+<body>
+
+    <!-- 🌸 THANH TRÊN CÙNG -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <i class="fa fa-calendar"></i>
+            <strong>Giờ làm việc:</strong> Từ 09h00 đến 21h00
+        </div>
+
+        <div class="right">
+            {% if user.is_authenticated %}
+            <!-- 🔔 Nếu đã đăng nhập -->
+            <div class="notify-box">
+                <span class="notify-icon">🔔</span>
+                <div class="notify-content">
+                    {% for tb in thong_baos_moi %}
+                        <div class="notify-item">
+                            <strong>{{ tb.tieu_de }}</strong><br>
+                            <small>{{ tb.ngay_tao|date:"d/m/Y H:i" }}</small>
+                        </div>
+                    {% empty %}
+                        <p>Không có thông báo mới.</p>
+                    {% endfor %}
+                    <a href="{% url 'TB:danh_sach_thong_bao' %}" class="view-all">Xem tất cả</a>
+                </div>
+            </div>
+
+           <!-- MENU TAI KHOAN -->
+            <div class="user-menu">
+                <button class="user-btn">
+                    <i class="fa fa-user"></i> {{ user.username }}
+                    <i class="fa fa-caret-down"></i>
+                </button>
+
+                <div class="dropdown-menu">
+                    <a href="{% url 'thongtintaikhoan' %}"><i class="fa fa-star"></i> Tài khoản</a>
+                    <a href="#"><i class="fa fa-star"></i> Tích điểm</a>
+                    <a href="#"><i class="fa fa-ticket"></i> Mã ưu đãi</a>
+                    <a href="{% url 'lich_hen_sap_toi' %}"><i class="fa fa-calendar"></i> Lịch hẹn</a>
+                    <a href="#"><i class="fa fa-comments"></i> Khiếu nại</a>
+                    <a href="{% url 'dangxuat' %}"><i class="fa fa-sign-out-alt"></i> Đăng xuất</a>
+                    <a href="#"><i class="fa fa-trash"></i> Xóa tài khoản</a>
+                </div>
+            </div>
+
+            {% else %}
+            <!-- 🔹 Nếu chưa đăng nhập -->
+            <div class="notify-box">
+                <span class="notify-icon">🔔</span>
+                <div class="notify-content">
+                    <div style="text-align:center; padding:15px;">
+                        <img src="{% static 'trangchu/notify-cat .png' %}" alt="Mèo dễ thương" class="notify-image">
+                        <p>Đăng nhập để xem thông báo</p>
+                        <a href="{% url 'dangnhap' %}" class="btn">Đăng nhập</a>
+                        <a href="{% url 'dangky' %}" class="btn">Đăng ký</a>
+                    </div>
+                </div>
+            </div>
+            <a href="{% url 'dangnhap' %}">Đăng nhập</a> |
+            <a href="{% url 'dangky' %}">Đăng ký</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 🌸 HEADER CHÍNH -->
+    <header class="navbar">
+        <div class="logo">
+            <img src="{% static 'trangchu/logo.png' %}" alt="Logo Punky Spa">
+            <h1><span class="pink">Punky</span> Spa</h1>
+        </div>
+
+        <nav>
+            <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Trang chủ</a>
+            <a href="{% url 'danh_sach_dich_vu' %}" class="{% if request.resolver_match.url_name == 'danh_sach_dich_vu' %}active{% endif %}">Dịch vụ</a>
+            <a href="{% url 'TB:danh_sach_khuyen_mai' %}"class="nav-link {% if request.resolver_match.url_name == 'danh_sach_khuyen_mai' %}active{% endif %}">Khuyến mãi</a>
+            <a href="{% url 'lien_he' %}" class="{% if request.resolver_match.url_name == 'lien_he' %}active{% endif %}">Liên hệ</a>
+
+        </nav>
+
+        <div class="search">
+            <input type="text" placeholder="Tìm kiếm...">
+            <button>🔍</button>
+        </div>
+    </header>
+
+
+    {% block content %}{% endblock %}
+
+    <!-- 🌸 FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>Liên lạc</h4>
+                <p>Hotline: 1900 6750</p>
+                <p>Địa chỉ: 627 Ngô Quyền, An Hải Bắc,<br>Đà Nẵng, Việt Nam</p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Chính sách</h4>
+                <p>Chính sách bảo mật</p>
+                <p>Quy định sử dụng</p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Tổng đài hỗ trợ</h4>
+                <p>Tư vấn dịch vụ: 1800 6750</p>
+                <p>Hỗ trợ sử dụng: 1900 6750</p>
+                <p>Email: punkyspa@gmail.vn</p>
+                <p>Từ 7h00 – 20h00 các ngày từ thứ 2 đến Chủ nhật.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 🌸 Nút gọi và Chat -->
+    <div class="floating-icons">
+        <a href="tel:19006750" class="phone-icon" title="Gọi ngay Punky Spa">
+            <i class="fa fa-phone"></i>
+        </a>
+        <div class="chat-icon" id="chatToggle">
+            <img src="{% static 'trangchu/logo.png' %}" alt="Chat Punky Spa">
+        </div>
+    </div>
+
+    <!-- 🌸 Chatbox -->
+    <div class="chatbox" id="chatBox">
+        <div class="chat-header">
+            <img src="{% static 'trangchu/logo.png' %}" alt="Logo">
+            <h4>Punky Spa hỗ trợ 🐾</h4>
+            <span id="closeChat">✖</span>
+        </div>
+
+        <div class="chat-body" id="chatBody">
+            <div class="message bot">
+                Xin chào 👋, chào mừng bạn đã đến với <b>Punky Spa</b>!
+                Bạn cần được hỗ trợ về dịch vụ nào ạ?
+                <div class="options">
+                    <button onclick="sendOption('Báo giá dịch vụ')">Báo giá dịch vụ</button>
+                    <button onclick="sendOption('Hỏi đáp nhanh (FAQ)')">Hỏi đáp nhanh</button>
+                    <button onclick="sendOption('Tư vấn trực tiếp')">Tư vấn trực tiếp</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🌸 Ô nhập tin nhắn -->
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Nhập tin nhắn của bạn..." />
+            <button id="chat-send"><i class="fa fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- 🌸 SCRIPT -->
+    <script>
+    const chatToggle = document.getElementById("chatToggle");
+    const chatBox = document.getElementById("chatBox");
+    const closeChat = document.getElementById("closeChat");
+    const chatBody = document.getElementById("chatBody");
+    const chatInput = document.getElementById("chat-input");
+    const chatSend = document.getElementById("chat-send");
+
+    chatToggle.addEventListener("click", () => chatBox.style.display = "block");
+    closeChat.addEventListener("click", () => chatBox.style.display = "none");
+
+    // 📨 Gửi tin nhắn
+    chatSend.addEventListener("click", sendMessage);
+    chatInput.addEventListener("keypress", e => {
+        if (e.key === "Enter") sendMessage();
+    });
+
+    function sendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+        appendMessage(text, "user");
+        chatInput.value = "";
+        setTimeout(() => appendMessage(getBotReply(text), "bot"), 700);
+    }
+
+    function appendMessage(content, sender) {
+        const msg = document.createElement("div");
+        msg.className = `message ${sender}`;
+        msg.innerHTML = content;
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function sendOption(option) {
+        appendMessage(option, "user");
+
+        // ⚙️ Nếu người dùng chọn Báo giá dịch vụ hoặc FAQ hoặc Tư vấn trực tiếp → dùng autoReply()
+        if (
+            option === "Báo giá dịch vụ" ||
+            option === "Hỏi đáp nhanh (FAQ)" ||
+            option === "Tư vấn trực tiếp"
+        ) {
+            setTimeout(() => appendMessage(autoReply(option), "bot"), 600);
+        }
+        // ⚙️ Nếu người dùng chọn một dịch vụ cụ thể → gọi getBotReply()
+        else {
+            setTimeout(() => appendMessage(getBotReply(option), "bot"), 600);
+        }
+    }
+
+    function autoReply(option) {
+        if (option === "Báo giá dịch vụ") {
+            return `
+            Bạn muốn xem báo giá cho dịch vụ nào?
+            <div class='options'>
+                <button onclick='sendOption("Tắm rửa")'>Tắm rửa</button>
+                <button onclick='sendOption("Cắt tỉa lông")'>Cắt tỉa lông</button>
+                <button onclick='sendOption("Nhuộm lông")'>Nhuộm lông</button>
+                <button onclick='sendOption("Tư vấn sức khỏe")'>Tư vấn sức khỏe</button>
+                <button onclick='sendOption("Tiêm phòng")'>Tiêm phòng</button>
+                <button onclick='sendOption("Triệt sản")'>Triệt sản</button>
+            </div>`;
+        }
+
+        if (option === "Hỏi đáp nhanh (FAQ)") {
+            return `
+            💬 Bạn có thể hỏi tôi những điều sau:<br><br>
+            🐶 “Punky Spa có nhận chó mèo ngoài giờ không?”<br>
+            🐾 “Có dịch vụ chăm sóc tại nhà không?”<br>
+            💖 “Sau khi tắm có sấy khô và chải lông không?”<br>
+            🌸 “Có được mang dầu gội riêng cho bé không?”<br><br>
+            Hoặc bạn có thể chọn <b>Tư vấn trực tiếp</b> để được nhân viên hỗ trợ thêm 💕`;
+        }
+
+        if (option === "Tư vấn trực tiếp") {
+            return "📞 Bạn có thể gọi ngay <b>1900 6750</b> để được nhân viên Punky Spa hỗ trợ tận tình 💕";
+        }
+
+        return "Cảm ơn bạn đã quan tâm đến Punky Spa 💖";
+    }
+
+    function getBotReply(text) {
+        // 🔹 Chuẩn hóa text: viết thường, bỏ dấu, bỏ khoảng trắng thừa
+        text = text.trim().toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+
+        // 🐾 Thông tin dịch vụ chi tiết
+        if (text.includes("tam")) {
+            return `🐱 <b>Tắm rửa</b> có giá khoảng <b>150,000 VND</b>.<br>
+            Dịch vụ tắm hữu cơ dịu nhẹ, sấy khô riêng và massage thư giãn.<br>
+            <a href="/dichvu/6/" class="btn" style="margin-top:6px;">👉 Xem chi tiết</a>`;
+        }
+
+        if (text.includes("cat") || text.includes("tia long")) {
+            return `🐩 <b>Cắt, tỉa lông</b> có giá khoảng <b>200,000 VND</b>.<br>
+            Tạo kiểu lông dễ thương, sử dụng dụng cụ chuyên nghiệp.<br>
+            <a href="/dichvu/2/" class="btn" style="margin-top:6px;">👉 Xem chi tiết</a>`;
+        }
+
+        if (text.includes("nhuom")) {
+            return `🎨 <b>Nhuộm lông</b> có giá khoảng <b>300,000 VND</b>.<br>
+            Màu nhuộm an toàn, không độc hại – cho bé thêm nổi bật.<br>
+            <a href="/dichvu/4/" class="btn" style="margin-top:6px;">👉 Xem chi tiết</a>`;
+        }
+
+        if (text.includes("tu van") || text.includes("suc khoe")) {
+            return `🐶 <b>Tư vấn sức khỏe</b> có giá khoảng <b>100,000 VND</b>.<br>
+            Bác sĩ thú y tư vấn dinh dưỡng, chăm sóc da lông định kỳ.<br>
+            <a href="/dichvu/5/" class="btn" style="margin-top:6px;">👉 Xem chi tiết</a>`;
+        }
+
+        if (text.includes("tiem") || text.includes("phong")) {
+            return `💉 <b>Tiêm phòng</b> có giá khoảng <b>250,000 VND</b>.<br>
+            Vaccine nhập khẩu, theo dõi sức khỏe kỹ lưỡng sau tiêm.<br>
+            <a href="/dichvu/3/" class="btn" style="margin-top:6px;">👉 Xem chi tiết</a>`;
+        }
+
+        if (text.includes("triet") || text.includes("san")) {
+            return `🐕‍🦺 <b>Triệt sản</b> có giá khoảng <b>700,000 VND</b>.<br>
+            Quy trình an toàn, vô trùng, bé hồi phục nhanh chóng.<br>
+            <a href="/dichvu/1/" class="btn" style="margin-top:6px;">👉 Xem chi tiết</a>`;
+        }
+
+        // 💬 Các câu hỏi FAQ phổ biến
+        if (text.includes("meo") || text.includes("cho")) {
+            return "Dạ có ạ 💕 Punky Spa phục vụ cả chó và mèo — mỗi bé đều được chăm sóc riêng 🐶🐱";
+        }
+
+        if (text.includes("ngoai gio")) {
+            return "Spa mở cửa từ <b>09h00 đến 21h00</b>. Ngoài giờ, bạn có thể đặt lịch trước để được phục vụ 💕";
+        }
+
+        if (text.includes("tai nha")) {
+            return "Hiện Punky Spa <b>chưa hỗ trợ chăm sóc tại nhà</b> ạ 😿, nhưng bạn có thể đặt lịch và được ưu tiên sớm nhất 💕";
+        }
+
+        if (text.includes("say") || text.includes("cham soc sau tam")) {
+            return "Dạ có ạ 💕 Mỗi bé sau khi tắm đều được sấy khô riêng bằng máy chuyên dụng và chải lông nhẹ nhàng 🐾";
+        }
+
+        if (text.includes("dat lich") || text.includes("hen truoc")) {
+            return "Dạ bạn có thể đặt lịch trước qua website hoặc gọi <b>1900 6750</b> để được ưu tiên 🕐";
+        }
+
+        if (text.includes("dau goi")) {
+            return "Punky Spa có <b>dầu gội hữu cơ</b> dành cho da nhạy cảm, và bạn có thể mang dầu riêng cho bé nếu muốn 🌿";
+        }
+
+        return "💗 Cảm ơn bạn đã liên hệ Punky Spa! Bạn có thể hỏi về giá, dịch vụ, hoặc chọn mục 'Báo giá dịch vụ' để biết thêm chi tiết nhé.";
+    }
+
+    </script>
+ <!-- 🌸 SCRIPT DROPDOWN MENU NGƯỜI DÙNG -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 🔹 Toggle dropdown chính (menu lyly)
+    const userBtn = document.querySelector(".user-btn");
+    const dropdown = document.querySelector(".dropdown-menu");
+    if (userBtn) {
+        userBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle("show");
+        });
+
+        // 🔹 Bấm ra ngoài thì đóng dropdown (trừ khi đang trong dropdown)
+        document.addEventListener("click", (event) => {
+            if (!dropdown.contains(event.target) && !userBtn.contains(event.target)) {
+                dropdown.classList.remove("show");
+            }
+        });
+    }
+
+    // 🔹 Toggle submenu tài khoản (nội dung cá nhân + thú cưng)
+    const submenuToggle = document.querySelector(".submenu-toggle");
+    const submenuItems = document.querySelector(".submenu-items");
+
+    if (submenuToggle && submenuItems) {
+        submenuToggle.addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // 👈 NGĂN không cho đóng dropdown cha
+            submenuItems.classList.toggle("show");
+            submenuToggle.classList.toggle("active");
+        });
+    }
+});
+</script>
+
+<!-- 🌸 STYLE BỔ SUNG -->
+<style>
+/* 🌸 Ẩn submenu mặc định */
+.submenu-items {
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 6px;
+  margin-top: 5px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+/* 🌸 Hiện submenu khi nhấn */
+.submenu-items.show {
+  display: flex !important;
+}
+
+/* 🌸 Hiệu ứng mũi tên xoay xuống/up */
+.submenu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.submenu-toggle i.fa-caret-down {
+  transition: transform 0.3s ease;
+}
+
+.submenu-toggle.active i.fa-caret-down {
+  transform: rotate(180deg);
+}
+</style>
+
+</body>
+</html>
