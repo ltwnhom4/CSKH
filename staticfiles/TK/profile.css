@@ -1,0 +1,126 @@
+.profile-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-box {
+  background: #ffe6ef;
+  border-radius: 20px;
+  padding: 30px;
+  width: 650px; /* giảm nhẹ khung tổng */
+  position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  font-size: 60px;
+  color: #333;
+}
+
+.profile-content label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* ⚡ input nhỏ gọn lại */
+.profile-content input,
+.profile-content select {
+  width: 75%; /* giảm chiều dài input */
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Dòng chứa 2 cột */
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 15px;
+}
+
+.col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🌸 Nút cập nhật căn giữa */
+.update-btn {
+  background: #d6336c;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin: 25px auto 0 auto; /* căn giữa */
+}
+
+.update-btn:hover {
+  background: #b02356;
+}
+
+
+//* 🌸 Thông báo cập nhật thành công - hiển thị nổi bật, canh giữa */
+.message-container {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.alert-success {
+  background-color: #ffe6ef; /* nền hồng pastel */
+  color: #b3005f;            /* chữ hồng đậm */
+  border: 1px solid #f5a6c5;
+  padding: 10px 25px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon nhỏ xinh */
+.alert-success i {
+  color: #b3005f;
+}
+
+/* Hiệu ứng xuất hiện */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+
+

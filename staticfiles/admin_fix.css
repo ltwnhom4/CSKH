@@ -1,0 +1,247 @@
+/* 🌸 ============================= */
+/* 🌸 Punky Spa Admin — Pink Theme */
+/* 🌸 ============================= */
+@layer override {
+  .app-list .model .actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+  }
+
+  .app-list .model .actions a {
+    background-color: #f497b6 !important;
+    border-radius: 8px !important;
+    padding: 5px 12px !important;
+    margin-left: 8px !important;
+    display: inline-flex !important;
+    color: #fff !important;
+  }
+}
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* 🌸 Navbar pastel hồng */
+.navbar-pink {
+  background: linear-gradient(90deg, #f8a5c2, #f497b6) !important;
+  color: #fff !important;
+  border-bottom: 2px solid #f8a5c2 !important;
+}
+.navbar-pink a,
+.navbar-pink .nav-link {
+  color: #fff !important;
+  font-weight: 500 !important;
+}
+.navbar-pink a:hover {
+  color: #ffe4ed !important;
+}
+
+/* 🌸 Sidebar pastel hồng */
+.sidebar-light-pink {
+  background-color: #fff0f5 !important;
+  color: #4a0e1a !important;
+}
+.sidebar-light-pink .nav-sidebar .nav-link {
+  color: #4a0e1a !important;
+  border-radius: 8px !important;
+  padding: 10px 15px !important;
+  font-weight: 500 !important;
+}
+.sidebar-light-pink .nav-sidebar .nav-link.active {
+  background-color: #f497b6 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(244, 151, 182, 0.3) !important;
+}
+.sidebar-light-pink .nav-sidebar .nav-link:hover {
+  background-color: #f8a5c2 !important;
+  color: #fff !important;
+}
+
+/* 🌸 Tổng thể */
+body, .content-wrapper {
+  background-color: #fff8fa !important;
+  color: #4a0e1a !important;
+  font-family: "Poppins", "Segoe UI", sans-serif !important;
+}
+
+/* 🌸 Card Dashboard */
+.card {
+  background-color: #fff !important;
+  border: 1px solid #f8a5c2 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 3px 6px rgba(244, 151, 182, 0.15) !important;
+}
+.card-header {
+  background-color: #f8a5c2 !important;
+  color: #4a0e1a !important;
+  font-weight: 600 !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+/* 🌸 Table */
+table {
+  border-collapse: collapse !important;
+  width: 100%;
+  background-color: #fff !important;
+}
+thead th {
+  background-color: #fff5f7 !important;
+  color: #4a0e1a !important;
+  font-weight: 600 !important;
+}
+tbody tr {
+  background-color: #fff !important;
+}
+tbody tr:nth-child(even) {
+  background-color: #fffafc !important;
+}
+tbody tr:hover {
+  background-color: #ffe0eb !important;
+  transition: background-color 0.25s ease-in-out;
+}
+
+/* 🌸 Liên kết */
+a {
+  color: #d63b7e !important;
+  font-weight: 600;
+}
+a:hover {
+  color: #a61028 !important;
+}
+
+/* 🌸 Dropdown (Account menu) */
+.dropdown-menu {
+  background-color: #fff !important;
+  border: 1px solid #f8a5c2 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+.dropdown-header {
+  color: #4a0e1a !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  text-align: left !important;
+  padding: 10px 16px !important;
+}
+.dropdown-menu .dropdown-item {
+  color: #4a0e1a !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 10px 16px !important;
+  transition: all 0.2s ease-in-out;
+}
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f497b6 !important;
+  color: #fff !important;
+  border-radius: 6px !important;
+}
+
+/* 🌸 Fix Log out */
+.dropdown-menu a[href*="logout"]::before {
+  content: none !important;
+  display: none !important;
+}
+.dropdown-menu a[href*="logout"] i {
+  color: #4a0e1a !important;
+  font-size: 15px !important;
+  margin-right: 8px !important;
+}
+
+/* 🌸 Input */
+input, select, textarea {
+  border: 1.5px solid #f8a5c2 !important;
+  border-radius: 6px !important;
+  padding: 6px 10px !important;
+  background-color: #fff !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #f497b6 !important;
+  box-shadow: 0 0 4px rgba(244, 151, 182, 0.4) !important;
+}
+
+/* 🌸 Buttons */
+.btn, .btn-pink {
+  background-color: #f497b6 !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 6px !important;
+}
+.btn:hover {
+  background-color: #f8a5c2 !important;
+  color: #fff !important;
+}
+
+/* 🌸 Breadcrumb & tiêu đề */
+.breadcrumb-item a {
+  color: #f497b6 !important;
+}
+.breadcrumb-item.active {
+  color: #a61028 !important;
+}
+h1, h2, h3, h4, label {
+  color: #4a0e1a !important;
+}
+
+/* 🌸 Footer */
+footer.main-footer {
+  background-color: #ffeef2 !important;
+  color: #a61028 !important;
+  font-weight: 500 !important;
+  border-top: 1px solid #f8a5c2 !important;
+}
+/* 🌸 FIX CHÍNH XÁC lỗi nút Add & Change dính nhau trong Jazzmin (Bootstrap .btn-group) */
+.btn-group.float-right {
+  display: flex !important;
+  gap: 10px !important; /* 🔹 Tạo khoảng cách rõ ràng giữa Add / Change */
+  justify-content: flex-end !important;
+  align-items: center !important;
+}
+
+.btn-group.float-right .btn {
+  border-radius: 8px !important; /* 🔹 Bo góc đẹp */
+  margin: 0 !important; /* 🔹 Reset margin gốc Bootstrap */
+  padding: 5px 14px !important; /* 🔹 Kích thước nhỏ vừa */
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  background-color: #f497b6 !important;
+  color: #fff !important;
+  border: none !important;
+  transition: all 0.25s ease-in-out !important;
+}
+
+.btn-group.float-right .btn:hover {
+  background-color: #f8a5c2 !important;
+  box-shadow: 0 2px 6px rgba(244, 151, 182, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+/* 🌸 Gỡ override của Bootstrap khiến nút dính nhau */
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn:not(:first-child) {
+  border-radius: 8px !important;
+  margin-right: 8px !important; /* ✅ khoảng cách thực sự giữa Add và Change */
+  border-top-right-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+}
+/* 🌸 ================================ */
+/* 🌸 FIX CỘT "DỊCH VỤ" KHÁC MÀU NỀN */
+/* 🌸 ================================ */
+
+/* Ghi đè mọi kiểu màu nền có thể bị Jazzmin áp vào */
+tr td.field-hien_thi_dich_vu,
+tr:nth-child(odd) td.field-hien_thi_dich_vu,
+tr:nth-child(even) td.field-hien_thi_dich_vu {
+  background-color: #fff !important; /* màu đồng bộ */
+  color: #4a0e1a !important; /* cùng màu chữ */
+}
+
+/* Giữ hiệu ứng hover pastel */
+tr:hover td.field-hien_thi_dich_vu {
+  background-color: #ffe0eb !important;
+  transition: background-color 0.25s ease-in-out;
+}
+
+/* (tùy chọn) chỉnh border-bottom cho gọn */
+td.field-hien_thi_dich_vu {
+  border-bottom: 1px solid #f8a5c2 !important;
+}
