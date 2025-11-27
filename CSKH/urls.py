@@ -28,6 +28,8 @@ urlpatterns = [
     path('dichvu/', include('DV.urls')),
     path('lich-hen/', include('LichHen.urls')),
     path('khieu-nai/', include('KhieunaiDanhgia.urls')),
+    path('chat/', include('Chat.urls')),
+
 
 ]
 if settings.DEBUG:
