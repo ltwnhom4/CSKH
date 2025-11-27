@@ -141,7 +141,6 @@ def tao_lich_hen(request):
                     link=f"/lich-hen/chi-tiet/{lich_hen.id}/"
                 )
 
-            messages.success(request, "Thêm lịch hẹn thành công!")
             return redirect('lich_hen_sap_toi')
         else:
             messages.error(request, "Vui lòng nhập đầy đủ thông tin hợp lệ.")
