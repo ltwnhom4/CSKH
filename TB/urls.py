@@ -9,5 +9,5 @@ urlpatterns = [
     path('xem/<int:tb_id>/', views.xem_thong_bao, name='xem_thong_bao'),
     path('tao-khuyen-mai/', views.tao_khuyen_mai, name='tao_khuyen_mai'),
     path('khuyen-mai/', views.danh_sach_khuyen_mai, name='danh_sach_khuyen_mai'),
-
+    path('khuyen-mai/xoa/<int:km_id>/', views.xoa_khuyen_mai, name='xoa_khuyen_mai'),
 ]
