@@ -6,25 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng nhập - Punky Spa</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="{% static 'TK/style.css' %}">
+  <link rel="stylesheet" href="{% static 'TK/dangnhap.css' %}">
 </head>
 <body>
-  <div class="login-wrapper">
-    <!-- 🌸 BÊN TRÁI: FORM -->
-    <div class="login-left">
-      <a href="{% url 'home' %}" class="back-btn"><i class="fa fa-arrow-left"></i></a>
-
-      <h2>Đăng nhập tài khoản</h2>
-      <p class="sub">Chào mừng bạn quay lại với <strong>Punky Spa 💕</strong></p>
-
-      {% if messages %}
+{% if messages %}
       <div class="messages">
         {% for message in messages %}
         <p class="text-danger">{{ message }}</p>
         {% endfor %}
       </div>
       {% endif %}
+  <div class="login-wrapper">
+    <!-- 🌸 BÊN TRÁI: FORM -->
+    <div class="login-left">
+      <a href="{% url 'home' %}" class="back-btn"><i class="fa fa-arrow-left"></i></a>
 
+
+      <h2>Đăng nhập tài khoản</h2>
+      <p class="sub">Chào mừng bạn quay lại với <strong>Punky Spa 💕</strong></p>
       <form method="POST">
         {% csrf_token %}
         <div class="input-group">

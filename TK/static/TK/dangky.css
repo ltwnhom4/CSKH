@@ -1,0 +1,249 @@
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff5f7, #ffeaf1);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 🌸 Khung tổng */
+    .register-wrapper {
+      display: flex;
+      width: 900px;
+      height: 540px;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    /* 🌸 Bên trái: Form đăng ký */
+    .register-left {
+      flex: 1;
+      padding: 50px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* 🌸 Nút quay lại */
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 25px;
+      color: #a01940;
+      text-decoration: none;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .back-btn:hover { color: #d94c66; }
+    .back-btn i { margin-right: 6px; }
+
+    /* 🌸 Tiêu đề */
+    .register-left h2 {
+      color: #a01940;
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .register-left p.sub {
+      color: #666;
+      margin-bottom: 25px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    /* 🌸 Input nhóm */
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: #fff5f7;
+      border: 1px solid #0000;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-group:focus-within { border-color: #ff5c8d; }
+    .input-group i {
+      color: #a01940;
+      font-size: 15px;
+    }
+    .input-group input {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      font-size: 15px;
+      color: #333;
+      margin-left: 10px;
+    }
+    .input-group:focus-within {
+      border-color: #000;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 🌸 Con mắt hiển thị mật khẩu */
+    .toggle-eye {
+      color: #a01940;
+      font-size: 16px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      margin-left: 8px;
+    }
+    .toggle-eye:hover {
+      color: #d94c66;
+    }
+
+    /* 🌸 Liên kết nhỏ */
+    .form-links {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      margin-top: 18px;
+      letter-spacing: 0.2px;
+    }
+
+    .form-links a {
+      color: #a01940;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .form-links a:hover {
+      color: #d94c66;
+      text-decoration: underline;
+    }
+
+    /* 🌸 Nút đăng ký */
+    .btn-register {
+      background-color: #a01940;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 5px;
+    }
+
+    .btn-register:hover {
+      background-color: #d94c66;
+    }
+
+    /* 🌸 Bên phải: Ảnh */
+    .register-right {
+      flex: 0 0 52%;
+      background: linear-gradient(135deg, #ffb6c1, #ffa8c3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .register-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0 20px 20px 0;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* 🌸 Responsive */
+    @media (max-width: 950px) {
+      .register-wrapper {
+        flex-direction: column;
+        width: 95%;
+        height: auto;
+      }
+      .register-right { display: none; }
+      .register-left { padding: 40px 30px; }
+    }
+
+
+/* 🌸 TOAST lỗi nằm ngoài form */
+.toast-error {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background: #ffe5ea;
+    border-left: 5px solid #d6003d;
+    padding: 14px 22px;
+    border-radius: 10px;
+
+    width: max-content;
+    max-width: 500px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+
+    animation: toastSlide 0.5s ease-out,
+               toastFade 0.6s ease-in 3s forwards;
+
+    z-index: 9999;
+}
+
+
+.messages {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #b4002e !important;
+}
+/* Text */
+.toast-error p {
+    margin: 0;
+    padding: 2px 0;
+    color: #b4002e;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+/* Slide xuống */
+@keyframes toastSlide {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* Tự biến mất */
+@keyframes toastFade {
+    from { opacity: 1; }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+        pointer-events: none;
+    }
+}
