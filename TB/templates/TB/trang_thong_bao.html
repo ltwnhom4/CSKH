@@ -186,7 +186,7 @@
       <li><a href="{% url 'TB:trang_thong_bao' %}"  class="menu-title" disabled><i class="fa fa-bell"></i> Thông báo</a></li>
       <li><a href="#" class="menu-item active" data-target="lichhen"><i class="fa fa-calendar"></i> Lịch hẹn</a></li>
       <li><a href="#" class="menu-item" data-target="khuyenmai"><i class="fa fa-gift"></i> Khuyến mãi</a></li>
-      <li><a href="#" class="menu-item" data-target="hethong"><i class="fa fa-cog"></i> Hệ thống</a></li>
+      <li><a href="#" class="menu-item" data-target="khieunai"><i class="fa fa-envelope-open-text"></i> Khiếu nại</a></li>
     </ul>
   </div>
 
@@ -255,23 +255,27 @@
       {% endfor %}
     </div>
 
-    <!-- Hệ thống -->
-    <div class="tb-list" id="hethong">
-      {% for tb in thongbao_hethong %}
+    <!-- Khiếu nại -->
+    <div class="tb-list" id="khieunai">
+
+      {% for tb in thongbao_khieunai %}
         <div class="tb-item">
           <div>
             <h4>{{ tb.tieu_de }}</h4>
             <p>{{ tb.noi_dung }}</p>
             <small>{{ tb.ngay_tao|date:"d/m/Y H:i" }}</small>
           </div>
-          <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
+
+          <!-- 🔥 Xem chi tiết khiếu nại -->
+          <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">
+            Xem chi tiết
+          </a>
         </div>
       {% empty %}
-        <p class="no-data">Không có thông báo hệ thống nào.</p>
+        <p class="no-data">Không có thông báo khiếu nại nào.</p>
       {% endfor %}
+
     </div>
-  </div>
-</div>
 
 <script>
   // Khi click menu => hiển thị danh sách tương ứng

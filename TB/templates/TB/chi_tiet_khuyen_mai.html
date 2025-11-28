@@ -1,30 +1,56 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Chi tiết khuyến mãi</title>
   <style>
-    body { background:#fff5f8; font-family:'Poppins',sans-serif; padding:40px; }
-    .promo-box {
-      max-width:800px; margin:auto; background:#fff; padding:30px;
-      border-radius:12px; box-shadow:0 2px 8px rgba(255,182,193,0.3);
+    body {
+      background: #ffeef5;
+      font-family: 'Poppins', sans-serif;
+      padding: 40px;
     }
-    h2 { color:#ff4f7b; }
-    .highlight { background:#fff0f3; padding:10px; border-radius:6px; }
-    a.back {
-      display:inline-block; margin-top:20px; background:#ff7aa5; color:white;
-      padding:8px 14px; border-radius:6px; text-decoration:none;
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 4px 12px rgba(255, 182, 193, 0.35);
+    }
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      background: #ff7aa5;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <div class="promo-box">
-    <h2>🎁 {{ tb.tieu_de }}</h2>
-    <div class="highlight">
-      <p>{{ tb.noi_dung }}</p>
-    </div>
-    <p><strong>Ngày thông báo:</strong> {{ tb.ngay_tao|date:"d/m/Y" }}</p>
-    <a href="{% url 'TB:trang_thong_bao' %}" class="back">← Quay lại</a>
-  </div>
+
+<div class="box">
+  <h2 style="color:#ff4f7b;">🎁 {{ tb.tieu_de }}</h2>
+
+  {% if tb.hinh_anh %}
+    <img src="{{ tb.hinh_anh.url }}"
+         style="width:100%; border-radius:10px; margin:15px 0;">
+  {% endif %}
+
+  <p style="font-size:17px; line-height:1.6;">
+    {{ tb.noi_dung }}
+  </p>
+
+  <p>
+    <strong>Ngày thông báo:</strong>
+    {{ tb.ngay_tao|date:"d/m/Y H:i" }}
+  </p>
+
+  <a href="{% url 'TB:trang_thong_bao' %}" class="back-btn">← Quay lại</a>
+</div>
+
 </body>
 </html>

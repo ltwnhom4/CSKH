@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import KhieuNai, DanhGia
+from TB.models import ThongBao
 
 # 🌸 Cấu hình hiển thị cho model Khiếu nại
 @admin.register(KhieuNai)
@@ -79,10 +80,30 @@ class KhieuNaiAdmin(admin.ModelAdmin):
 
     # ✅ Khi nhân viên lưu phản hồi -> tự cập nhật trạng thái
     def save_model(self, request, obj, form, change):
-        # Nếu nhân viên có phản hồi thì cập nhật trạng thái
+        # Lấy trạng thái cũ trước khi lưu
+        old_status = None
+        if obj.pk:
+            old_obj = KhieuNai.objects.get(pk=obj.pk)
+            old_status = old_obj.trang_thai
+
+        # Nếu nhân viên nhập phản hồi -> tự chuyển sang "Đã phản hồi"
         if obj.phan_hoi and obj.trang_thai != 'Đã phản hồi':
             obj.trang_thai = 'Đã phản hồi'
+
         super().save_model(request, obj, form, change)
+
+        # ========= ⭐ GỬI THÔNG BÁO SAU KHI LƯU ⭐ =========
+        # Nếu trạng thái thay đổi từ khác -> "Đã phản hồi"
+        if old_status != obj.trang_thai and obj.trang_thai == "Đã phản hồi":
+            ThongBao.objects.create(
+                tieu_de="📬 Khiếu nại của bạn đã được phản hồi",
+                noi_dung=f"Nhân viên {request.user.username} đã phản hồi khiếu nại của bạn.",
+                loai="khieu_nai",
+                nguoi_gui=request.user,  # người xử lý
+                nguoi_nhan=obj.nguoi_gui,  # khách hàng
+                doi_tuong_id=obj.id,
+                link=f"/khieu-nai/chi-tiet/{obj.id}/"
+            )
 
 
 # 🌸 Cấu hình hiển thị cho model Đánh giá

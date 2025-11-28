@@ -24,6 +24,9 @@
           <th>Minh chứng</th>
           <th>Trạng thái</th>
           <th>Phản hồi</th>
+          {% if request.user.is_staff %}
+            <th>Hành động</th>
+          {% endif %}
         </tr>
       </thead>
 
@@ -83,6 +86,16 @@
                 <em>Chưa có phản hồi</em>
               {% endif %}
             </td>
+            {% if request.user.is_staff %}
+            <td>
+                <a href="{% url 'KhieunaiDanhgia:xu_ly_khieu_nai' k.id %}"
+                   style="background:#ff4f7b;color:white;padding:6px 12px;border-radius:8px;
+                          text-decoration:none;font-weight:600;display:inline-block;">
+                    Xử lý
+                </a>
+            </td>
+            {% endif %}
+
           </tr>
           {% endfor %}
         {% else %}

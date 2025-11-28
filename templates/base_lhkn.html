@@ -42,11 +42,11 @@
       </div>
 
       <!-- Khiếu nại -->
-      <a href="{% url 'danh_sach_khieu_nai' %}" class="{% if 'khieu-nai' in request.path %}active{% endif %}">
+      <a href="{% url 'KhieunaiDanhgia:danh_sach_khieu_nai' %}" class="{% if 'khieu-nai' in request.path %}active{% endif %}">
         <i class="fa-solid fa-comment-dots"></i> Khiếu nại
       </a>
       <div class="dropdown-content">
-        <a href="{% url 'danh_sach_khieu_nai' %}" class="{% if 'khieu-nai' in request.path %}active{% endif %}">
+        <a href="{% url 'KhieunaiDanhgia:danh_sach_khieu_nai' %}" class="{% if 'khieu-nai' in request.path %}active{% endif %}">
           Lịch sử khiếu nại
         </a>
       </div>
