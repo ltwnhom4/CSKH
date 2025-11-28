@@ -2,16 +2,62 @@
 {% block title %}Tạo khuyến mãi mới{% endblock %}
 {% block content %}
 <div class="container" style="max-width:700px; margin:50px auto; background:#fff; padding:40px; border-radius:16px; box-shadow:0 4px 15px rgba(255,182,193,0.3);">
-  <h2 style="color:#ff4f7b; text-align:center; margin-bottom:25px;">🎁 Tạo thông báo khuyến mãi</h2>
-  <form method="post">
+  <h2 style="color:#ff4f7b; text-align:center; margin-bottom:25px;">Tạo thông báo khuyến mãi</h2>
+    <form action="{% url 'TB:tao_khuyen_mai' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <div style="text-align:center;">
-      <button type="submit" style="background-color:#ff4f7b; border:none; color:white; padding:10px 20px; border-radius:8px; cursor:pointer;">
-        <i class="fa fa-paper-plane"></i> Gửi khuyến mãi
-      </button>
-      <a href="{% url 'TB:trang_thong_bao' %}" style="margin-left:10px; text-decoration:none; color:#ff4f7b;">Quay lại</a>
-    </div>
-  </form>
+
+<button type="submit" class="btn-submit-km">
+    <i class="fa fa-paper-plane"></i> Gửi khuyến mãi
+</button>
+
+<a href="{% url 'TB:danh_sach_khuyen_mai' %}" class="btn-back-km">
+    <i class="fa fa-arrow-left"></i> Quay lại
+</a>
+
+<style>
+/* ==========================
+     Nút Gửi khuyến mãi
+========================== */
+.btn-submit-km {
+    background: #ff4f7b;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    border: none;
+    font-weight: 600;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+.btn-submit-km:hover {
+    background: #ff2f63;
+    transform: translateY(-2px);
+}
+
+/* ==========================
+     Nút Quay lại
+========================== */
+.btn-back-km {
+    background: #ffd4de;
+    color: #c91c48;
+    padding: 8px 20px;
+    border-radius: 50px;
+    margin-left: 10px;
+    font-weight: 600;
+    display: inline-block;
+    transition: 0.2s ease;
+    text-decoration: none !important; /* 🔥 Không gạch chân */
+}
+.btn-back-km:hover {
+    background: #ffb6c9;
+    color: #a31435;
+    transform: translateY(-2px);
+    text-decoration: none; /* Đảm bảo hover cũng không gạch chân */
+}
+</style>
+
+
+
+    </form>
 </div>
 {% endblock %}

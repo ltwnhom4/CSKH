@@ -205,6 +205,9 @@ JAZZMIN_SETTINGS = {
    "usermenu_links": [
        {"name": "Trang chủ", "url": "/", "new_window": False},
    ],
+    "icons": {
+        "TB.ThongBao": "fas fa-bell",
+    },
 }
 
 

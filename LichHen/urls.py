@@ -16,5 +16,6 @@ urlpatterns = [
     path('lich-su/', views.lich_su_lich_hen, name='lich_su_lich_hen'),
     path('da-huy/', views.lich_da_huy, name='lich_da_huy'),
     path('api/thu-cung/<int:pk>/', views.thong_tin_thu_cung, name='api_thu_cung'),
+    path('chi-tiet/<int:id>/', views.chi_tiet_lich_hen, name='chi_tiet_lich_hen'),
 
 ]

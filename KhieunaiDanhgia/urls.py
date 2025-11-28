@@ -7,7 +7,8 @@ urlpatterns = [
     path('tao-danh-gia/<int:lich_hen_id>/', views.tao_danh_gia, name='tao_danh_gia'),
     path('tao-khieu-nai/<int:lich_hen_id>/', views.tao_khieu_nai, name='tao_khieu_nai'),
     path('danh-sach/', views.danh_sach_khieu_nai, name='danh_sach_khieu_nai'),
-
+    path("chi-tiet/<int:id>/", views.chi_tiet_khieu_nai, name="chi_tiet_khieu_nai"),
+    path('xu-ly/<int:id>/', views.xu_ly_khieu_nai, name='xu_ly_khieu_nai'),
 ]
 
 if settings.DEBUG:
