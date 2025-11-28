@@ -26,7 +26,7 @@
     <div class="event-row">
         <b>👩‍💼 Nhân viên:</b>
         {% if lh.nhan_vien %}
-            {{ lh.nhan_vien.ho_ten }}
+            {{ lh.nhan_vien.ho_ten|default:lh.nhan_vien.user.username }}
         {% else %}
             -
         {% endif %}
