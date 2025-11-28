@@ -38,10 +38,7 @@ def dangnhap(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if user.is_superuser or user.is_staff:
-                return redirect('/admin/')
-            else:
-               return redirect('home')
+            return redirect('home')
         else:
             messages.error(request, "Sai tên đăng nhập hoặc mật khẩu!")
 
@@ -105,7 +102,7 @@ def xoa_tai_khoan(request):
         user = request.user
         user.is_active = False
         user.save()
-        messages.success(request, "Tài khoản của bạn đã được xóa thành công!")
+        messages.success(request, "Tài khoản của bạn đã được khóa! Vui lòng liên hệ quản trị viên ")
         return redirect('dangxuat')  # đăng xuất sau khi khóa
 
     return render(request, 'TK/xoa_tai_khoan.html', {'user': request.user})

@@ -6,18 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng ký - Punky Spa</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'TK/style.css' %}">
+    <link rel="stylesheet" href="{% static 'TK/dangky.css' %}">
 </head>
 <body>
+{% if form.errors %}
+<div class="toast-error">
+    {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    {% endfor %}
+</div>
+{% endif %}
+
   <div class="register-wrapper">
 
     <!-- 🌸 FORM BÊN TRÁI -->
     <div class="register-left">
       <a href="{% url 'home' %}" class="back-btn"><i class="fa fa-arrow-left"></i></a>
-
-      <h2>Đăng ký tài khoản</h2>
-      <p class="sub">Tạo tài khoản mới để trải nghiệm dịch vụ <strong>Punky Spa 💕</strong></p>
-
       {% if messages %}
       <div class="messages">
         {% for message in messages %}
@@ -25,6 +31,10 @@
         {% endfor %}
       </div>
       {% endif %}
+      <h2>Đăng ký tài khoản</h2>
+      <p class="sub">Tạo tài khoản mới để trải nghiệm dịch vụ <strong>Punky Spa 💕</strong></p>
+
+
 
       <form method="POST">
         {% csrf_token %}

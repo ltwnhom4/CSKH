@@ -72,6 +72,7 @@
                 <div class="dropdown-menu">
                   {% if request.user.is_staff and not request.user.is_superuser %}
                     <a href="{% url 'thong_tin_nhanvien' %}"><i class="fa fa-user-tie"></i> Tài khoản</a>
+                    <a href="/admin/" class="dropdown-item"><i class="fa fa-tools"></i> Quản lý</a>
                     <a href="{% url 'xoa_tai_khoan' %}" class="delete-account"><i class="fa fa-trash"></i> Khóa tài khoản</a>
                     <a href="{% url 'dangxuat' %}" class="dropdown-item"><i class="fa fa-sign-out-alt"></i> Đăng xuất</a>
 
