@@ -12,13 +12,20 @@
 
 <!-- SIDEBAR -->
 <div class="sidebar">
+
     <div class="spa-title">Punky Spa</div>
 
+    <!-- LOGO CHÍNH -->
+    <div class="logo-box">
+        <img src="{% static 'trangchu/logo_lh_kn.png' %}" alt="Punky Spa Logo">
+    </div>
+
+    <!-- USERNAME -->
     <div class="profile-box">
-        <div class="profile-img"></div>
         <div class="profile-name">{{ request.user.username }}</div>
     </div>
 
+    <!-- PET LIST -->
     <div class="side-title">🐾 Thú cưng của bạn</div>
     {% for pet in request.user.khachhang.thucung_set.all %}
         <div class="side-item">{{ pet.ten_thucung }} ({{ pet.loai }})</div>
@@ -26,16 +33,18 @@
         <div class="side-item">Chưa có thú cưng</div>
     {% endfor %}
 
+    <!-- SERVICE SUGGEST -->
     <div class="side-title">✨ Gợi ý dịch vụ</div>
-        <div class="side-item">Tắm rửa cơ bản</div>
-        <div class="side-item">Cắt tỉa lông thẩm mỹ</div>
-        <div class="side-item">Chăm sóc da & spa</div>
+    <div class="side-item">Tắm rửa cơ bản</div>
+    <div class="side-item">Cắt tỉa lông thẩm mỹ</div>
+    <div class="side-item">Chăm sóc da & spa</div>
 
+    <!-- SUPPORT -->
     <div class="side-title">📞 Hỗ trợ</div>
-        <div class="side-item">Hotline: 1900 0099</div>
+    <div class="side-item">Hotline: 1900 0099</div>
+
 </div>
 
-<!-- NAVBAR -->
 <!-- NAVBAR -->
 <div class="top-nav">
     <div class="nav">
@@ -61,22 +70,19 @@
         </a>
 
         <a href="{% url 'danh_sach_khieu_nai' %}"
-           class="{% if '/kieu-nai' in request.path or '/khieu-nai' in request.path %}active{% endif %}">
+           class="{% if '/khieu-nai' in request.path %}active{% endif %}">
             Danh sách khiếu nại
         </a>
 
     </div>
 
-    <!-- BLOCK NÚT THÊM LỊCH -->
     {% block add_button %}{% endblock %}
 </div>
-
 
 <!-- MAIN CONTENT -->
 <div class="main-content">
     <div class="content-wrap">
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </div>
 </div>
 

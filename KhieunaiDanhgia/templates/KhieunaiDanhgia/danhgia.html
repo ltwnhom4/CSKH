@@ -1,127 +1,64 @@
 {% load static %}
+<link rel="stylesheet" href="{% static 'KhieunaiDanhgia/dg_kn.css' %}">
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Đánh giá dịch vụ</title>
-  <style>
-    body {
-      background-color: #fff6fa;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
 
-    .form-box {
-      position: relative;
-      width: 400px;
-      background: white;
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(255, 92, 141, 0.25);
-      text-align: center;
-    }
-
-    /* ❌ Nút thoát */
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      background: none;
-      border: none;
-      color: #ff5c8d;
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .close-btn:hover {
-      color: #a01940;
-      transform: scale(1.2);
-    }
-
-    h2 {
-      text-align: center;
-      color: #a01940;
-      margin-bottom: 25px;
-      font-size: 22px;
-      font-weight: 700;
-    }
-
-    form {
-      text-align: left;
-    }
-
-    .rating-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 20px;
-    }
-
-    .rating-item label {
-      margin-left: 8px;
-      color: #444;
-      font-size: 15px;
-    }
-
-    textarea {
-      width: 100%;
-      border: 1px solid #ffd6de;
-      border-radius: 8px;
-      padding: 10px;
-      resize: none;
-      height: 80px;
-      font-family: 'Segoe UI';
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    .submit-btn {
-      background: #ff5c8d;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      font-size: 15px;
-      transition: background 0.3s;
-    }
-
-    .submit-btn:hover {
-      background: #e84c7e;
-    }
-  </style>
 </head>
 <body>
+
   <div class="form-box">
 
-    <!-- ❌ Nút thoát về Lịch sử lịch hẹn -->
     <button class="close-btn" onclick="window.location.href='{% url 'lich_su_lich_hen' %}'">&times;</button>
 
     <h2>ĐÁNH GIÁ DỊCH VỤ</h2>
-    <form method="post" action="">
+
+    {% if da_danh_gia %}
+      <p class="notice">Bạn đã gửi đánh giá cho lịch hẹn này 💗</p>
+    {% endif %}
+
+    <form method="post">
       {% csrf_token %}
 
-      <!-- Mức độ hài lòng -->
       <div class="rating-group">
-        <p style="font-weight: 600; color: #333;">Mức độ hài lòng:</p>
-        <div class="rating-item"><input type="radio" name="diem" value="1" id="r1"> <label for="r1">1 - Rất không hài lòng</label></div>
-        <div class="rating-item"><input type="radio" name="diem" value="2" id="r2"> <label for="r2">2 - Không hài lòng</label></div>
-        <div class="rating-item"><input type="radio" name="diem" value="3" id="r3"> <label for="r3">3 - Bình thường</label></div>
-        <div class="rating-item"><input type="radio" name="diem" value="4" id="r4"> <label for="r4">4 - Hài lòng</label></div>
-        <div class="rating-item"><input type="radio" name="diem" value="5" id="r5"> <label for="r5">5 - Rất hài lòng</label></div>
+        <p style="font-weight: 600; margin-bottom: 6px;">Mức độ hài lòng:</p>
 
+        <div class="rating-item">
+          <input type="radio" name="diem" value="1" {% if form.initial.diem == 1 %}checked{% endif %} {% if da_danh_gia %}disabled{% endif %}>
+          <label>1 – Rất không hài lòng</label>
+        </div>
+
+        <div class="rating-item">
+          <input type="radio" name="diem" value="2" {% if form.initial.diem == 2 %}checked{% endif %} {% if da_danh_gia %}disabled{% endif %}>
+          <label>2 – Không hài lòng</label>
+        </div>
+
+        <div class="rating-item">
+          <input type="radio" name="diem" value="3" {% if form.initial.diem == 3 %}checked{% endif %} {% if da_danh_gia %}disabled{% endif %}>
+          <label>3 – Bình thường</label>
+        </div>
+
+        <div class="rating-item">
+          <input type="radio" name="diem" value="4" {% if form.initial.diem == 4 %}checked{% endif %} {% if da_danh_gia %}disabled{% endif %}>
+          <label>4 – Hài lòng</label>
+        </div>
+
+        <div class="rating-item">
+          <input type="radio" name="diem" value="5" {% if form.initial.diem == 5 %}checked{% endif %} {% if da_danh_gia %}disabled{% endif %}>
+          <label>5 – Rất hài lòng</label>
+        </div>
       </div>
 
-      <!-- Nhận xét -->
-      <label for="nhan_xet" style="font-weight: 600; color: #333;">Nhận xét:</label>
-      <textarea name="nhan_xet" id="nhan_xet" placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
-      <button type="submit" class="submit-btn">GỬI ĐÁNH GIÁ</button>
+      <label style="font-weight:600; float:left; margin-bottom:6px;">Chia sẻ trải nghiệm của bạn:</label>
+      <textarea name="nhan_xet" {% if da_danh_gia %}disabled{% endif %}>{{ form.nhan_xet.value|default:"" }}</textarea>
+
+      {% if da_danh_gia %}
+        <button class="submit-btn" disabled>ĐÃ GỬI ĐÁNH GIÁ</button>
+      {% else %}
+        <button class="submit-btn">GỬI ĐÁNH GIÁ</button>
+      {% endif %}
     </form>
   </div>
 </body>

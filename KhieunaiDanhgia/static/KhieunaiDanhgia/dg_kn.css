@@ -1,0 +1,160 @@
+/* ======================== */
+/*  NỀN TRANG               */
+/* ======================== */
+body {
+    background: #ffeaf2;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;   /* 💗 KHÔNG ép giữa để không che chữ */
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+/* ======================== */
+/*  HỘP FORM                */
+/* ======================== */
+.form-box {
+    width: 420px;
+    background: white;
+    padding: 35px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(255, 92, 141, 0.25);
+    position: relative;
+    overflow: visible;    /* 💗 ĐỂ KHÔNG CHE DẤU X */
+}
+
+/* ======================== */
+/*  NÚT X                   */
+/* ======================== */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: #ff5c8d;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* ======================== */
+/*  TIÊU ĐỀ                 */
+/* ======================== */
+h2 {
+    text-align: center;
+    color: #a01940;
+    font-size: 22px;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+/* ======================== */
+/*  LABEL                   */
+/* ======================== */
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 6px;
+    margin-top: 12px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* ======================== */
+/*  TEXTAREA VÀ INPUT       */
+/* ======================== */
+textarea,
+input[type="file"] {
+    width: 100%;
+    border: 1px solid #ffd6de;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    resize: none;
+}
+
+/* Ẩn input file khi đã gửi */
+.hidden-file {
+    display: none;
+}
+
+/* ======================== */
+/*  NÚT SUBMIT              */
+/* ======================== */
+.submit-btn {
+    background: #ff5c8d;
+    border: none;
+    color: white;
+    padding: 10px 18px;
+    margin-top: 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: #e84c7e;
+}
+
+.submit-btn:disabled {
+    background: #ffb6c9;
+    cursor: not-allowed;
+}
+
+/* ======================== */
+/*  ẢNH / VIDEO PREVIEW     */
+/* ======================== */
+.preview-box img,
+.preview-box video {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(255, 92, 141, 0.25);
+}
+
+/* ======================== */
+/*  RADIO (ĐÁNH GIÁ)        */
+/* ======================== */
+.rating-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.rating-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.rating-item label {
+    margin-left: 8px;
+    font-size: 15px;
+    color: #444;
+}
+.notice {
+    text-align: center !important;
+    color: #a01940 !important;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+    width: 100%;
+}
+/* Giữ nguyên khung đẹp khi disabled */
+.form-box textarea[disabled],
+.form-box input[disabled],
+.form-box select[disabled] {
+    background-color: #fff !important;
+    color: #555 !important;
+    border: 1.5px solid #f3a8c2 !important;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: not-allowed;
+    opacity: 1 !important;  /* KHÔNG làm mờ */
+}

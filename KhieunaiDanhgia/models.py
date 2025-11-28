@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from LichHen.models import LichHen
 
 class DanhGia(models.Model):
-    lich_hen = models.ForeignKey(LichHen, on_delete=models.CASCADE, related_name='danh_gia_list')
+    lich_hen = models.OneToOneField(LichHen, on_delete=models.CASCADE, related_name='danh_gia')
     nguoi_dung = models.ForeignKey(User, on_delete=models.CASCADE)
     diem = models.PositiveSmallIntegerField(choices=[(i, str(i)) for i in range(1, 6)], verbose_name="Mức độ hài lòng")
     nhan_xet = models.TextField(verbose_name="Nhận xét", blank=True)
@@ -14,7 +14,7 @@ class DanhGia(models.Model):
 
 
 class KhieuNai(models.Model):
-    lich_hen = models.ForeignKey(LichHen, on_delete=models.CASCADE, related_name='khieu_nai_list', null=True, blank=True)
+    lich_hen = models.OneToOneField(LichHen, on_delete=models.CASCADE, related_name='khieu_nai')
     nguoi_gui = models.ForeignKey(User, on_delete=models.CASCADE)
     noi_dung = models.TextField(verbose_name="Nội dung khiếu nại")
     minh_chung = models.FileField(upload_to='minhchung/', blank=True, null=True,

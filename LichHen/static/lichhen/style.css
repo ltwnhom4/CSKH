@@ -208,3 +208,229 @@ body {
 .action-wrapper {
     margin-top: 12px;
 }
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #ffeef4;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 270px;
+    background: white;
+    padding: 25px;
+    box-shadow: 4px 0 16px rgba(255, 92, 141, .15);
+    min-height: 100vh;
+    border-radius: 0 20px 20px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.spa-title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #ff5c8d;
+}
+
+.profile-box { text-align: center; margin-bottom: 20px; }
+
+.profile-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #ffd6e3;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.profile-name {
+    font-weight: 600;
+    color: #ff5c8d;
+}
+
+.side-title {
+    margin-top: 25px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #444;
+}
+
+.side-item {
+    background: #fff3f7;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border-left: 4px solid #ff5c8d;
+    font-size: 14px;
+}
+
+/* ===== NAVBAR ===== */
+.top-nav {
+    background: #ffd9e6;
+    height: 65px;
+    position: fixed;
+    top: 0;
+    left: 270px;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(255, 92, 141, .12);
+}
+
+.nav {
+    display: flex;
+    gap: 45px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.nav a {
+    color: #444;
+    text-decoration: none;
+    padding-bottom: 6px;
+}
+
+.nav a.active {
+    color: #ff5c8d;
+    border-bottom: 3px solid #ff5c8d;
+}
+
+.nav a:hover { color: #ff5c8d; }
+
+/* ===== BTN ADD ===== */
+.btn-add {
+    position: fixed;
+    right: 40px;
+    top: 12px;
+    padding: 10px 20px;
+    background: #ff5c8d;
+    color: white;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 92, 141, .4);
+    z-index: 1200;
+    transition: .2s;
+}
+
+.btn-add:hover { transform: scale(1.05); }
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+    margin-left: 270px;
+    margin-top: 90px;
+    display: flex;
+    justify-content: center;
+}
+
+.content-wrap {
+    width: 65%;
+    max-width: 900px;
+}
+
+/* ===== DATE ===== */
+.date-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ff5c8d;
+    margin: 25px 0 15px;
+}
+
+/* ===== EVENT CARD ===== */
+.event {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .06);
+    transition: .2s;
+}
+
+.event:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(255, 92, 141, .25);
+}
+
+.event-time {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.event-pet {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 6px 0;
+}
+
+.event-row {
+    margin: 4px 0;
+    font-size: 15px;
+}
+
+/* Hủy lịch */
+.cancel-btn {
+    margin-top: 12px;
+    background: white;
+    border: 2px solid #ff5c8d;
+    color: #ff5c8d;
+    padding: 8px 18px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.cancel-btn:hover {
+    background: #ff5c8d;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 92, 141, .5);
+}
+/* ===== BUTTON CHO LỊCH SỬ ===== */
+
+.action-btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border: 2px solid #ff5c8d;
+    border-radius: 40px;
+    color: #ff5c8d;
+    background: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+    margin-right: 15px;   /* TÁCH NÚT */
+}
+
+.action-btn:hover {
+    background: #ff5c8d;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 92, 141, 0.4);
+}
+
+.action-wrapper {
+    margin-top: 12px;
+}
+/* ===== LOGO PUNKY SPA ===== */
+.logo-box {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 15px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
