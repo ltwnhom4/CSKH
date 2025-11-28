@@ -28,7 +28,7 @@
                 <div class="event-row">
                     <b>👩‍💼 Nhân viên:</b>
                     {% if lich.nhan_vien %}
-                        {{ lich.nhan_vien.ho_ten }}
+                        {{ lich.nhan_vien.ho_ten|default:lich.nhan_vien.user.username }}
                     {% else %}
                         -
                     {% endif %}

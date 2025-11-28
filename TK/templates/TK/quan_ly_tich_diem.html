@@ -128,6 +128,45 @@ input[name="diem_moi"] {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+    /* 🌸 Huy hiệu cấp bậc khách hàng */
+.rank-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #a01940;
+  background: #ffeaf1;
+  border: 1px solid #f7c4d4;
+}
+
+/* 🐾 Thành viên mới */
+.rank-newbie {
+  background: #ffeaf1;
+  color: #c2185b;
+}
+
+/* 🥈 Bạc */
+.rank-silver {
+  background: #f0f0f0;
+  color: #555;
+  border: 1px solid #ccc;
+}
+
+/* 🏆 Vàng */
+.rank-gold {
+  background: #fff8d6;
+  color: #b8860b;
+  border: 1px solid #f4d03f;
+}
+
+/* 💎 Kim cương */
+.rank-diamond {
+  background: #e0f7ff;
+  color: #006c9c;
+  border: 1px solid #8be0ff;
+}
 </style>
 
 <div class="container-tichdiem">
@@ -156,6 +195,7 @@ input[name="diem_moi"] {
           <th>Họ Tên</th>
           <th>Số Điện Thoại</th>
           <th>Điểm Tích Lũy</th>
+          <th>Hạng</th>
           <th>Hành Động</th>
         </tr>
       </thead>
@@ -165,6 +205,12 @@ input[name="diem_moi"] {
           <td>{{ kh.ho_ten }}</td>
           <td>{{ kh.so_dien_thoai }}</td>
           <td>{{ kh.tich_diem.tong_diem|default:0 }}</td>
+          <td><span class="rank-badge
+            {% if kh.tich_diem.cap_bac == 'Thành viên mới 🐾' %}rank-newbie
+            {% elif kh.tich_diem.cap_bac == 'Bạc' %}rank-silver
+            {% elif kh.tich_diem.cap_bac == 'Vàng 🏆' %}rank-gold
+            {% elif kh.tich_diem.cap_bac == 'Kim cương 💎' %}rank-diamond
+            {% endif %}">{{ kh.tich_diem.cap_bac }}</span></td>
           <td>
             <form method="post" style="display:flex; justify-content:center; gap:6px;">
               {% csrf_token %}

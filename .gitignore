@@ -10,11 +10,6 @@ env/
 
 # SQLite database
 db.sqlite3
-
-# Django static & media
-staticfiles/
-media/
-
 # IDE
 .vscode/
 .idea/

@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Punky Spa – Chat hỗ trợ</title>
+
+<link rel="stylesheet" href="{% static 'chat/chat.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+
+</style>
+
+</head>
+
+<body>
+
+<div class="chatbox" id="chatBox">
+
+    <!-- ================= HEADER ================= -->
+    <div class="chat-header">
+        <a href="/" class="back-home-text">← Quay lại trang chủ</a>
+        <img src="{% static 'trangchu/logo.png' %}" class="chat-avatar">
+        <span id="badge-chat" class="badge-chat" style="display:none;">1</span>
+        <h3>Punky Spa hỗ trợ 🐾</h3>
+    </div>
+
+
+    <!-- ================= BODY CHAT ================= -->
+    <div class="chat-body" id="chatBody">
+
+        <!-- ⭐ ⭐ ⭐ MENU CHÀO LUÔN LUÔN HIỆN ⭐ ⭐ ⭐ -->
+        <div id="welcome-box">
+            <div class="message bot">
+
+                Xin chào 👋 chào mừng bạn đến với <b>Punky Spa</b>!<br>
+                Bạn cần được hỗ trợ về dịch vụ nào ạ?
+
+                <div class="options">
+                    <button onclick="sendOption('Báo giá dịch vụ')">Báo giá dịch vụ</button>
+                    <button onclick="sendOption('Hỏi đáp nhanh (FAQ)')">Hỏi đáp nhanh</button>
+                    <button onclick="sendOption('Tư vấn trực tiếp')">Tư vấn trực tiếp</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= HIỂN THỊ LỊCH SỬ TIN NHẮN ================= -->
+        {% for m in messages %}
+            {% if m.nguoi_gui == "KH" %}
+                <div class="message user">{{ m.noi_dung|safe }}</div>
+            {% else %}
+                <div class="message bot">{{ m.noi_dung|safe }}</div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <!-- ================= Ô GỬI TIN NHẮN ================= -->
+    <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Nhập tin nhắn của bạn..." />
+        <button id="chat-send"><i class="fa fa-paper-plane"></i></button>
+    </div>
+
+</div>
+
+<script src="{% static 'chat/chat.js' %}"></script>
+
+</body>
+</html>

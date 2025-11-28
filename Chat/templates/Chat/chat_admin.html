@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Chat khách – Nhân viên</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    body {
+        font-family: "Segoe UI", sans-serif;
+        background:#ffeef5;
+        display:flex;
+        justify-content:center;
+        padding:40px 0;
+    }
+
+    /* Khung chat */
+    .chat-admin-box {
+        width: 600px;
+        background:white;
+        border-radius:15px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        overflow:hidden;
+    }
+
+    /* =============== HEADER =============== */
+    .chat-header {
+        background:#ff9dc2;
+        padding:18px;
+        color:white;
+        font-size:20px;
+        font-weight:600;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .chat-header a {
+        color:white;
+        font-size:14px;
+        text-decoration:none;
+    }
+
+    /* =============== BODY =============== */
+    .chat-body {
+        height:500px;
+        overflow-y:auto;
+        padding:20px;
+
+        /* để bubble align trái/phải */
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+    }
+
+    /* =============== BUBBLES =============== */
+    .msg {
+        max-width: 75%;
+        padding: 12px 16px;
+        border-radius: 16px;
+        font-size: 15px;
+        line-height: 1.45;
+        word-break: break-word;
+    }
+
+    /* KHÁCH HÀNG – trái, hồng pastel */
+    .msg.KH {
+        background:#ffd6e8;
+        align-self:flex-start;
+        color:#222;
+    }
+
+    /* HỆ THỐNG – phải, màu BE */
+    .msg.HT {
+        background:#f7eedd;
+        align-self:flex-end;
+        color:#6f4e37;
+    }
+
+    /* NHÂN VIÊN – phải, cam pastel */
+    .msg.NV {
+        background:#ffe2c6;
+        align-self:flex-end;
+        color:#7a3e00;
+    }
+
+    /* ADMIN – phải, xanh mint */
+    .msg.AD {
+        background:#d8fff1;
+        align-self:flex-end;
+        color:#006653;
+    }
+
+    /* =============== INPUT BOX =============== */
+    .chat-input-area {
+        padding: 15px;
+        display:flex;
+        gap:10px;
+        background:#fff1f7;
+    }
+
+    .chat-input-area input {
+        flex:1;
+        padding:12px;
+        border:1px solid #ffb8d4;
+        border-radius:25px;
+    }
+
+    .chat-input-area button {
+        width:50px;
+        height:50px;
+        background:#ff5fa8;
+        border-radius:50%;
+        border:none;
+        color:white;
+        font-size:18px;
+        cursor:pointer;
+    }
+    /* Block tổng */
+.options.service-menu {
+    background: #fde7ef;
+    border-radius: 15px;
+    padding: 18px;
+    margin: 10px 0;
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* Tiêu đề */
+.options.service-menu .title,
+.options.service-menu div {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+/* Các nút */
+.options.service-menu button {
+    display: block;
+    width: 100%;
+    background: #ffcfe2;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.options.service-menu button:hover {
+    background: #ffb3ce;
+}
+
+
+</style>
+
+</head>
+<body>
+
+<div class="chat-admin-box">
+
+    <!-- HEADER -->
+    <div class="chat-header">
+        <span>💬 Đang chat với: <b>{{ target }}</b></span>
+        <a href="/chat/khach/">← Quay lại danh sách</a>
+    </div>
+
+    <!-- CHAT BODY -->
+    <div class="chat-body" id="chatBody">
+        {% for m in messages %}
+            {% if m.noi_dung.strip %}
+                <div class="msg {{ m.nguoi_gui }}">
+                    {{ m.noi_dung|safe }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- INPUT -->
+    <div class="chat-input-area">
+        <input type="text" id="admin-msg" placeholder="Nhập tin nhắn...">
+        <button onclick="sendAdminMsg()">
+            <i class="fa fa-paper-plane"></i>
+        </button>
+    </div>
+
+</div>
+
+
+<script>
+// Tự cuộn xuống cuối khi load
+const chatBody = document.getElementById("chatBody");
+chatBody.scrollTop = chatBody.scrollHeight;
+
+const adminInput = document.getElementById("admin-msg");
+
+// ===============
+// Gửi khi nhấn Enter
+// ===============
+adminInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        sendAdminMsg();
+    }
+});
+
+function sendAdminMsg() {
+    const text = adminInput.value.trim();
+    if (!text) return;
+
+    fetch("/chat/gui/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: JSON.stringify({
+            text: text,
+            mode: "{{ mode }}",
+            to: "{{ send_to }}"
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        location.reload();
+    });
+}
+
+// =====================================================
+// ⭐⭐ KHI MỞ CHAT → tự động đánh dấu tin KH đã đọc ⭐⭐
+// =====================================================
+fetch("/chat/clear-unread/", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": "{{ csrf_token }}",
+    },
+    body: JSON.stringify({
+        mode: "{{ mode }}",
+        to: "{{ send_to }}"
+    })
+});
+</script>
+
+</body>
+</html>

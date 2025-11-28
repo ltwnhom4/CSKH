@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils import timezone
-from TK.models import KhachHang, ThuCung, NhanVien
 from DV.models import DichVu
 from django.core.validators import RegexValidator
-from TK.models import KhachHang, ThuCung
+from TK.models import KhachHang, ThuCung,NhanVien
+from django.contrib.auth.models import User
 
 
 class LichHen(models.Model):
@@ -47,7 +47,13 @@ class LichHen(models.Model):
 
     da_nhac = models.BooleanField(default=False, help_text="Đánh dấu nếu đã gửi thông báo nhắc lịch cho khách.")
     tong_tien = models.DecimalField(max_digits=12, decimal_places=0, default=0)
-
+    nguoi_tao = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text="Tài khoản đã tạo lịch hẹn."
+    )
     def tinh_tong_tien(self):
         """Tính tổng tiền từ các dịch vụ đã chọn"""
         ds_dv = DV_LichHen.objects.filter(lich_hen=self)

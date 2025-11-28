@@ -1,0 +1,122 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Danh sách khách chat – Punky Spa</title>
+
+<style>
+    body {
+        background: #ffeef5;
+        font-family: "Segoe UI", sans-serif;
+        padding: 30px;
+    }
+    .container {
+        width: 600px;
+        margin: auto;
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    h2 {
+        text-align: center;
+        color: #ff5599;
+        margin-bottom: 20px;
+    }
+    .customer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #ffe1eb;
+        padding: 15px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        border: 1px solid #ffc1d6;
+        transition: 0.2s;
+        position: relative;
+    }
+    .customer:hover {
+        background: #ffd4e6;
+    }
+    .info {
+        font-size: 15px;
+    }
+    .btn {
+        background: #ff5599;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        position: relative;
+    }
+
+    /* Badge số tin chưa đọc */
+    .badge-unread {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: red;
+        color: white;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        font-size: 13px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    .back-btn {
+        display: inline-block;
+        background: #ff77aa;
+        color: white;
+        padding: 8px 18px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-bottom: 15px;
+        transition: 0.2s;
+    }
+
+    .back-btn:hover {
+        background: #ff5599;
+        transform: translateY(-2px);
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a href="/" class="back-btn">↩ Quay lại trang chủ</a>
+    <h2>💗 Danh sách khách đã chat</h2>
+
+    {% for k in khach_list %}
+    <div class="customer">
+
+        <!-- Thông tin khách -->
+        <div class="info">
+            <b>{{ k.ho_ten }}</b><br>
+            📞 {{ k.so_dien_thoai|default:"Không có số" }}<br>
+            🕒 {{ k.last_time|date:"d/m/Y H:i" }}
+        </div>
+
+        <!-- Nút xem hội thoại -->
+        <a class="btn" href="/chat/khach/{{ k.id }}/">
+            Xem hội thoại →
+            {% if k.unread > 0 %}
+                <span class="badge-unread">{{ k.unread }}</span>
+            {% endif %}
+        </a>
+
+    </div>
+    {% empty %}
+    <p>Chưa có khách nào nhắn tin.</p>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

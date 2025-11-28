@@ -1,0 +1,340 @@
+/* 🌸 Toàn bộ trang */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: white;
+    background-image: url("../images/bg-cat.jpg");
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+/* 🌸 Khung form chung */
+.auth-box {
+    max-width: 430px;
+    background: #fddce2;
+    padding: 35px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+    margin: 70px auto;
+    text-align: center;
+}
+
+/* 🌸 Tiêu đề */
+.auth-box h4, h2, h3 {
+    font-weight: bold;
+    color: #a01940;
+    margin-bottom: 25px;
+}
+
+/* 🌸 Input group */
+.input-group {
+    display: flex;
+    align-items: center;
+    border: 2px solid #000;
+    border-radius: 14px;
+    padding: 8px 15px;
+    margin-bottom: 15px;
+    background: #fff;
+}
+
+.input-group i {
+    color: #000 !important;  /* 👈 đồng bộ icon đen */
+    font-size: 18px;
+}
+
+.input-group input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    padding: 6px 10px;
+    background: none;
+}
+
+/* 🌸 Fix các icon text-danger của Bootstrap (ép về đen luôn) */
+.input-group-text.text-danger i,
+.input-group-text.text-danger {
+    color: #000 !important;
+}
+
+/* 🌸 Icon ẩn/hiện mật khẩu */
+.toggle {
+    cursor: pointer;
+    color: #000;
+    margin-left: 5px;
+    transition: 0.3s;
+}
+
+.toggle:hover {
+    color: #a01940;
+}
+
+/* 🌸 Nút chính */
+.btn-main {
+    width: 100%;
+    background-color: #a01940;
+    color: #fff;
+    border-radius: 10px;
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    background-color: #800d30;
+}
+
+/* 🌸 Liên kết phụ (Đăng ký / Đăng nhập / Quên mật khẩu) */
+.auth-text,
+.auth-options {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.auth-text a,
+.auth-options a {
+    color: #a01940;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.auth-text a:hover,
+.auth-options a:hover {
+    text-decoration: underline;
+    color: #800d30;
+}
+
+/* 🌸 Hàng liên kết dưới form (Đăng ký / Quên mật khẩu) căn 2 bên */
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 🌸 Đường kẻ chia */
+.divider {
+    margin: 20px 0;
+    position: relative;
+    text-align: center;
+    color: #333;
+    font-size: 15px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #aaa;
+}
+
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+/* 🌸 Social login */
+.social-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;   /* 👉 tăng khoảng cách giữa icon */
+    margin-top: 15px;
+}
+
+/* 🌸 Nút mạng xã hội */
+.social-btn {
+    border: none;
+    border-radius: 50%;
+    padding: 8px 15px;
+    font-size: 22px;
+    color: #fff;
+    background: #a01940;
+    transition: 0.3s ease;
+}
+
+.social-btn:hover {
+    background: #800d30;
+    transform: scale(1.08);
+}
+/* 🌸 Ẩn hoàn toàn nền trắng của popup đăng nhập / đăng ký */
+.modal {
+    display: none; /* Ẩn mặc định */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 80px;
+    background: transparent !important; /* ❌ Không có nền */
+    backdrop-filter: none !important;
+    pointer-events: none; /* Cho phép click nền phía sau */
+}
+
+/* 🌸 Hộp form hiển thị */
+.modal-content {
+    background: #fddce2;
+    border-radius: 20px;
+    padding: 30px;
+    width: 400px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    position: relative;
+    animation: popup 0.3s ease-out;
+    z-index: 1000;
+    pointer-events: all; /* Cho phép tương tác trong form */
+}
+
+/* 🌸 Hiệu ứng bật popup */
+@keyframes popup {
+    from { transform: translateY(-15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 🌸 Dấu X */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 26px;
+    cursor: pointer;
+    color: #000;
+    transition: 0.3s;
+}
+.close:hover {
+    color: #a01940;
+}
+.auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* Khung form đăng nhập */
+.auth-box {
+    background: #fddce2;
+    border-radius: 20px;
+    padding: 40px 45px;
+    width: 420px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    text-align: center;
+    position: relative;
+    animation: popup 0.3s ease-out;
+}
+
+@keyframes popup {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.auth-box h2 {
+    color: #a01940;
+    margin-bottom: 20px;
+}
+}
+
+/* Nhóm input */
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+}
+
+.input-group input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 15px;
+}
+
+.input-group-text {
+    margin-right: 8px;
+    color: #a01940;
+}
+
+
+.toggle {
+    color: #a01940;
+    cursor: pointer;
+}
+
+.btn-main {
+    background: #a01940;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-main:hover {
+    background: #801332;
+}
+
+.divider {
+    margin: 15px 0;
+    font-size: 14px;
+    color: #444;
+}
+
+.social-login {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+.social-btn.fb { background: #3b5998; }
+.social-btn.gg { background: #db4a39; }
+
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+.form-errors {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.error-text {
+    color: #b4003d;
+    font-weight: 500;
+    background: #ffe1eb;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+

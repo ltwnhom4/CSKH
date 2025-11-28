@@ -49,7 +49,7 @@ def lich_hen_sap_toi(request):
     lich_hens = LichHen.objects.filter(
         khach_hang_id=khach_hang.id,
         trang_thai='sap_toi'
-    ).select_related('thu_cung', 'khach_hang').order_by('thoi_gian')
+    ).select_related('thu_cung', 'khach_hang','nhan_vien').order_by('thoi_gian')
 
     return render(request, 'lichhen/lich_hen_sap_toi.html', {'lich_hens': lich_hens})
 
@@ -141,7 +141,6 @@ def tao_lich_hen(request):
                     link=f"/lich-hen/chi-tiet/{lich_hen.id}/"
                 )
 
-            messages.success(request, "Thêm lịch hẹn thành công!")
             return redirect('lich_hen_sap_toi')
         else:
             messages.error(request, "Vui lòng nhập đầy đủ thông tin hợp lệ.")
@@ -216,7 +215,13 @@ def xoa_lich_hen(request, id):
 @login_required(login_url='/dangnhap/')
 def lich_da_huy(request):
     khach_hang = KhachHang.objects.filter(user=request.user).first()
-    lich_hens = LichHen.objects.filter(khach_hang=khach_hang, trang_thai='huy').order_by('-thoi_gian')
+    lich_hens = LichHen.objects.filter(
+        khach_hang=khach_hang,
+        trang_thai='huy'
+    ).select_related('thu_cung', 'khach_hang', 'nhan_vien') \
+        .prefetch_related('dv_lichhen_set__dich_vu') \
+        .order_by('-thoi_gian')
+
     return render(request, 'lichhen/lich_da_huy.html', {'lich_hens': lich_hens})
 
 
@@ -224,7 +229,12 @@ def lich_da_huy(request):
 @login_required(login_url='/dangnhap/')
 def lich_su_lich_hen(request):
     khach_hang = KhachHang.objects.filter(user=request.user).first()
-    lich_hens = LichHen.objects.filter(khach_hang=khach_hang, trang_thai='hoan_thanh').order_by('-thoi_gian')
+    lich_hens = LichHen.objects.filter(
+        khach_hang=khach_hang,
+        trang_thai='hoan_thanh'
+    ).select_related('thu_cung', 'khach_hang', 'nhan_vien') \
+        .prefetch_related('dv_lichhen_set__dich_vu') \
+        .order_by('-thoi_gian')
     return render(request, 'lichhen/lich_su_lich_hen.html', {'lich_hens': lich_hens})
 
 
