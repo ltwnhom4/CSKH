@@ -21,7 +21,7 @@ class KhachHangForm(forms.ModelForm):
         model = KhachHang
         fields = ['ho_ten', 'gioi_tinh', 'so_dien_thoai', 'ngay_sinh', 'dia_chi', 'email']
         widgets = {
-            'ngay_sinh': forms.TextInput(attrs={'placeholder': 'dd/mm/yy'}),
+            'ngay_sinh': forms.DateInput(attrs={'type': 'date'}),
         }
 class NhanVienForm(forms.ModelForm):
    class Meta:
