@@ -19,7 +19,7 @@ class KhieuNai(models.Model):
     noi_dung = models.TextField(verbose_name="Nội dung khiếu nại")
     minh_chung = models.FileField(upload_to='minhchung/', blank=True, null=True,
                                   verbose_name="Minh chứng (ảnh hoặc video)")
-    yeu_cau = models.TextField(verbose_name="Yêu cầu/mong muốn", blank=True)
+    yeu_cau = models.TextField(verbose_name="Yêu cầu/mong muốn")
     phan_hoi = models.TextField(verbose_name="Phản hồi / Ghi chú từ nhân viên", blank=True, null=True)
     trang_thai = models.CharField(
         max_length=30,
