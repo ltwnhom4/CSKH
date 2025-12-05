@@ -194,8 +194,8 @@ def danh_sach_khuyen_mai(request):
 
 @login_required
 @user_passes_test(la_nhan_vien)
-def xoa_khuyen_mai(request, id):
-    km = get_object_or_404(ThongBao, id=id, loai='khuyen_mai')
+def xoa_khuyen_mai(request,km_id):
+    km = get_object_or_404(ThongBao, id=km_id, loai='khuyen_mai')
 
     # Xóa 1 bản ghi duy nhất
     km.delete()
