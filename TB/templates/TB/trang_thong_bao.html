@@ -245,7 +245,7 @@
         <div class="tb-item">
           <div>
             <h4>{{ tb.tieu_de }}</h4>
-            <p>{{ tb.noi_dung }}</p>
+            <p>{{ tb.noi_dung|truncatechars:140  }}</p>
             <small>{{ tb.ngay_tao|date:"d/m/Y H:i" }}</small>
           </div>
           <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>

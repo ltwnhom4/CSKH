@@ -134,9 +134,9 @@ def xem_thong_bao(request, tb_id):
 
     # ✅ Nếu không có link → fallback theo loại
     if tb.loai == 'lich_hen' and tb.doi_tuong_id:
-        return redirect('chi_tiet_lich_hen', id=tb.doi_tuong_id)
+        return redirect('TB:chi_tiet_lich_hen', id=tb.doi_tuong_id)
     elif tb.loai == 'khuyen_mai' and tb.doi_tuong_id:
-        return redirect('chi_tiet_khuyen_mai', id=tb.doi_tuong_id)
+        return redirect('TB:chi_tiet_khuyen_mai', id=tb.doi_tuong_id)
     elif tb.loai == "khieu_nai" and tb.doi_tuong_id:
         return redirect("chi_tiet_khieu_nai", id=tb.doi_tuong_id)
     # ✅ Nếu không có loại cụ thể → quay lại danh sách
@@ -146,7 +146,7 @@ def xem_thong_bao(request, tb_id):
 @user_passes_test(la_nhan_vien)
 def tao_khuyen_mai(request):
     if request.method == 'POST':
-        form = KhuyenMaiForm(request.POST, request.FILES)   # 🔥 PHẢI CÓ request.FILES
+        form = KhuyenMaiForm(request.POST, request.FILES)   #  PHẢI CÓ request.FILES
         if form.is_valid():
 
             tieu_de = form.cleaned_data['tieu_de']
@@ -154,7 +154,7 @@ def tao_khuyen_mai(request):
             hinh_anh = form.cleaned_data.get('hinh_anh', None)
             nguoi_gui = request.user
 
-            # 🔥 Lấy TẤT CẢ khách hàng thực tế
+            #  Lấy TẤT CẢ khách hàng thực tế
             khach_hangs = KhachHang.objects.all()
 
             so_nguoi = 0
@@ -207,4 +207,27 @@ def chi_tiet_khuyen_mai(request, id):
     km = get_object_or_404(ThongBao, id=id, loai='khuyen_mai')
     return render(request, 'TB/chi_tiet_khuyen_mai.html', {'km': km})
 
+# 📄 Chi tiết lịch hẹn
+@login_required(login_url='/dangnhap/')
+def chi_tiet_lich_hen(request, id):
+    lich_hen = get_object_or_404(LichHen, id=id)
 
+    # ⭐ ADMIN / NHÂN VIÊN → xem được tất cả lịch hẹn
+    if request.user.is_staff:
+        dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
+        return render(request, 'TB/chi_tiet_lich_hen.html', {
+            'lich_hen': lich_hen,
+            'dich_vu_list': dich_vu_list
+        })
+
+    # ⭐ KHÁCH HÀNG → chỉ xem lịch của mình
+    kh = KhachHang.objects.filter(user=request.user).first()
+    if not kh or lich_hen.khach_hang != kh:
+        return redirect('TB:trang_thong_bao')
+
+    dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
+
+    return render(request, 'TB/chi_tiet_lich_hen.html', {
+        'lich_hen': lich_hen,
+        'dich_vu_list': dich_vu_list
+    })

@@ -1,12 +1,35 @@
 from django.contrib import admin
-
-# Register your models here.
-from django.contrib import admin
 from .models import ThongBao
 
 @admin.register(ThongBao)
 class ThongBaoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tieu_de', 'nguoi_gui', 'nguoi_nhan', 'loai', 'ngay_tao', 'da_doc')
-    list_filter = ('loai', 'ngay_tao', 'da_doc')
-    search_fields = ('tieu_de', 'noi_dung', 'nguoi_gui__username', 'nguoi_nhan__username')
-    ordering = ('-ngay_tao',)
+    fields = ('loai', 'tieu_de', 'noi_dung', 'nguoi_nhan', 'hinh_anh', 'doi_tuong_id', 'link')
+
+    # ❌ Không cho phép tạo thông báo mới
+    def has_add_permission(self, request):
+        return False
+
+    # ✔ Cho phép sửa
+    def has_change_permission(self, request, obj=None):
+        return True
+
+    # ✔ Cho phép xem danh sách
+    def has_view_permission(self, request, obj=None):
+        return True
+
+    # ❌ Không cho phép xóa
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        # Ẩn field nguoi_gui trong admin
+        if 'nguoi_gui' in form.base_fields:
+            form.base_fields.pop('nguoi_gui')
+        return form
+
+    def save_model(self, request, obj, form, change):
+        # Nếu chỉnh sửa, giữ nguyên người gửi cũ
+        if not obj.pk:
+            obj.nguoi_gui = request.user
+        super().save_model(request, obj, form, change)
