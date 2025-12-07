@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     # Xem danh sách lịch hẹn sắp tới
     path('sap-toi/', views.lich_hen_sap_toi, name='lich_hen_sap_toi'),

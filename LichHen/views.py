@@ -139,6 +139,7 @@ def tao_lich_hen(request):
                     loai='lich_hen',
                     nguoi_gui=request.user,
                     nguoi_nhan=admin_user,
+                    doi_tuong_id=lich_hen.id,
                     link=reverse("chi_tiet_lich_hen", args=[lich_hen.id])
 
                 )
