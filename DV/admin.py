@@ -9,10 +9,3 @@ class DichVuAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
 
-    # 🩷 Ẩn luôn hành động "Xóa các dịch vụ đã chọn" khỏi menu hành động
-    def get_actions(self, request):
-        actions = super().get_actions(request)
-        if not request.user.is_superuser:
-            if 'delete_selected' in actions:
-                del actions['delete_selected']
-        return actions
