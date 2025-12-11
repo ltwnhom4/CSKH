@@ -1,5 +1,3 @@
-
-
 * {
       margin: 0;
       padding: 0;
@@ -16,7 +14,7 @@
     }
 
     /* 🌸 Khung tổng */
-    .forgot-wrapper {
+    .login-wrapper {
       display: flex;
       width: 900px;
       height: 540px;
@@ -26,8 +24,8 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
 
-    /* 🌸 Bên trái: Form */
-    .forgot-left {
+    /* 🌸 Bên trái: Form đăng nhập */
+    .login-left {
       flex: 1;
       padding: 50px 60px;
       display: flex;
@@ -48,18 +46,17 @@
       font-weight: 600;
       transition: color 0.3s ease;
     }
-
     .back-btn:hover { color: #d94c66; }
     .back-btn i { margin-right: 6px; }
 
-    .forgot-left h2 {
+    .login-left h2 {
       color: #a01940;
       font-size: 28px;
       margin-bottom: 8px;
       text-align: center;
     }
 
-    .forgot-left p.sub {
+    .login-left p.sub {
       color: #666;
       margin-bottom: 25px;
       font-size: 15px;
@@ -77,14 +74,11 @@
       margin-bottom: 16px;
       transition: border-color 0.3s ease;
     }
-
     .input-group:focus-within { border-color: #ff5c8d; }
     .input-group i {
       color: #a01940;
-      margin-right: 10px;
       font-size: 15px;
     }
-
     .input-group input {
       border: none;
       outline: none;
@@ -92,13 +86,45 @@
       width: 100%;
       font-size: 15px;
       color: #333;
+      margin-left: 10px;
     }
     .input-group:focus-within {
-    border-color: #000;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+      border-color: #000;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
     }
-    /* 🌸 Nút chính */
-    .btn-forgot {
+
+    /* 🌸 Con mắt hiển thị mật khẩu */
+    .toggle-eye {
+      color: #a01940;
+      font-size: 16px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      margin-left: 8px;
+    }
+    .toggle-eye:hover {
+      color: #d94c66;
+    }
+
+    /* 🌸 Liên kết nhỏ */
+    .form-links {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 15px;
+    }
+    .form-links a {
+      color: #a01940;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .form-links a:hover {
+      text-decoration: underline;
+      color: #d94c66;
+    }
+
+    /* 🌸 Nút đăng nhập */
+    .btn-login {
       background-color: #a01940;
       color: white;
       border: none;
@@ -110,59 +136,85 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
-    .btn-forgot:hover { background-color: #d94c66; }
-
-    /* 🌸 Liên kết nhỏ */
-    .form-links {
-      text-align: center;
-      font-size: 14px;
-      color: #555;
-      margin-top: 15px;
-    }
-
-    .form-links a {
-      color: #a01940;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .form-links a:hover {
-      text-decoration: underline;
-      color: #d94c66;
+    .btn-login:hover {
+      background-color: #d94c66;
     }
 
     /* 🌸 Bên phải: hình nền */
-    .forgot-right {
+    .login-right {
       flex: 0 0 52%;
       background: linear-gradient(135deg, #ffb6c1, #ffa8c3);
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
       overflow: hidden;
     }
 
+    .login-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0 20px 20px 0;
+      animation: float 6s ease-in-out infinite;
+    }
 
-.forgot-right img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 0 20px 20px 0;
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
 
     /* 🌸 Responsive */
     @media (max-width: 900px) {
-      .forgot-wrapper {
+      .login-wrapper {
         flex-direction: column;
         width: 95%;
         height: auto;
       }
-      .forgot-right { display: none; }
-      .forgot-left { padding: 40px 30px; }
+      .login-right { display: none; }
+      .login-left { padding: 40px 30px; }
     }
+
+/* 🌸 THÔNG BÁO CHUNG */
+.messages {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 18px;
+    border-radius: 10px;
+    width: 380px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    animation: slideDown 0.45s ease-out,
+               fadeOut 0.7s ease-in 3s forwards;
+    z-index: 999;
+}
+
+/* 🌸 THÔNG BÁO LỖI – GIỮ NGUYÊN MÀU HỒNG */
+.messages p.error {
+    background: #ffe5eb;
+    border-left: 4px solid #d6003d;
+    color: #b20030;
+    font-weight: 600;
+}
+
+/* 🌸 THÔNG BÁO THÀNH CÔNG – ĐỔI MÀU XANH */
+.messages p.success {
+    background: #e6fff1;
+    border-left: 4px solid #2ecc71;
+    color: #1e9d57;
+    font-weight: 600;
+}
+
+/* Animation */
+@keyframes slideDown {
+    from { opacity: 0; transform: translate(-50%, -20px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; transform: translate(-50%, -10px); }
+}
