@@ -13,6 +13,12 @@ class DV_LichHenInline(admin.TabularInline):
 
 @admin.register(LichHen)
 class LichHenAdmin(admin.ModelAdmin):
+    def _lay_nhan_vien(self, request):
+        """Tiện ích lấy bản ghi NhanVien gắn với user hiện tại (nếu có)."""
+        try:
+            return NhanVien.objects.get(user=request.user)
+        except NhanVien.DoesNotExist:
+            return None
 
     list_display = ('khach_hang', 'so_dien_thoai','thu_cung','nhan_vien', 'thoi_gian', 'trang_thai','hien_thi_dich_vu','ghi_chu', 'ly_do_huy')
     list_filter = ('trang_thai','nhan_vien','thoi_gian')
@@ -24,13 +30,59 @@ class LichHenAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
 
-        # STAFF không được chọn nhan_vien
+        # STAFF không được chọn nhan_vien; admin sẽ phân công sau
         if request.user.is_staff and not request.user.is_superuser:
             if 'nhan_vien' in form.base_fields:
                 form.base_fields['nhan_vien'].disabled = True
 
         return form
+    # Hạn chế quyền xem/chỉnh sửa/xóa: admin toàn quyền, nhân viên chỉ với lịch được phân công
+    def has_view_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
 
+        nhan_vien = self._lay_nhan_vien(request)
+        if not request.user.is_staff or nhan_vien is None:
+            return False
+
+        if obj is None:
+            return True  # danh sách đã được lọc trong get_queryset
+
+        return obj.nhan_vien == nhan_vien
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+
+        nhan_vien = self._lay_nhan_vien(request)
+        if not request.user.is_staff or nhan_vien is None:
+            return False
+
+        if obj is None:
+            return True
+
+        return obj.nhan_vien == nhan_vien
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+
+        nhan_vien = self._lay_nhan_vien(request)
+        if not request.user.is_staff or nhan_vien is None:
+            return False
+
+        if obj is None:
+            return True
+
+        return obj.nhan_vien == nhan_vien
+
+    def has_add_permission(self, request):
+        # Chỉ cho phép tạo nếu có hồ sơ nhân viên; admin toàn quyền
+        if request.user.is_superuser:
+            return True
+
+        nhan_vien = self._lay_nhan_vien(request)
+        return request.user.is_staff and nhan_vien is not None
     # Hiển thị DV
     def hien_thi_dich_vu(self, obj):
         dich_vus = obj.dv_lichhen_set.select_related('dich_vu').all()
@@ -58,8 +110,17 @@ class LichHenAdmin(admin.ModelAdmin):
         # Lịch do chính user tạo
         if obj.nguoi_tao == request.user:
             return ['ly_do_huy','nguoi_tao','tong_tien']
+        # Lịch do nhân viên tạo → admin có thể phân công nhân viên và điều chỉnh trạng thái
+        if request.user.is_superuser:
+            return [
+                f.name
+                for f in self.model._meta.fields
+                if f.name not in ('nhan_vien', 'trang_thai')
+            ]
 
         # Staff khác → chỉ sửa trạng thái
+        if request.user.is_superuser:
+            return []
         if request.user.is_staff:
             return ['khach_hang', 'thu_cung', 'nhan_vien','so_dien_thoai', 'thoi_gian', 'ghi_chu','tong_tien', 'ly_do_huy']
 
@@ -84,12 +145,10 @@ class LichHenAdmin(admin.ModelAdmin):
 
         # Nhân viên xem lịch do mình phụ trách
         if request.user.is_staff:
-            try:
-                nv = NhanVien.objects.get(user=request.user)
-            except NhanVien.DoesNotExist:
-                return qs.none()  # nhân viên chưa có profile NhanVien → không thấy lịch nào
-
-            return qs.filter(nhan_vien=nv)
+                nv = self._lay_nhan_vien(request)
+                if nv is None:
+                    return qs.none()  # nhân viên chưa có profile NhanVien → không thấy lịch nào
+                return qs.filter(nhan_vien=nv)
 
         # Khách thì không có quyền vào admin
         return qs.none()
