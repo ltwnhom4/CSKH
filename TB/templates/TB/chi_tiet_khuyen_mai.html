@@ -1,38 +1,29 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Chi tiết khuyến mãi</title>
-  <style>
-    body { background:#fff5f8; font-family:'Poppins',sans-serif; padding:40px; }
-    .promo-box {
-      max-width:800px; margin:auto; background:#fff; padding:30px;
-      border-radius:12px; box-shadow:0 2px 8px rgba(255,182,193,0.3);
-    }
-    h2 { color:#ff4f7b; }
-    .highlight { background:#fff0f3; padding:10px; border-radius:6px; }
-    a.back {
-      display:inline-block; margin-top:20px; background:#ff7aa5; color:white;
-      padding:8px 14px; border-radius:6px; text-decoration:none;
-    }
-  </style>
-</head>
-<body>
-  <div class="promo-box">
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Khuyến mãi: {{ tb.tieu_de }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'TB/chitiet.css' %}">
+
+<div class="ct-container">
+
     <h2>🎁 {{ tb.tieu_de }}</h2>
+
     {% if tb.hinh_anh %}
-      <img src="{{ tb.hinh_anh.url }}"
-           alt="Hình khuyến mãi"
-           style="width:50%; display:block;
-                    margin:0 auto 20px auto;
-                    border-radius:12px">
+        <img src="{{ tb.hinh_anh.url }}" alt="Hình khuyến mãi" class="ct-img">
     {% endif %}
 
-    <div class="highlight">
-      <p>{{ tb.noi_dung|linebreaksbr|safe }}</p>
+    <div class="ct-value" style="margin-top:15px;">
+        {{ tb.noi_dung|linebreaksbr }}
     </div>
-    <p><strong>Ngày thông báo:</strong> {{ tb.ngay_tao|date:"d/m/Y" }}</p>
-    <a href="javascript:history.back()" class="back">← Quay lại</a>
-  </div>
-</body>
-</html>
+
+    <p style="color:#666; margin-top:10px;">
+        📅 <strong>Ngày thông báo:</strong> {{ tb.ngay_tao|date:"d/m/Y H:i" }}
+    </p>
+
+    <a href="javascript:history.back()" class="ct-back"> ← Quay lại</a>
+
+</div>
+
+{% endblock %}

@@ -37,7 +37,20 @@
                           <small>{{ tb.ngay_tao|date:"H:i  d-m-Y" }}</small>
                       </div>
                   </div>
-                  <a href="{% url 'TB:chi_tiet_lich_hen' tb.id %}" class="tb-detail">Xem chi tiết</a>
+
+                  {# ----- Điều hướng chi tiết theo loại thông báo ----- #}
+                  {% if tb.loai == "lich_hen" %}
+                      <a href="{% url 'TB:chi_tiet_lich_hen' tb.id %}" class="tb-detail">Xem chi tiết</a>
+
+                  {% elif tb.loai == "khuyen_mai" %}
+                      <a href="{% url 'TB:chi_tiet_khuyen_mai' tb.id %}" class="tb-detail">Xem chi tiết</a>
+
+                  {% elif tb.loai == "khieu_nai" %}
+                      <a href="{% url 'TB:chi_tiet_khieu_nai' tb.id %}" class="tb-detail">Xem chi tiết</a>
+
+                  {% else %}
+                      <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
+                  {% endif %}
               </div>
           {% empty %}
               <p>Bạn chưa có thông báo nào.</p>
