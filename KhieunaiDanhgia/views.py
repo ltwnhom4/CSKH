@@ -28,7 +28,6 @@ def tao_danh_gia(request, lich_hen_id):
             dg.lich_hen = lich_hen
             dg.nguoi_dung = request.user
             dg.save()
-            messages.success(request, "🎉 Gửi đánh giá thành công!")
             return redirect("tao_danh_gia", lich_hen_id=lich_hen.id)
     else:
         form = DanhGiaForm(instance=danh_gia_instance)
@@ -64,7 +63,6 @@ def tao_khieu_nai(request, lich_hen_id):
 
             # CHỈ Admin và nhân viên phụ trách mới được POST
             if not (is_admin or is_responsible_staff):
-                messages.error(request, "❌ Bạn không thể chỉnh sửa khiếu nại này.")
                 return redirect("tao_khieu_nai", lich_hen_id=lich_hen.id)
 
             form = KhieuNaiForm(request.POST, request.FILES, instance=kn)
@@ -89,7 +87,6 @@ def tao_khieu_nai(request, lich_hen_id):
                     updated.trang_thai = original.trang_thai
 
                 updated.save()
-                messages.success(request, "🎉 Cập nhật thành công!")
                 return redirect("tao_khieu_nai", lich_hen_id=lich_hen.id)
 
         # --- GET hiển thị form ---
@@ -102,9 +99,7 @@ def tao_khieu_nai(request, lich_hen_id):
             form.allow_staff_edit()
         if is_admin:
             form.lock_admin_fields()
-        # 🟣 Admin → KHÔNG mở bất kỳ trường nào!
         # Admin CHỈ sửa field “nhân viên phân công” → field này nằm ngoài form, ở admin site.
-        # => Ở đây admin KHÔNG được sửa gì.
 
         return render(request, "KhieunaiDanhgia/khieunai.html", {
             "form": form,
@@ -150,7 +145,6 @@ def tao_khieu_nai(request, lich_hen_id):
             )
 
             lich_hen.refresh_from_db()
-            messages.success(request, "🎉 Gửi khiếu nại thành công!")
             return redirect("tao_khieu_nai", lich_hen_id=lich_hen.id)
 
     else:
@@ -168,9 +162,13 @@ def tao_khieu_nai(request, lich_hen_id):
 # -------------------------------
 @login_required
 def danh_sach_khieu_nai(request):
-    if request.user.is_staff or request.user.is_superuser:
+    if request.user.is_superuser:
         # Nếu là admin hoặc superuser, xem tất cả khiếu nại
         khieu_nai_list = KhieuNai.objects.all().order_by('-id')
+    elif request.user.is_staff:
+        khieu_nai_list = KhieuNai.objects.filter(
+            nhan_vien_phu_trach=request.user
+        ).order_by('-id')
     else:
         # Nếu là người dùng bình thường, chỉ xem khiếu nại của bản thân
         khieu_nai_list = KhieuNai.objects.filter(nguoi_gui=request.user).order_by('-id')
@@ -241,11 +239,19 @@ def xu_ly_khieu_nai(request, id):
 def chi_tiet_khieu_nai(request, id):
     khieunai = get_object_or_404(KhieuNai, id=id)
 
-    if request.user.is_staff:
-        return render(request, 'TB/chi_tiet_khieu_nai.html', {'khieunai': khieunai})
+    # ADMIN → xem tất cả
+    if request.user.is_superuser:
+        pass
 
-    if khieunai.nguoi_gui != request.user:
+    # NHÂN VIÊN → chỉ xem khi được phân công
+    elif request.user.is_staff:
+        if khieunai.nhan_vien_phu_trach != request.user:
+            messages.error(request, "Bạn không được xem khiếu nại không giao cho bạn.")
+            return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
+
+    # KHÁCH → chỉ xem khiếu nại mình gửi
+    elif khieunai.nguoi_gui != request.user:
         messages.error(request, "Bạn không được xem khiếu nại của người khác.")
-        return redirect('TB:trang_thong_bao')
+        return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
 
     return render(request, 'TB/chi_tiet_khieu_nai.html', {'khieunai': khieunai})
