@@ -10,22 +10,64 @@ class NhanVienAdmin(admin.ModelAdmin):
     list_display = ('ho_ten', 'email', 'so_dien_thoai','dia_chi', 'ngay_vao_lam')
     search_fields = ('ho_ten', 'so_dien_thoai')
     ordering = ('ngay_vao_lam',)
-
-    # 🔒 Tắt quyền thêm thủ công trong admin
+    # Không cho thêm
     def has_add_permission(self, request):
         return False
+
+    # Không cho sửa
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    # Không cho xóa
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_view_permission(self, request, obj=None):
+        # Nếu là superuser → vẫn được xem (tùy bạn)
+        if request.user.is_superuser:
+            return True
+
 class KhachHangAdmin(admin.ModelAdmin):
    list_display = ('ho_ten', 'so_dien_thoai', 'dia_chi','email', 'gioi_tinh', 'ngay_sinh', 'ngay_tham_gia')
    search_fields = ( 'ho_ten', 'so_dien_thoai' )
    ordering = ('ngay_tham_gia',)
    def has_add_permission(self, request):
        return False
+   # Không cho thêm
+   def has_add_permission(self, request):
+        return False
+
+    # Không cho chỉnh sửa
+   def has_change_permission(self, request, obj=None):
+        return False
+
+    # Không cho xóa
+   def has_delete_permission(self, request, obj=None):
+        return False
+
+    # Chỉ cho xem
+   def has_view_permission(self, request, obj=None):
+        return True
 
 class ThuCungAdmin(admin.ModelAdmin):
    list_display = ('ten_thucung', 'loai', 'tuoi', 'can_nang', 'ghi_chu','khach_hang')
    list_filter = ('loai', 'khach_hang')
    search_fields = ('ten_thucung', 'khach_hang')
+# Không cho thêm
+   def has_add_permission(self, request):
+        return False
 
+    # Không cho chỉnh sửa
+   def has_change_permission(self, request, obj=None):
+        return False
+
+    # Không cho xóa
+   def has_delete_permission(self, request, obj=None):
+        return False
+
+    # Chỉ cho xem
+   def has_view_permission(self, request, obj=None):
+        return True
 
 # Kế thừa UserAdmin mặc định để tùy chỉnh hành vi khi lưu
 class CustomUserAdmin(UserAdmin):
@@ -65,6 +107,22 @@ class LichSuTichDiemAdmin(admin.ModelAdmin):
     list_display = ('khach_hang', 'so_diem', 'noi_dung', 'ngay_cap_nhat')
     list_filter = ('ngay_cap_nhat',)
     search_fields = ('khach_hang__ho_ten',)
+
+    # Không cho thêm lịch sử
+    def has_add_permission(self, request):
+        return False
+
+    # Không cho sửa lịch sử
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    # Không cho xóa lịch sử
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    # Chỉ cho xem chi tiết
+    def has_view_permission(self, request, obj=None):
+        return True
 
 # Gỡ bỏ UserAdmin mặc định của Django
 admin.site.unregister(User)
