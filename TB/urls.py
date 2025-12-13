@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 app_name = 'TB'
 urlpatterns = [
-    path('<int:id>/', views.chi_tiet_thong_bao, name='chi_tiet_thong_bao'),
 
     path('tat-ca/', views.trang_thong_bao, name='trang_thong_bao'),
     path('xem/<int:tb_id>/', views.xem_thong_bao, name='xem_thong_bao'),

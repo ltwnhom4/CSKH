@@ -8,7 +8,7 @@ class DV_LichHenInline(admin.TabularInline):
     model = DV_LichHen
     extra = 1
     verbose_name = "Dịch vụ trong lịch hẹn"
-    verbose_name_plural = "Danh sách dịch vụ"
+    verbose_name_plural = "Danh sách dịch vụ" #Tiêu đề Inline:
 
 
 @admin.register(LichHen)
@@ -88,7 +88,7 @@ class LichHenAdmin(admin.ModelAdmin):
         dich_vus = obj.dv_lichhen_set.select_related('dich_vu').all()
         return ", ".join([dv.dich_vu.ten_dich_vu for dv in dich_vus]) if dich_vus else "(chưa chọn)"
     hien_thi_dich_vu.short_description = "Dịch vụ"
-
+# lọc tất car các dịch vụ trong bảng lịch vụ lịch hẹn gán với object , trả về chuỗi tên dv cách bởi dấu ",", nếu kh có thì hiện chưa chon
     # Quyền sửa readonly fields
     def get_readonly_fields(self, request, obj=None):
 
@@ -97,7 +97,7 @@ class LichHenAdmin(admin.ModelAdmin):
             if request.user.is_superuser:
                 return ['ly_do_huy', 'nguoi_tao', 'tong_tien']
             if request.user.is_staff:
-                return ['tong_tien', 'ly_do_huy', 'nguoi_tao']
+                return ['tong_tien', 'ly_do_huy', 'nguoi_tao','nhan_vien']
             return [f.name for f in self.model._meta.fields]
 
         # Lịch khách tạo
@@ -119,8 +119,6 @@ class LichHenAdmin(admin.ModelAdmin):
             ]
 
         # Staff khác → chỉ sửa trạng thái
-        if request.user.is_superuser:
-            return []
         if request.user.is_staff:
             return ['khach_hang', 'thu_cung', 'nhan_vien','so_dien_thoai', 'thoi_gian', 'ghi_chu','tong_tien', 'ly_do_huy']
 
