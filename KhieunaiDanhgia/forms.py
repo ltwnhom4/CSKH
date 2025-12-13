@@ -30,18 +30,16 @@ class DanhGiaForm(forms.ModelForm):
 
 
 # ============================================
-#  FORM KHIẾU NẠI DỊCH VỤ
+#  FORM KHIẾU NẠI (CHỈ KHÁCH HÀNG)
 # ============================================
 class KhieuNaiForm(forms.ModelForm):
     class Meta:
         model = KhieuNai
-        fields = ['noi_dung', 'minh_chung', 'yeu_cau', 'trang_thai', 'phan_hoi']
+        fields = ['noi_dung', 'minh_chung', 'yeu_cau']
         labels = {
             'noi_dung': 'Nội dung khiếu nại',
             'minh_chung': 'Minh chứng (ảnh hoặc video)',
             'yeu_cau': 'Yêu cầu / mong muốn',
-            'trang_thai': 'Trạng thái xử lý',
-            'phan_hoi': 'Phản hồi từ nhân viên',
         }
         widgets = {
             'noi_dung': forms.Textarea(attrs={
@@ -52,31 +50,10 @@ class KhieuNaiForm(forms.ModelForm):
                 'rows': 3,
                 'placeholder': 'Bạn mong muốn được hỗ trợ ra sao?'
             }),
-            'phan_hoi': forms.Textarea(attrs={
-                'rows': 3,
-                'placeholder': 'Nhân viên sẽ ghi phản hồi tại đây...'
-            }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # File upload: chấp nhận ảnh và video
         self.fields['minh_chung'].widget.attrs.update({
             'accept': 'image/*,video/*'
         })
-
-    # Hàm hỗ trợ khóa toàn bộ field (để dùng trong view)
-    def disable_all_fields(self):
-        for field in self.fields.values():
-            field.disabled = True
-
-    # Hàm hỗ trợ mở khóa đúng 2 trường cho nhân viên
-    def allow_staff_edit(self):
-        self.fields['trang_thai'].disabled = False
-        self.fields['phan_hoi'].disabled = False
-
-    # Hàm hỗ trợ admin CHỈ xem (không sửa)
-    def lock_admin_fields(self):
-        for field in self.fields.values():
-            field.disabled = True
