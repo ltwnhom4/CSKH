@@ -16,12 +16,7 @@ from TK.models import KhachHang
 def la_nhan_vien(user):
     return user.is_staff or user.is_superuser
 
-# 1️⃣ Khách hàng xem danh sách thông báo
-@login_required
-def danh_sach_thong_bao(request):
-    loai = request.GET.get('loai', 'lich_hen')  # mặc định tab lịch hẹn
-    thongbaos = ThongBao.objects.filter(nguoi_nhan=request.user, loai=loai).order_by('-ngay_tao')
-    return render(request, 'TB/danh_sach_thong_bao.html', {'thongbaos': thongbaos, 'loai': loai})
+
 
 # 2️⃣ Chi tiết thông báo
 @login_required
@@ -207,27 +202,3 @@ def chi_tiet_khuyen_mai(request, id):
     km = get_object_or_404(ThongBao, id=id, loai='khuyen_mai')
     return render(request, 'TB/chi_tiet_khuyen_mai.html', {'km': km})
 
-# 📄 Chi tiết lịch hẹn
-@login_required(login_url='/dangnhap/')
-def chi_tiet_lich_hen(request, id):
-    lich_hen = get_object_or_404(LichHen, id=id)
-
-    # ⭐ ADMIN / NHÂN VIÊN → xem được tất cả lịch hẹn
-    if request.user.is_staff:
-        dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
-        return render(request, 'TB/chi_tiet_lich_hen.html', {
-            'lich_hen': lich_hen,
-            'dich_vu_list': dich_vu_list
-        })
-
-    # ⭐ KHÁCH HÀNG → chỉ xem lịch của mình
-    kh = KhachHang.objects.filter(user=request.user).first()
-    if not kh or lich_hen.khach_hang != kh:
-        return redirect('TB:trang_thong_bao')
-
-    dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
-
-    return render(request, 'TB/chi_tiet_lich_hen.html', {
-        'lich_hen': lich_hen,
-        'dich_vu_list': dich_vu_list
-    })
