@@ -10,6 +10,7 @@ from .forms import LichHenForm, LyDoHuyForm
 from TK.models import KhachHang, ThuCung
 from TB.models import ThongBao
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 # 🧾 Hiển thị lịch hẹn sắp tới
@@ -138,7 +139,9 @@ def tao_lich_hen(request):
                     loai='lich_hen',
                     nguoi_gui=request.user,
                     nguoi_nhan=admin_user,
-                    link=f"/lich-hen/chi-tiet/{lich_hen.id}/"
+                    doi_tuong_id=lich_hen.id,
+                    link=reverse("chi_tiet_lich_hen", args=[lich_hen.id])
+
                 )
 
             return redirect('lich_hen_sap_toi')
@@ -242,6 +245,23 @@ def lich_su_lich_hen(request):
 @login_required(login_url='/dangnhap/')
 def chi_tiet_lich_hen(request, id):
     lich_hen = get_object_or_404(LichHen, id=id)
+
+    # ⭐ ADMIN / NHÂN VIÊN → xem được tất cả lịch hẹn
+    if request.user.is_staff:
+        dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
+        return render(request, 'TB/chi_tiet_lich_hen.html', {
+            'lich_hen': lich_hen,
+            'dich_vu_list': dich_vu_list
+        })
+
+    # ⭐ KHÁCH HÀNG → chỉ xem lịch của mình
+    kh = KhachHang.objects.filter(user=request.user).first()
+    if not kh or lich_hen.khach_hang != kh:
+        return redirect('TB:trang_thong_bao')
+
     dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
-    context = {'lich_hen': lich_hen, 'dich_vu_list': dich_vu_list}
-    return render(request, 'TB/chi_tiet_lich_hen.html', context)
+
+    return render(request, 'TB/chi_tiet_lich_hen.html', {
+        'lich_hen': lich_hen,
+        'dich_vu_list': dich_vu_list
+    })

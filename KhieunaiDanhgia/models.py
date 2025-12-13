@@ -17,7 +17,12 @@ class KhieuNai(models.Model):
     lich_hen = models.OneToOneField(LichHen, on_delete=models.CASCADE, related_name='khieu_nai')
     nguoi_gui = models.ForeignKey(User, on_delete=models.CASCADE)
     noi_dung = models.TextField(verbose_name="Nội dung khiếu nại")
-    minh_chung = models.FileField(upload_to='minhchung/', verbose_name="Minh chứng (ảnh hoặc video)", blank=True, null=True)
+    minh_chung = models.FileField(
+        upload_to='minhchung/',
+        verbose_name="Minh chứng (ảnh hoặc video)",
+        blank=True,
+        null=True
+    )
     yeu_cau = models.TextField(verbose_name="Yêu cầu/mong muốn")
     phan_hoi = models.TextField(verbose_name="Phản hồi / Ghi chú từ nhân viên", blank=True, null=True)
     trang_thai = models.CharField(

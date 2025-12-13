@@ -20,11 +20,19 @@
 <body>
   <div class="promo-box">
     <h2>🎁 {{ tb.tieu_de }}</h2>
+    {% if tb.hinh_anh %}
+      <img src="{{ tb.hinh_anh.url }}"
+           alt="Hình khuyến mãi"
+           style="width:50%; display:block;
+                    margin:0 auto 20px auto;
+                    border-radius:12px">
+    {% endif %}
+
     <div class="highlight">
-      <p>{{ tb.noi_dung }}</p>
+      <p>{{ tb.noi_dung|linebreaksbr|safe }}</p>
     </div>
     <p><strong>Ngày thông báo:</strong> {{ tb.ngay_tao|date:"d/m/Y" }}</p>
-    <a href="{% url 'TB:trang_thong_bao' %}" class="back">← Quay lại</a>
+    <a href="javascript:history.back()" class="back">← Quay lại</a>
   </div>
 </body>
 </html>

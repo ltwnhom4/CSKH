@@ -42,6 +42,25 @@
         font-size:14px;
         text-decoration:none;
     }
+    /* Nút quay lại */
+.btn-back {
+    font-weight: 700;                /* chữ đậm */
+    padding: 6px 14px;
+    background: #ffb5d2;             /* nền hồng nhạt */
+    border: 2px solid #ff8fb9;       /* viền hồng đậm hơn */
+    border-radius: 10px;
+    color: white !important;         /* màu chữ giữ trắng */
+    text-decoration: none;
+    transition: 0.2s ease;
+    display: inline-block;
+}
+
+/* Hover đẹp */
+.btn-back:hover {
+    background: #ff8fb9;
+    border-color: #ff6fa5;
+    transform: translateY(-2px);     /* hiệu ứng nhấc nhẹ */
+}
 
     /* =============== BODY =============== */
     .chat-body {
@@ -74,23 +93,23 @@
 
     /* HỆ THỐNG – phải, màu BE */
     .msg.HT {
-        background:#f7eedd;
+        background:#fce495;
         align-self:flex-end;
-        color:#6f4e37;
+        color:#222;
     }
 
     /* NHÂN VIÊN – phải, cam pastel */
     .msg.NV {
-        background:#ffe2c6;
+        background:#f4c2d7;
         align-self:flex-end;
-        color:#7a3e00;
+        color:#222;
     }
 
     /* ADMIN – phải, xanh mint */
     .msg.AD {
         background:#d8fff1;
         align-self:flex-end;
-        color:#006653;
+        color:#222;
     }
 
     /* =============== INPUT BOX =============== */
@@ -164,7 +183,8 @@
     <!-- HEADER -->
     <div class="chat-header">
         <span>💬 Đang chat với: <b>{{ target }}</b></span>
-        <a href="/chat/khach/">← Quay lại danh sách</a>
+        <a href="/chat/khach/" class="btn-back">← Quay lại danh sách</a>
+
     </div>
 
     <!-- CHAT BODY -->

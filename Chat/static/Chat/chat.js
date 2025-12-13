@@ -113,3 +113,4 @@ updateChatBadge();
 
 // cập nhật mỗi 3s
 setInterval(updateChatBadge, 3000);
+

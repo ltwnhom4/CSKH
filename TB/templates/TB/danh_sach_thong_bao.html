@@ -13,7 +13,7 @@
           <li class="active"><a href="#"><i class="fa fa-bell"></i> Thông báo</a></li>
           <li><a href="{% url 'lich_hen_sap_toi' %}"><i class="fa fa-calendar"></i> Lịch hẹn</a></li>
           <li><a href="#"><i class="fa fa-gift"></i> Khuyến mãi</a></li>
-          <li><a href="#"><i class="fa fa-cog"></i> Hệ thống</a></li>
+          <li><a href="#"><i class="fa fa-cog"></i> Khiếu nại</a></li>
       </ul>
   </div>
 
@@ -37,7 +37,7 @@
                           <small>{{ tb.ngay_tao|date:"H:i  d-m-Y" }}</small>
                       </div>
                   </div>
-                  <a href="#" class="tb-detail">Xem chi tiết</a>
+                  <a href="{% url 'TB:chi_tiet_lich_hen' tb.id %}" class="tb-detail">Xem chi tiết</a>
               </div>
           {% empty %}
               <p>Bạn chưa có thông báo nào.</p>

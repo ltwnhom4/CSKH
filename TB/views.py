@@ -8,7 +8,7 @@ from LichHen.models import LichHen, DV_LichHen
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Max
-
+from TK.models import KhachHang
 
 
 
@@ -26,19 +26,16 @@ def danh_sach_thong_bao(request):
 # 2️⃣ Chi tiết thông báo
 @login_required
 def chi_tiet_thong_bao(request, id):
-    # 👩‍💼 Nếu là nhân viên → có thể xem tất cả thông báo
-    if request.user.is_staff:
-        tb = get_object_or_404(ThongBao, id=id)
-    else:
-        # 👤 Nếu là khách hàng → chỉ được xem thông báo của chính họ
-        tb = get_object_or_404(ThongBao, id=id, nguoi_nhan=request.user)
 
-    # ✅ Đánh dấu đã đọc nếu chưa đọc
-    if not tb.da_doc:
-        tb.da_doc = True
-        tb.save()
+    tb = get_object_or_404(ThongBao, id=id)  # lấy thông báo gốc
 
-    # ✅ Hiển thị theo loại thông báo
+    # 🔹 Nhân viên / admin xem được tất cả
+    if not request.user.is_staff:
+        if tb.nguoi_nhan != request.user:
+            messages.error(request, "Bạn không có quyền xem thông báo này.")
+            return redirect('TB:trang_thong_bao')
+
+    # 🔥 1) THÔNG BÁO LỊCH HẸN
     if tb.loai == 'lich_hen' and tb.doi_tuong_id:
         try:
             lich_hen = LichHen.objects.get(id=tb.doi_tuong_id)
@@ -48,21 +45,31 @@ def chi_tiet_thong_bao(request, id):
                 'lich_hen': lich_hen,
                 'dich_vu_list': dich_vu_list
             })
-        except LichHen.DoesNotExist:
-            return render(request, 'TB/chi_tiet_thong_bao.html', {
+        except:
+            messages.error(request, "Lịch hẹn này không còn tồn tại.")
+            return redirect('TB:trang_thong_bao')
+
+    # 🔥 2) THÔNG BÁO KHIẾU NẠI
+    if tb.loai == 'khieu_nai' and tb.doi_tuong_id:
+        try:
+            from KhieunaiDanhgia.models import KhieuNai
+            kn = KhieuNai.objects.get(id=tb.doi_tuong_id)
+            return render(request, 'TB/chi_tiet_khieu_nai.html', {
                 'tb': tb,
-                'error': 'Lịch hẹn này không còn tồn tại.'
+                'khieunai': kn
             })
+        except:
+            messages.error(request, "Khiếu nại này không còn tồn tại.")
+            return redirect('TB:trang_thong_bao')
 
-    elif tb.loai == 'khuyen_mai':
-        return render(request, 'TB/chi_tiet_khuyen_mai.html', {'tb': tb})
-
-    elif tb.loai == 'he_thong':
-        return render(request, 'TB/chi_tiet_he_thong.html', {'tb': tb})
+    # ⭐⭐⭐ 3) THÔNG BÁO KHUYẾN MÃI — BẠN ĐÃ QUÊN NHÁNH NÀY!
+    if tb.loai == 'khuyen_mai':
+        return render(request, 'TB/chi_tiet_khuyen_mai.html', {
+            'tb': tb
+        })
 
     # fallback
     return render(request, 'TB/chi_tiet_thong_bao.html', {'tb': tb})
-
 
 # 3️⃣ Nhân viên tạo thông báo
 @login_required
@@ -79,39 +86,30 @@ def tao_thong_bao(request):
         form = ThongBaoForm()
     return render(request, 'TB/tao_thong_bao.html', {'form': form})
 @login_required(login_url='/dangnhap/')
+@login_required(login_url='/dangnhap/')
 def trang_thong_bao(request):
-    # 🎯 Lấy các loại thông báo khác như cũ
+
     thongbao_lichhen = ThongBao.objects.filter(
-        nguoi_nhan=request.user, loai='lich_hen'
+        nguoi_nhan=request.user,
+        loai='lich_hen'
     ).order_by('-ngay_tao')
 
-    thongbao_hethong = ThongBao.objects.filter(
-        nguoi_nhan=request.user, loai='he_thong'
+    thongbao_khieunai = ThongBao.objects.filter(
+        nguoi_nhan=request.user,
+        loai='khieu_nai'
     ).order_by('-ngay_tao')
 
-    # 🎁 Riêng khuyến mãi: lọc trùng bằng Python
-    if request.user.is_staff:
-        # Nếu là nhân viên: xem tất cả
-        thongbaos_all = ThongBao.objects.filter(loai='khuyen_mai').order_by('-ngay_tao')
-    else:
-        # Nếu là khách hàng: chỉ xem khuyến mãi gửi cho mình
-        thongbaos_all = ThongBao.objects.filter(
-            nguoi_nhan=request.user, loai='khuyen_mai'
-        ).order_by('-ngay_tao')
+    thongbao_khuyenmai = ThongBao.objects.filter(
+        loai='khuyen_mai'
+    ).order_by('-ngay_tao')
 
-    thongbao_khuyenmai = []
-    seen = set()
-
-    for tb in thongbaos_all:
-        key = (tb.tieu_de.strip(), tb.noi_dung.strip())
-        if key not in seen:
-            thongbao_khuyenmai.append(tb)
-            seen.add(key)
+    if not request.user.is_staff:
+        thongbao_khuyenmai = thongbao_khuyenmai.filter(nguoi_nhan=request.user)
 
     context = {
         'thongbao_lichhen': thongbao_lichhen,
+        'thongbao_khieunai': thongbao_khieunai,
         'thongbao_khuyenmai': thongbao_khuyenmai,
-        'thongbao_hethong': thongbao_hethong,
     }
 
     return render(request, 'TB/trang_thong_bao.html', context)
@@ -136,26 +134,29 @@ def xem_thong_bao(request, tb_id):
 
     # ✅ Nếu không có link → fallback theo loại
     if tb.loai == 'lich_hen' and tb.doi_tuong_id:
-        return redirect('chi_tiet_lich_hen', id=tb.doi_tuong_id)
+        return redirect('TB:chi_tiet_lich_hen', id=tb.doi_tuong_id)
     elif tb.loai == 'khuyen_mai' and tb.doi_tuong_id:
-        return redirect('chi_tiet_khuyen_mai', id=tb.doi_tuong_id)
-    elif tb.loai == 'he_thong':
-        return render(request, 'TB/chi_tiet_thong_bao.html', {'tb': tb})
-
+        return redirect('TB:chi_tiet_khuyen_mai', id=tb.doi_tuong_id)
+    elif tb.loai == "khieu_nai" and tb.doi_tuong_id:
+        return redirect("chi_tiet_khieu_nai", id=tb.doi_tuong_id)
     # ✅ Nếu không có loại cụ thể → quay lại danh sách
     return redirect('TB:trang_thong_bao')
+
 @login_required
 @user_passes_test(la_nhan_vien)
 def tao_khuyen_mai(request):
     if request.method == 'POST':
-        form = KhuyenMaiForm(request.POST)
+        form = KhuyenMaiForm(request.POST, request.FILES)   #  PHẢI CÓ request.FILES
         if form.is_valid():
+
             tieu_de = form.cleaned_data['tieu_de']
             noi_dung = form.cleaned_data['noi_dung']
+            hinh_anh = form.cleaned_data.get('hinh_anh', None)
             nguoi_gui = request.user
 
-            # ✅ Gửi thông báo đến tất cả khách hàng (is_staff=False)
-            khach_hangs = User.objects.filter(is_staff=False)
+            #  Lấy TẤT CẢ khách hàng thực tế
+            khach_hangs = KhachHang.objects.all()
+
             so_nguoi = 0
 
             for kh in khach_hangs:
@@ -163,13 +164,14 @@ def tao_khuyen_mai(request):
                     tieu_de=tieu_de,
                     noi_dung=noi_dung,
                     loai='khuyen_mai',
+                    hinh_anh=hinh_anh,             # 🔥 LƯU HÌNH ẢNH
                     nguoi_gui=nguoi_gui,
-                    nguoi_nhan=kh
+                    nguoi_nhan=kh.user             # 🔥 ĐÚNG NGƯỜI NHẬN
                 )
                 so_nguoi += 1
 
             messages.success(request, f"🎉 Đã gửi khuyến mãi đến {so_nguoi} khách hàng.")
-            return redirect('TB:trang_thong_bao')
+            return redirect('TB:danh_sach_khuyen_mai')            # 🔥 redirect đúng trang KM
     else:
         form = KhuyenMaiForm()
 
@@ -179,7 +181,7 @@ def danh_sach_khuyen_mai(request):
     # Lấy mỗi tiêu đề khuyến mãi một bản ghi mới nhất
     latest_ids = (
         ThongBao.objects.filter(loai='khuyen_mai')
-        .values('tieu_de')
+        .values('tieu_de', 'noi_dung')
         .annotate(max_id=Max('id'))
         .values_list('max_id', flat=True)
     )
@@ -188,4 +190,44 @@ def danh_sach_khuyen_mai(request):
 
     return render(request, 'TB/trang_khuyen_mai.html', {
         'thongbao_khuyenmai': thongbao_khuyenmai
+    })
+
+@login_required
+@user_passes_test(la_nhan_vien)
+def xoa_khuyen_mai(request,km_id):
+    km = get_object_or_404(ThongBao, id=km_id, loai='khuyen_mai')
+
+    # Xóa 1 bản ghi duy nhất
+    km.delete()
+
+    messages.success(request, "🗑️ Đã xóa khuyến mãi.")
+    return redirect('TB:danh_sach_khuyen_mai')
+@login_required
+def chi_tiet_khuyen_mai(request, id):
+    km = get_object_or_404(ThongBao, id=id, loai='khuyen_mai')
+    return render(request, 'TB/chi_tiet_khuyen_mai.html', {'km': km})
+
+# 📄 Chi tiết lịch hẹn
+@login_required(login_url='/dangnhap/')
+def chi_tiet_lich_hen(request, id):
+    lich_hen = get_object_or_404(LichHen, id=id)
+
+    # ⭐ ADMIN / NHÂN VIÊN → xem được tất cả lịch hẹn
+    if request.user.is_staff:
+        dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
+        return render(request, 'TB/chi_tiet_lich_hen.html', {
+            'lich_hen': lich_hen,
+            'dich_vu_list': dich_vu_list
+        })
+
+    # ⭐ KHÁCH HÀNG → chỉ xem lịch của mình
+    kh = KhachHang.objects.filter(user=request.user).first()
+    if not kh or lich_hen.khach_hang != kh:
+        return redirect('TB:trang_thong_bao')
+
+    dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
+
+    return render(request, 'TB/chi_tiet_lich_hen.html', {
+        'lich_hen': lich_hen,
+        'dich_vu_list': dich_vu_list
     })

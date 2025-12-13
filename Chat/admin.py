@@ -5,8 +5,8 @@ from .models import TinNhan
 class TinNhanAdmin(admin.ModelAdmin):
     list_display = ("id_tinnhan", "nguoi_gui", "noi_dung", "thoi_gian_gui",
                     "ten_khachhang", "ten_nhanvien")
-    list_filter = ("nguoi_gui", "thoi_gian_gui")
-    search_fields = ("noi_dung", )
+    list_filter = ("nguoi_gui", "thoi_gian_gui", "id_khachhang", "id_nhanvien",)
+    search_fields = ("noi_dung", "id_khachhang__ho_ten", "id_nhanvien__ho_ten", )
     ordering = ("-thoi_gian_gui",)
 
     def ten_khachhang(self, obj):

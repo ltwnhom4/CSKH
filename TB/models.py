@@ -9,8 +9,8 @@ from TK.models import KhachHang, NhanVien
 class ThongBao(models.Model):
     TIEU_DE_CHOICES = [
         ('lich_hen', 'Lịch hẹn'),
+        ('khuyen_mai', 'Khuyến mãi'),
         ('khieu_nai', 'Khiếu nại'),
-        ('he_thong', 'Hệ thống'),
     ]
     tieu_de = models.CharField(max_length=100)
     noi_dung = models.TextField()
@@ -19,6 +19,7 @@ class ThongBao(models.Model):
     da_doc = models.BooleanField(default=False)
     ghi_chu = models.TextField(blank=True, null=True)
     dich_vu = models.CharField(max_length=255, blank=True, null=True)
+    hinh_anh = models.ImageField(upload_to='khuyenmai/', blank=True, null=True)
     nguoi_gui = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='thongbao_gui'
     )
