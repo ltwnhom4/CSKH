@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import DangKyForm, KhachHangForm, NhanVienForm, CapNhatDiemForm
+from .forms import DangKyForm, KhachHangForm, NhanVienForm
 from .models import KhachHang, NhanVien, TichDiem, LichSuTichDiem
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -10,18 +10,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
 def dangky(request):
-    if request.method == 'POST':
-        form = DangKyForm(request.POST)
+    if request.method == 'POST':  #Nếu người dùng gửi form (POST)
+        form = DangKyForm(request.POST)  #Lấy dữ liệu từ form đăng ký
         if form.is_valid():
             user = form.save()  # Tạo tài khoản user
             user.is_active=True
             # Gán vào nhóm Khách hàng
             khach_group, _ = Group.objects.get_or_create(name='Khách hàng')
             user.groups.add(khach_group)
-            ho_ten = form.cleaned_data.get('ho_ten', user.username)
             # 👉 Tự động tạo bản ghi KhachHang
-            KhachHang.objects.create(user=user, ho_ten=ho_ten, email=user.email,)
-                # hoặc nếu form có field họ_tên thì thay user.username bằng form.cleaned_data['ho_ten']
+            KhachHang.objects.create(user=user, email=user.email,)
             messages.success(request, "Đăng ký thành công! Hãy đăng nhập.")
             return redirect('dangnhap')
         else:
@@ -66,17 +64,10 @@ def dangxuat(request):
 
 @login_required
 def thongtintaikhoan(request):
-    khach, created = KhachHang.objects.get_or_create(user=request.user)
-
+    khach= KhachHang.objects.get(user=request.user)
     if not khach.ho_ten:
         khach.ho_ten = request.user.username
         khach.save()
-
-    # 🔹 Nếu khách mới tạo hoặc chưa có email, tự gán email từ tài khoản user
-    if not khach.email:
-        khach.email = request.user.email
-        khach.save()
-
     if request.method == 'POST':
         form = KhachHangForm(request.POST, instance=khach)
         if form.is_valid():
@@ -113,7 +104,11 @@ def thong_tin_nhanvien(request):
    if request.method == 'POST':
        form = NhanVienForm(request.POST, instance=nhanvien)
        if form.is_valid():
-           form.save()
+           nv = form.save(commit=False)
+           # Nếu người dùng sửa email → cập nhật cả User.email luôn
+           request.user.email = nv.email
+           request.user.save()
+           nv.save()
            messages.success(request, "Cập nhật thông tin thành công!")
            return redirect('thong_tin_nhanvien')
    else:

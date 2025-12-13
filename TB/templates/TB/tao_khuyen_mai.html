@@ -1,19 +1,35 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}Tạo khuyến mãi mới{% endblock %}
+
 {% block content %}
-<div class="container" style="max-width:700px; margin:50px auto; background:#fff; padding:40px; border-radius:16px; box-shadow:0 4px 15px rgba(255,182,193,0.3);">
-  <h2 style="color:#ff4f7b; text-align:center; margin-bottom:25px;">Tạo thông báo khuyến mãi</h2>
-    <form action="{% url 'TB:tao_khuyen_mai' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
+<div class="container"
+     style="max-width:700px; margin:50px auto; background:#fff;
+            padding:40px; border-radius:16px;
+            box-shadow:0 4px 15px rgba(255,182,193,0.3);">
 
-<button type="submit" class="btn-submit-km">
-    <i class="fa fa-paper-plane"></i> Gửi khuyến mãi
-</button>
+  <h2 style="color:#ff4f7b; text-align:center; margin-bottom:25px;">
+      Tạo thông báo khuyến mãi
+  </h2>
 
-<a href="{% url 'TB:danh_sach_khuyen_mai' %}" class="btn-back-km">
-    <i class="fa fa-arrow-left"></i> Quay lại
-</a>
+  <form action="{% url 'TB:tao_khuyen_mai' %}"
+        method="post"
+        enctype="multipart/form-data">
+
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <!-- Nút gửi -->
+      <button type="submit" class="btn-submit-km">
+          <i class="fa fa-paper-plane"></i> Gửi khuyến mãi
+      </button>
+
+      <!-- Nút quay lại -->
+      <a href="javascript:history.back()" class="ct-back"> ← Quay lại</a>
+
+  </form>
+</div>
 
 <style>
 /* ==========================
@@ -46,18 +62,14 @@
     font-weight: 600;
     display: inline-block;
     transition: 0.2s ease;
-    text-decoration: none !important; /* 🔥 Không gạch chân */
+    text-decoration: none !important; /* Không có gạch chân */
 }
 .btn-back-km:hover {
     background: #ffb6c9;
     color: #a31435;
     transform: translateY(-2px);
-    text-decoration: none; /* Đảm bảo hover cũng không gạch chân */
+    text-decoration: none;
 }
 </style>
 
-
-
-    </form>
-</div>
 {% endblock %}
