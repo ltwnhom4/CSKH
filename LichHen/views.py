@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.utils import timezone
 from django.contrib.messages import get_messages
-
+from datetime import timedelta
+from TK.models import TichDiem, LichSuTichDiem
 from .models import LichHen, DV_LichHen
 from .forms import LichHenForm, LyDoHuyForm
 from TK.models import KhachHang, ThuCung
@@ -33,8 +34,13 @@ def lich_hen_sap_toi(request):
 
     # ✅ Chuyển lịch đã qua sang “hoàn thành”
     hien_tai = timezone.now()
-    lich_qua_ngay = LichHen.objects.filter(khach_hang=khach_hang, trang_thai='sap_toi', thoi_gian__lt=hien_tai)
-    from TK.models import TichDiem, LichSuTichDiem
+    moc_hoan_thanh = hien_tai - timedelta(hours=2)
+    lich_qua_ngay = LichHen.objects.filter(
+        khach_hang=khach_hang,
+        trang_thai='sap_toi',
+        thoi_gian__lte=moc_hoan_thanh
+    )
+
     for lich in lich_qua_ngay:
         lich.trang_thai = 'hoan_thanh'
         lich.save()
