@@ -77,6 +77,8 @@ class KhieuNaiForm(forms.ModelForm):
         self.fields['phan_hoi'].disabled = False
 
     # Hàm hỗ trợ admin CHỈ xem (không sửa)
-    def lock_admin_fields(self):
-        for field in self.fields.values():
-            field.disabled = True
+    def allow_admin_assign_staff(self):
+        # Khóa hết
+        self.disable_all_fields()
+        # Chỉ cho admin sửa nhân viên phụ trách
+        self.fields['nhan_vien_phu_trach'].disabled = False
