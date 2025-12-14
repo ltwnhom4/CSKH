@@ -109,18 +109,20 @@ class LichHenAdmin(admin.ModelAdmin):
 
         # Lịch do chính user tạo
         if obj.nguoi_tao == request.user:
-            return ['ly_do_huy','nguoi_tao','tong_tien']
         # Lịch do nhân viên tạo → admin có thể phân công nhân viên và điều chỉnh trạng thái
-        if request.user.is_superuser:
+            if request.user.is_superuser:
+                return ['ly_do_huy', 'nguoi_tao', 'tong_tien']
+            if request.user.is_staff:
+                return ['nhan_vien', 'ly_do_huy', 'nguoi_tao', 'tong_tien']
+        if request.user.is_superuser and obj.nguoi_tao and obj.nguoi_tao != request.user:
             return [
-                f.name
-                for f in self.model._meta.fields
-                if f.name not in ('nhan_vien', 'trang_thai')
+                f.name for f in self.model._meta.fields
+                if f.name not in ('nhan_vien', 'trang_thai')  # chỉ mở 2 trường
             ]
 
-        # Staff khác → chỉ sửa trạng thái
-        if request.user.is_staff:
-            return ['khach_hang', 'thu_cung', 'nhan_vien','so_dien_thoai', 'thoi_gian', 'ghi_chu','tong_tien', 'ly_do_huy']
+        # Nhân viên khác xem lịch do người khác tạo → chỉ được xem (không sửa gì)
+        if request.user.is_staff and obj.nguoi_tao != request.user:
+            return [f.name for f in self.model._meta.fields]
 
         return []
 

@@ -144,6 +144,7 @@ def tao_lich_hen(request):
             lich_hen.save(update_fields=['tong_tien'])
 
             # 📨 Gửi thông báo
+            #strip() để xóa các kí tự khoảng trắng thừa
             ten_dv = ", ".join([dv.ten_dich_vu for dv in dich_vu_list]) or "(Không có dịch vụ)"
             ghi_chu = form.cleaned_data.get('ghi_chu', '').strip() or "(Không có ghi chú)"
             ThongBao.objects.create(

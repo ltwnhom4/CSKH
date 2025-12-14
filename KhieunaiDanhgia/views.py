@@ -143,7 +143,7 @@ def tao_khieu_nai(request, lich_hen_id):
                 doi_tuong_id=new_kn.id,
                 link=f"/khieu-nai/chi-tiet/{new_kn.id}/"
             )
-
+            #refresh_from_db() chỉ làm 1 việc:cập nhật lại object trong RAM cho giống database.
             lich_hen.refresh_from_db()
             return redirect("tao_khieu_nai", lich_hen_id=lich_hen.id)
 
