@@ -176,63 +176,6 @@ def danh_sach_khieu_nai(request):
     return render(request, 'KhieunaiDanhgia/danhsachkhieunai.html', {
         'khieu_nai_list': khieu_nai_list,
     })
-# 🟩 2. THÊM VIEW CỦA BẠN (KHÔNG ĐỤNG VÀO MAIN)
-# ============================================================
-
-# 🟢 Gửi khiếu nại KHÔNG THEO LỊCH HẸN (view riêng của bạn)
-@login_required
-def gui_khieu_nai(request):
-    if request.method == 'POST':
-        form = KhieuNaiForm(request.POST, request.FILES)
-        if form.is_valid():
-            kn = form.save(commit=False)
-            kn.nguoi_gui = request.user
-            kn.save()
-
-            nhan_viens = User.objects.filter(is_staff=True)
-            for nv in nhan_viens:
-                ThongBao.objects.create(
-                    tieu_de="Khiếu nại mới",
-                    noi_dung=f"Khách hàng {request.user.username} vừa gửi một khiếu nại mới.",
-                    loai="khieu_nai",
-                    nguoi_gui=request.user,
-                    nguoi_nhan=nv,
-                    doi_tuong_id=kn.id,
-                    link=f"/khieu-nai/{kn.id}/chi-tiet/"
-                )
-
-            messages.success(request, "Bạn đã gửi khiếu nại thành công!")
-            return redirect("TB:trang_thong_bao")
-
-    else:
-        form = KhieuNaiForm()
-
-    return render(request, "KhieunaiDanhgia/gui_khieu_nai.html", {"form": form})
-
-
-# 🟢 Nhân viên xử lý khiếu nại (giữ nguyên logic bạn)
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-def xu_ly_khieu_nai(request, id):
-    kn = get_object_or_404(KhieuNai, id=id)
-
-    kn.trang_thai = 'Đã phản hồi'
-    kn.nhan_vien_phu_trach = request.user
-    kn.save()
-
-    ThongBao.objects.create(
-        tieu_de="📬 Khiếu nại của bạn đã được phản hồi",
-        noi_dung=f"Khiếu nại #{kn.id} của bạn đã được nhân viên {request.user.username} phản hồi.",
-        loai="khieu_nai",
-        nguoi_gui=request.user,
-        nguoi_nhan=kn.nguoi_gui,
-        doi_tuong_id=kn.id,
-        link=f"/khieu-nai/chi-tiet/{kn.id}/"
-    )
-
-    messages.success(request, "Đã phản hồi khiếu nại.")
-    return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
-
 
 # 🟢 Chi tiết khiếu nại (view riêng của bạn)
 @login_required
@@ -251,5 +194,5 @@ def chi_tiet_khieu_nai(request, id):
     # KHÁCH → chỉ xem khiếu nại mình gửi
     elif khieunai.nguoi_gui != request.user:
         return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
-
+        
     return render(request, 'TB/chi_tiet_khieu_nai.html', {'khieunai': khieunai})
