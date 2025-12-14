@@ -148,7 +148,6 @@ def gui_tin_nhan(request):
     is_quick = data.get("quick", False)  # ⭐ phân biệt gợi ý và tự gõ
     if not text:
         return JsonResponse({"error": "Nội dung trống"}, status=400)
-
     user = request.user
 
     # ============================================================
@@ -193,7 +192,6 @@ def gui_tin_nhan(request):
                 "reply": "💗 Cảm ơn bạn đã liên lạc, bạn vui lòng đăng nhập và nhắn tin để được hỗ trợ nhé!"
             })
 
-        # nếu đã gửi rồi thì im re
         return JsonResponse({"reply": ""})
     # ===============================================
     # 2. KHÁCH ĐĂNG NHẬP
@@ -206,7 +204,6 @@ def gui_tin_nhan(request):
             nguoi_gui="KH",
             noi_dung=text
         )
-
         reply = bot_auto_reply(text)
 
         if reply != "":
@@ -272,7 +269,6 @@ def gui_tin_nhan(request):
     return JsonResponse({"error": "Thiếu mode hoặc target"}, status=400)
 
 
-
 # ======================================================
 # 📌 VIEW HIỂN THỊ CHAT
 # ======================================================
@@ -283,7 +279,6 @@ def chatbox_view(request):
     # =========================================================
     if hasattr(request.user, "nhanvien") or request.user.is_staff:
         return redirect("danh_sach_khach")
-
     user = request.user
 
     # =========================================================
