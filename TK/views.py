@@ -15,9 +15,6 @@ def dangky(request):
         if form.is_valid():
             user = form.save()  # Tạo tài khoản user
             user.is_active=True
-            # Gán vào nhóm Khách hàng
-            khach_group, _ = Group.objects.get_or_create(name='Khách hàng')
-            user.groups.add(khach_group)
             # 👉 Tự động tạo bản ghi KhachHang
             KhachHang.objects.create(user=user, email=user.email,)
             messages.success(request, "Đăng ký thành công! Hãy đăng nhập.")
