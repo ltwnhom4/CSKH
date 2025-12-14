@@ -112,7 +112,7 @@ def trang_thong_bao(request):
 @login_required
 def danh_dau_da_doc_tat_ca(request):
     ThongBao.objects.filter(nguoi_nhan=request.user, da_doc=False).update(da_doc=True)
-    return redirect('danh_sach_thong_bao')
+    return redirect('trang_thong_bao')
 
 @login_required
 def xem_thong_bao(request, tb_id):
