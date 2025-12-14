@@ -159,7 +159,7 @@ def tao_lich_hen(request):
             )
 
             # 📨 Gửi cho admin
-            admin_user = User.objects.filter(is_staff=True).first()
+            admin_user = User.objects.filter(is_staff=True)
             if admin_user:
                 ThongBao.objects.create(
                     tieu_de="Khách hàng mới đặt lịch",
