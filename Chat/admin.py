@@ -5,7 +5,7 @@ from .models import TinNhan
 class TinNhanAdmin(admin.ModelAdmin):
     list_display = ("id_tinnhan", "nguoi_gui", "noi_dung", "thoi_gian_gui",
                     "ten_khachhang", "ten_nhanvien")
-    list_filter = ("nguoi_gui", "thoi_gian_gui", "id_khachhang", "id_nhanvien",)
+    list_filter = ("nguoi_gui", "thoi_gian_gui")
     search_fields = ("noi_dung", "id_khachhang__ho_ten", "id_nhanvien__ho_ten", )
     ordering = ("-thoi_gian_gui",)
 
@@ -16,3 +16,19 @@ class TinNhanAdmin(admin.ModelAdmin):
     def ten_nhanvien(self, obj):
         return obj.id_nhanvien.ho_ten if obj.id_nhanvien else "-"
     ten_nhanvien.short_description = "Nhân viên"
+
+    # Không cho thêm
+    def has_add_permission(self, request):
+        return False
+
+    # Không cho chỉnh sửa
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    # Không cho xóa
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    # Chỉ cho xem
+    def has_view_permission(self, request, obj=None):
+        return True
