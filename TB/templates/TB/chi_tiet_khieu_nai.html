@@ -1,139 +1,69 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Chi tiết khiếu nại</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <style>
-        body {
-            background: #fff6fa;
-            font-family: 'Poppins', sans-serif;
-            padding: 40px;
-        }
+{% block title %}Chi tiết khiếu nại #{{ khieunai.id }}{% endblock %}
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(255,120,150,0.25);
-        }
+{% block content %}
+<link rel="stylesheet" href="{% static 'TB/chitiet.css' %}">
 
-        h2 {
-            color: #ff4f7b;
-            font-weight: 700;
-            margin-bottom: 25px;
-        }
-
-        .label {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .value {
-            margin-bottom: 15px;
-            color: #444;
-        }
-
-        .status {
-            font-weight: 700;
-            color: #ff2f63;
-        }
-
-        .back-btn {
-            background: #ff7aa5;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 25px;
-            display: inline-block;
-        }
-        .back-btn:hover {
-            background: #ff5a85;
-        }
-
-        .img-preview {
-            margin-top: 12px;
-            max-width: 350px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
+<div class="ct-container">
 
     <h2><i class="fa-solid fa-thumbtack"></i> Chi tiết khiếu nại #{{ khieunai.id }}</h2>
 
-    <div class="label">Người gửi:</div>
-    <div class="value">{{ khieunai.nguoi_gui.username }}</div>
+    <div class="ct-label">Người gửi:</div>
+    <div class="ct-value">{{ khieunai.nguoi_gui.username }}</div>
 
-    <div class="label">Nội dung khiếu nại:</div>
-    <div class="value">{{ khieunai.noi_dung }}</div>
+    <div class="ct-label">Nội dung khiếu nại:</div>
+    <div class="ct-value">{{ khieunai.noi_dung|linebreaksbr }}</div>
 
     {% if khieunai.yeu_cau %}
-        <div class="label">Yêu cầu / mong muốn:</div>
-        <div class="value">{{ khieunai.yeu_cau }}</div>
+        <div class="ct-label">Yêu cầu / mong muốn:</div>
+        <div class="ct-value">{{ khieunai.yeu_cau|linebreaksbr }}</div>
     {% endif %}
 
-    <div class="label">Ngày gửi:</div>
-    <div class="value">{{ khieunai.ngay_gui|date:"d/m/Y H:i" }}</div>
+    <div class="ct-label">Ngày gửi:</div>
+    <div class="ct-value">{{ khieunai.ngay_gui|date:"d/m/Y H:i" }}</div>
 
-    <div class="label">Trạng thái:</div>
-    <div class="value status">{{ khieunai.trang_thai }}</div>
+    <div class="ct-label">Trạng thái:</div>
+    <div class="ct-value ct-status">{{ khieunai.trang_thai }}</div>
 
     {% if khieunai.lich_hen %}
-        <div class="label">Lịch hẹn liên quan:</div>
-        <div class="value">Mã lịch hẹn #{{ khieunai.lich_hen.id }}</div>
+        <div class="ct-label">Lịch hẹn liên quan:</div>
+        <div class="ct-value">Mã lịch hẹn #{{ khieunai.lich_hen.id }}</div>
     {% endif %}
 
     {% if user.is_staff %}
-        <div class="label">Nhân viên phụ trách:</div>
-        <div class="value">{{ khieunai.nhan_vien_phu_trach.username|default:"Chưa phân công" }}</div>
+        <div class="ct-label">Nhân viên phụ trách:</div>
+        <div class="ct-value">
+            {{ khieunai.nhan_vien_phu_trach.username|default:"Chưa phân công" }}
+        </div>
     {% endif %}
 
     {% if khieunai.phan_hoi %}
-        <div class="label">Phản hồi từ nhân viên:</div>
-        <div class="value">{{ khieunai.phan_hoi }}</div>
+        <div class="ct-label">Phản hồi từ nhân viên:</div>
+        <div class="ct-value">{{ khieunai.phan_hoi|linebreaksbr }}</div>
     {% endif %}
 
-<div class="label">Minh chứng:</div>
+    <div class="ct-label">Minh chứng:</div>
 
-{% if khieunai.minh_chung %}
+    {% if khieunai.minh_chung %}
+        {% with file=khieunai.minh_chung.url|lower %}
+            {% if file|slice:"-4:" == ".jpg" or file|slice:"-5:" == ".jpeg" or file|slice:"-4:" == ".png" %}
+                <img src="{{ khieunai.minh_chung.url }}" class="ct-img">
+            {% else %}
+                <a href="{{ khieunai.minh_chung.url }}" class="ct-download" target="_blank">
+                    📎 Tải minh chứng
+                </a>
+            {% endif %}
+        {% endwith %}
+    {% else %}
+        <div class="ct-value">Không có minh chứng</div>
+    {% endif %}
 
-    {# --- Nếu là ảnh --- #}
-    {% with file=khieunai.minh_chung.url|lower %}
-        {% if file|slice:"-4:" == ".jpg" or file|slice:"-5:" == ".jpeg" or file|slice:"-4:" == ".png" %}
+    <a href="javascript:history.back()" class="ct-back"> ← Quay lại</a>
 
-            <img src="{{ khieunai.minh_chung.url }}" class="img-preview">
-
-        {% else %}
-
-            <a href="{{ khieunai.minh_chung.url }}"
-               target="_blank"
-               style="color:#ff4f7b;font-weight:600;">
-               Tải minh chứng
-            </a>
-
-        {% endif %}
-    {% endwith %}
-
-{% else %}
-    <div class="value">Không có minh chứng</div>
-{% endif %}
-
-    <a href="javascript:history.back()" class="back-btn">
-        <i class="fa fa-arrow-left"></i> Quay lại
     </a>
 
 </div>
 
-</body>
-</html>
+{% endblock %}

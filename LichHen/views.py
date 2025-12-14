@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.utils import timezone
 from django.contrib.messages import get_messages
-
+from datetime import timedelta
+from TK.models import TichDiem, LichSuTichDiem
 from .models import LichHen, DV_LichHen
 from .forms import LichHenForm, LyDoHuyForm
 from TK.models import KhachHang, ThuCung
@@ -12,7 +13,17 @@ from TB.models import ThongBao
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+def _kiem_tra_quyen_lich_hen(user, lich_hen):
+    """Trả về tuple (được_phép, vai_tro, nhan_vien, khach_hang)."""
+    if user.is_superuser:
+        return True, "admin", None, None
 
+    if user.is_staff:
+        nhan_vien = NhanVien.objects.filter(user=user).first()
+        return (nhan_vien is not None and lich_hen.nhan_vien == nhan_vien, "staff", nhan_vien, None)
+
+    khach = KhachHang.objects.filter(user=user).first()
+    return (khach is not None and lich_hen.khach_hang == khach, "customer", None, khach)
 # 🧾 Hiển thị lịch hẹn sắp tới
 @login_required(login_url='/dangnhap/')
 def lich_hen_sap_toi(request):
@@ -23,8 +34,13 @@ def lich_hen_sap_toi(request):
 
     # ✅ Chuyển lịch đã qua sang “hoàn thành”
     hien_tai = timezone.now()
-    lich_qua_ngay = LichHen.objects.filter(khach_hang=khach_hang, trang_thai='sap_toi', thoi_gian__lt=hien_tai)
-    from TK.models import TichDiem, LichSuTichDiem
+    moc_hoan_thanh = hien_tai - timedelta(hours=2)
+    lich_qua_ngay = LichHen.objects.filter(
+        khach_hang=khach_hang,
+        trang_thai='sap_toi',
+        thoi_gian__lte=moc_hoan_thanh
+    )
+
     for lich in lich_qua_ngay:
         lich.trang_thai = 'hoan_thanh'
         lich.save()
@@ -95,6 +111,18 @@ def tao_lich_hen(request):
                 messages.error(request, "Vui lòng chọn hoặc thêm thú cưng hợp lệ.")
                 return render(request, 'lichhen/tao_lich_hen.html', {'form': form})
 
+            # 🚫 Chặn đặt trùng lịch cho cùng thú cưng trong cùng khung giờ (trừ lịch đã hủy)
+            thoi_gian_local = timezone.localtime(thoi_gian)
+            trung_lich = LichHen.objects.filter(
+                thu_cung=thu_cung,
+                thoi_gian__date=thoi_gian_local.date(),
+                thoi_gian__hour=thoi_gian_local.hour,
+            ).exclude(trang_thai='huy').exists()
+
+            if trung_lich:
+                messages.error(request, "Bé đã có lịch trong khung giờ này, vui lòng chọn thời gian khác.")
+                return render(request, 'lichhen/tao_lich_hen.html', {'form': form})
+
             # ✅ Lưu lịch hẹn
             lich_hen = form.save(commit=False)
             lich_hen.khach_hang = khach_hang
@@ -116,6 +144,7 @@ def tao_lich_hen(request):
             lich_hen.save(update_fields=['tong_tien'])
 
             # 📨 Gửi thông báo
+            #strip() để xóa các kí tự khoảng trắng thừa
             ten_dv = ", ".join([dv.ten_dich_vu for dv in dich_vu_list]) or "(Không có dịch vụ)"
             ghi_chu = form.cleaned_data.get('ghi_chu', '').strip() or "(Không có ghi chú)"
             ThongBao.objects.create(
@@ -168,7 +197,12 @@ def thong_tin_thu_cung(request, pk):
 def xoa_lich_hen(request, id):
     lich_hen = get_object_or_404(LichHen, id=id)
     form = LyDoHuyForm(request.POST or None)
+    #  Kiểm tra quyền: admin toàn quyền, nhân viên chỉ lịch được phân, khách chỉ lịch của mình
+    co_quyen, _, nhan_vien, khach = _kiem_tra_quyen_lich_hen(request.user, lich_hen)
 
+    if not co_quyen:
+        messages.error(request, "Bạn không có quyền hủy lịch hẹn này.")
+        return render(request, 'lichhen/xoa_lich_hen.html', {'lich_hen': lich_hen, 'form': form}, status=403)
     if request.method == 'POST' and form.is_valid():
         ly_do = form.cleaned_data['ly_do_huy']
         lich_hen.trang_thai = 'huy'

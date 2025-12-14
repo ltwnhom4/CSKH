@@ -5,8 +5,6 @@
 
 {% block content %}
 
-<h2 class="date-title">Danh sách khiếu nại</h2>
-
 {% if khieu_nai_list %}
 {% for k in khieu_nai_list %}
 
@@ -84,10 +82,7 @@
   </div>
   {% endif %}
 </div>
-
 {% endfor %}
 {% else %}
-
 <p style="text-align:center; font-style:italic;">Bạn chưa có khiếu nại nào.</p> {% endif %}
-
 {% endblock %}
