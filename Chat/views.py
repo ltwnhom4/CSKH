@@ -83,69 +83,59 @@ def bot_auto_reply(text_raw):
     # ----- 5. Default -----
     return ""   # để gui_tin_nhan xử lý
 
-# ======================================================
-# 📌 VIEW HIỂN THỊ CHAT
-# ======================================================
-def chatbox_view(request):
 
-    # =========================================================
-    # 1. Nhân viên / admin KHÔNG được vào chatbox khách
-    # =========================================================
-    if hasattr(request.user, "nhanvien") or request.user.is_staff:
-        return redirect("danh_sach_khach")
 
+# ======================================================
+# 📌 API TRẢ VỀ SỐ TIN NHẮN CHƯA ĐỌC
+# ======================================================
+
+from django.views.decorators.http import require_GET
+
+@require_GET
+def get_unread_count(request):
     user = request.user
 
-    # =========================================================
-    # 2. KHÁCH CHƯA ĐĂNG NHẬP
-    # =========================================================
+    # KH chưa login → dùng phiên chat
     if not user.is_authenticated:
+        phien = request.session.get("phien_chat")
+        if not phien:
+            return JsonResponse({"count": 0})
 
-        # lấy phiên chat
-        phien = get_or_create_session_chat(request)
-
-        # Lấy toàn bộ tin nhắn
-        messages = TinNhan.objects.filter(
-            phien_chat=phien
-        ).order_by("thoi_gian_gui")
-
-        # ĐÁNH DẤU TIN NV/AD ĐÃ ĐỌC
-        TinNhan.objects.filter(
+        unread = TinNhan.objects.filter(
             phien_chat=phien,
             nguoi_gui__in=["NV", "AD"],
             da_doc=False
-        ).update(da_doc=True)
+        ).count()
+        return JsonResponse({"count": unread})
 
-        return render(request, "Chat/chatbox.html", {
-            "messages": messages
-        })
-
-    # =========================================================
-    # 3. KHÁCH ĐĂNG NHẬP
-    # =========================================================
+    # KH đã login
     if hasattr(user, "khachhang"):
-
         kh = user.khachhang
-
-        messages = TinNhan.objects.filter(
-            id_khachhang=kh
-        ).order_by("thoi_gian_gui")
-
-        # ĐÁNH DẤU TIN NV/AD ĐÃ ĐỌC
-        TinNhan.objects.filter(
+        unread = TinNhan.objects.filter(
             id_khachhang=kh,
             nguoi_gui__in=["NV", "AD"],
             da_doc=False
-        ).update(da_doc=True)
+        ).count()
+        return JsonResponse({"count": unread})
 
-        return render(request, "Chat/chatbox.html", {
-            "messages": messages
-        })
+    return JsonResponse({"count": 0})
 
-    # =========================================================
-    # 4. Trường hợp khác (không xác định quyền)
-    # =========================================================
-    return HttpResponse("Không xác định quyền")
+def admin_unread_customers(request):
+    # Chỉ cho admin + nhân viên
+    if not request.user.is_authenticated:
+        return JsonResponse({"count": 0})
+
+    if not request.user.is_staff and not hasattr(request.user, "nhanvien"):
+        return JsonResponse({"count": 0})
+
+    # Lấy danh sách khách hàng có tài khoản & có tin chưa đọc
+    unread_customers = TinNhan.objects.filter(
+        nguoi_gui="KH",
+        da_doc=False,
+        id_khachhang__isnull=False  # CHỈ LẤY KHÁCH CÓ TÀI KHOẢN
+    ).values_list("id_khachhang", flat=True).distinct()
+
+    return JsonResponse({"count": len(unread_customers)})
 
 
 # ======================================================
@@ -281,35 +271,73 @@ def gui_tin_nhan(request):
 
     return JsonResponse({"error": "Thiếu mode hoặc target"}, status=400)
 
-def chat_admin(request, khach_id):
-    if not request.user.is_authenticated:
-        return redirect("dangnhap")
 
-    if not hasattr(request.user, "nhanvien") and not request.user.is_staff:
-        return redirect("chatbox")
 
-    try:
-        kh = KhachHang.objects.get(id=khach_id)
-    except KhachHang.DoesNotExist:
-        return HttpResponse("Không tìm thấy khách hàng")
+# ======================================================
+# 📌 VIEW HIỂN THỊ CHAT
+# ======================================================
+def chatbox_view(request):
 
-    messages = TinNhan.objects.filter(
-        id_khachhang=kh
-    ).order_by("thoi_gian_gui")
+    # =========================================================
+    # 1. Nhân viên / admin KHÔNG được vào chatbox khách
+    # =========================================================
+    if hasattr(request.user, "nhanvien") or request.user.is_staff:
+        return redirect("danh_sach_khach")
 
-    # Đánh dấu tin KH gửi là đã đọc
-    TinNhan.objects.filter(
-        id_khachhang=kh,
-        nguoi_gui="KH",
-        da_doc=False
-    ).update(da_doc=True)
+    user = request.user
 
-    return render(request, "Chat/chat_admin.html", {
-        "target": kh.ho_ten,
-        "messages": messages,
-        "mode": "khach",
-        "send_to": kh.id
-    })
+    # =========================================================
+    # 2. KHÁCH CHƯA ĐĂNG NHẬP
+    # =========================================================
+    if not user.is_authenticated:
+
+        # lấy phiên chat
+        phien = get_or_create_session_chat(request)
+
+        # Lấy toàn bộ tin nhắn
+        messages = TinNhan.objects.filter(
+            phien_chat=phien
+        ).order_by("thoi_gian_gui")
+
+        # ĐÁNH DẤU TIN NV/AD ĐÃ ĐỌC
+        TinNhan.objects.filter(
+            phien_chat=phien,
+            nguoi_gui__in=["NV", "AD"],
+            da_doc=False
+        ).update(da_doc=True)
+
+        return render(request, "Chat/chatbox.html", {
+            "messages": messages
+        })
+
+    # =========================================================
+    # 3. KHÁCH ĐĂNG NHẬP
+    # =========================================================
+    if hasattr(user, "khachhang"):
+
+        kh = user.khachhang
+
+        messages = TinNhan.objects.filter(
+            id_khachhang=kh
+        ).order_by("thoi_gian_gui")
+
+        # ĐÁNH DẤU TIN NV/AD ĐÃ ĐỌC
+        TinNhan.objects.filter(
+            id_khachhang=kh,
+            nguoi_gui__in=["NV", "AD"],
+            da_doc=False
+        ).update(da_doc=True)
+
+        return render(request, "Chat/chatbox.html", {
+            "messages": messages
+        })
+
+    # =========================================================
+    # 4. Trường hợp khác (không xác định quyền)
+    # =========================================================
+    return HttpResponse("Không xác định quyền")
+
+
 
 # ======================================================
 # ⭐ DANH SÁCH KHÁCH ĐÃ CHAT (NHÂN VIÊN / ADMIN)
@@ -343,54 +371,33 @@ def danh_sach_khach(request):
     })
 
 
-# ======================================================
-# 📌 API TRẢ VỀ SỐ TIN NHẮN CHƯA ĐỌC
-# ======================================================
-
-from django.views.decorators.http import require_GET
-
-@require_GET
-def get_unread_count(request):
-    user = request.user
-
-    # KH chưa login → dùng phiên chat
-    if not user.is_authenticated:
-        phien = request.session.get("phien_chat")
-        if not phien:
-            return JsonResponse({"count": 0})
-
-        unread = TinNhan.objects.filter(
-            phien_chat=phien,
-            nguoi_gui__in=["NV", "AD"],
-            da_doc=False
-        ).count()
-        return JsonResponse({"count": unread})
-
-    # KH đã login
-    if hasattr(user, "khachhang"):
-        kh = user.khachhang
-        unread = TinNhan.objects.filter(
-            id_khachhang=kh,
-            nguoi_gui__in=["NV", "AD"],
-            da_doc=False
-        ).count()
-        return JsonResponse({"count": unread})
-
-    return JsonResponse({"count": 0})
-
-def admin_unread_customers(request):
-    # Chỉ cho admin + nhân viên
+def chat_admin(request, khach_id):
     if not request.user.is_authenticated:
-        return JsonResponse({"count": 0})
+        return redirect("dangnhap")
 
-    if not request.user.is_staff and not hasattr(request.user, "nhanvien"):
-        return JsonResponse({"count": 0})
+    if not hasattr(request.user, "nhanvien") and not request.user.is_staff:
+        return redirect("chatbox")
 
-    # Lấy danh sách khách hàng có tài khoản & có tin chưa đọc
-    unread_customers = TinNhan.objects.filter(
+    try:
+        kh = KhachHang.objects.get(id=khach_id)
+    except KhachHang.DoesNotExist:
+        return HttpResponse("Không tìm thấy khách hàng")
+
+    messages = TinNhan.objects.filter(
+        id_khachhang=kh
+    ).order_by("thoi_gian_gui")
+
+    # Đánh dấu tin KH gửi là đã đọc
+    TinNhan.objects.filter(
+        id_khachhang=kh,
         nguoi_gui="KH",
-        da_doc=False,
-        id_khachhang__isnull=False  # CHỈ LẤY KHÁCH CÓ TÀI KHOẢN
-    ).values_list("id_khachhang", flat=True).distinct()
+        da_doc=False
+    ).update(da_doc=True)
 
-    return JsonResponse({"count": len(unread_customers)})
+    return render(request, "Chat/chat_admin.html", {
+        "target": kh.ho_ten,
+        "messages": messages,
+        "mode": "khach",
+        "send_to": kh.id
+    })
+
