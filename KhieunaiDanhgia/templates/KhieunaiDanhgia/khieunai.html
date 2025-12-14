@@ -29,19 +29,30 @@
       {% endif %}
 
       <!-- Minh chứng -->
-      <label>Minh chứng (ảnh/video):</label>
-
-      {% if da_khieu_nai %}
-          {% if kn.minh_chung %}
-              <div class="preview-box">
-                  <img src="{{ kn.minh_chung.url }}">
-              </div>
-          {% else %}
-              <p style="color:#777;">(Không có minh chứng)</p>
-          {% endif %}
-      {% else %}
-          {{ form.minh_chung }}
-      {% endif %}
+<!-- Minh chứng -->
+    <label>Minh chứng (ảnh/video):</label>
+    {% if da_khieu_nai %}
+        {% if kn.minh_chung %}
+            <div class="preview-box">
+                {% with file_url=kn.minh_chung.url|lower %}
+                    {% if ".mp4" in file_url or ".webm" in file_url or ".ogg" in file_url %}
+                        <!-- VIDEO -->
+                        <video controls style="max-width:100%; border-radius:10px;">
+                            <source src="{{ kn.minh_chung.url }}">
+                            Trình duyệt không hỗ trợ video.
+                        </video>
+                    {% else %}
+                        <!-- ẢNH -->
+                        <img src="{{ kn.minh_chung.url }}" style="max-width:100%; border-radius:10px;">
+                    {% endif %}
+                {% endwith %}
+            </div>
+        {% else %}
+            <p style="color:#777;">(Không có minh chứng)</p>
+        {% endif %}
+    {% else %}
+        {{ form.minh_chung }}
+    {% endif %}
 
       <!-- Yêu cầu -->
       <label>Yêu cầu / mong muốn:</label>

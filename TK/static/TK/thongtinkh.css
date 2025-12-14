@@ -187,3 +187,32 @@ input:focus, select:focus {
   }
 }
 
+.update-container {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ gap: 18px;              /* vừa phải, không xa quá */
+ margin-top: 30px;
+}
+
+
+/* Nút hủy */
+.cancel-btn {
+ background: #fff;
+ color: #a01940;
+ border: 2px solid #f3b8ca;
+ padding: 12px 26px;          /* ⭐ cùng chiều cao với update */
+ border-radius: 25px;         /* bo giống nút chính */
+ font-size: 15px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.25s ease;
+}
+
+
+.cancel-btn:hover {
+ background: #ffe3ec;
+ border-color: #e75480;
+ color: #e75480;
+ transform: scale(1.03);
+}

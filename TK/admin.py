@@ -31,8 +31,7 @@ class KhachHangAdmin(admin.ModelAdmin):
    list_display = ('ho_ten', 'so_dien_thoai', 'dia_chi','email', 'gioi_tinh', 'ngay_sinh', 'ngay_tham_gia')
    search_fields = ( 'ho_ten', 'so_dien_thoai' )
    ordering = ('ngay_tham_gia',)
-   def has_add_permission(self, request):
-       return False
+
    # Không cho thêm
    def has_add_permission(self, request):
         return False

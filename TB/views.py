@@ -21,14 +21,17 @@ def la_nhan_vien(user):
 # 2️⃣ Chi tiết thông báo
 @login_required
 def chi_tiet_thong_bao(request, id):
+    # 🔒 Lấy thông báo đúng người nhận
+    tb = get_object_or_404(
+        ThongBao,
+        id=id,
+        nguoi_nhan=request.user
+    )
 
-    tb = get_object_or_404(ThongBao, id=id)  # lấy thông báo gốc
-
-    # 🔹 Nhân viên / admin xem được tất cả
-    if not request.user.is_staff:
-        if tb.nguoi_nhan != request.user:
-            messages.error(request, "Bạn không có quyền xem thông báo này.")
-            return redirect('TB:trang_thong_bao')
+    # ✅ ĐÁNH DẤU ĐÃ ĐỌC (SỬA LỖI CHÍNH Ở ĐÂY)
+    if not tb.da_doc:
+        tb.da_doc = True
+        tb.save(update_fields=['da_doc'])
 
     # 🔥 1) THÔNG BÁO LỊCH HẸN
     if tb.loai == 'lich_hen' and tb.doi_tuong_id:
@@ -40,7 +43,7 @@ def chi_tiet_thong_bao(request, id):
                 'lich_hen': lich_hen,
                 'dich_vu_list': dich_vu_list
             })
-        except:
+        except LichHen.DoesNotExist:
             messages.error(request, "Lịch hẹn này không còn tồn tại.")
             return redirect('TB:trang_thong_bao')
 
@@ -53,17 +56,17 @@ def chi_tiet_thong_bao(request, id):
                 'tb': tb,
                 'khieunai': kn
             })
-        except:
+        except KhieuNai.DoesNotExist:
             messages.error(request, "Khiếu nại này không còn tồn tại.")
             return redirect('TB:trang_thong_bao')
 
-    # ⭐⭐⭐ 3) THÔNG BÁO KHUYẾN MÃI — BẠN ĐÃ QUÊN NHÁNH NÀY!
+    # 🔥 3) THÔNG BÁO KHUYẾN MÃI
     if tb.loai == 'khuyen_mai':
         return render(request, 'TB/chi_tiet_khuyen_mai.html', {
             'tb': tb
         })
 
-    # fallback
+    # 🔁 Fallback
     return render(request, 'TB/chi_tiet_thong_bao.html', {'tb': tb})
 
 # 3️⃣ Nhân viên tạo thông báo
@@ -116,7 +119,10 @@ def danh_dau_da_doc_tat_ca(request):
 
 @login_required
 def xem_thong_bao(request, tb_id):
-    tb = get_object_or_404(ThongBao, id=tb_id, nguoi_nhan=request.user)
+    if request.user.is_staff or request.user.is_superuser:
+        tb = get_object_or_404(ThongBao, id=tb_id)
+    else:
+        tb = get_object_or_404(ThongBao, id=tb_id, nguoi_nhan=request.user)
 
     # ✅ Đánh dấu đã đọc
     if not tb.da_doc:
@@ -129,11 +135,12 @@ def xem_thong_bao(request, tb_id):
 
     # ✅ Nếu không có link → fallback theo loại
     if tb.loai == 'lich_hen' and tb.doi_tuong_id:
-        return redirect('TB:chi_tiet_lich_hen', id=tb.doi_tuong_id)
-    elif tb.loai == 'khuyen_mai' and tb.doi_tuong_id:
-        return redirect('TB:chi_tiet_khuyen_mai', id=tb.doi_tuong_id)
+        return redirect('TB:chi_tiet_lich_hen', id=tb.id)
+    elif tb.loai == 'khuyen_mai':
+        return redirect('TB:chi_tiet_khuyen_mai', id=tb.id)
+
     elif tb.loai == "khieu_nai" and tb.doi_tuong_id:
-        return redirect("chi_tiet_khieu_nai", id=tb.doi_tuong_id)
+        return redirect("chi_tiet_khieu_nai", id=tb.id)
     # ✅ Nếu không có loại cụ thể → quay lại danh sách
     return redirect('TB:trang_thong_bao')
 
@@ -199,7 +206,10 @@ def xoa_khuyen_mai(request,km_id):
     return redirect('TB:danh_sach_khuyen_mai')
 @login_required
 def chi_tiet_khuyen_mai(request, id):
-    km = get_object_or_404(ThongBao, id=id, loai='khuyen_mai')
-    return render(request, 'TB/chi_tiet_khuyen_mai.html', {'km': km})
+    tb = get_object_or_404(ThongBao, id=id, loai='khuyen_mai')
+    return render(request, 'TB/chi_tiet_khuyen_mai.html', {
+        'tb': tb
+    })
+
 
 

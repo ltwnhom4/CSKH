@@ -47,7 +47,7 @@ class KhieuNaiAdmin(admin.ModelAdmin):
         return self.readonly_fields
     def has_add_permission(self, request):
         # Cấm Superuser tạo mới khiếu nại
-        if request.user.is_superuser:
+        if request.user.is_staff:
             return False  # Trả về False để không cho phép tạo mới khiếu nại
         return super().has_add_permission(request)  # Cho phép những người khác tạo mới
     def has_delete_permission(self, request, obj=None):
@@ -112,6 +112,6 @@ class DanhGiaAdmin(admin.ModelAdmin):
         # Cấm Superuser tạo mới đánh giá
 
     def has_add_permission(self, request):
-        if request.user.is_superuser:
+        if request.user.is_staff:
             return False  # Cấm Superuser tạo mới
         return super().has_add_permission(request)  # Cho phép những người khác

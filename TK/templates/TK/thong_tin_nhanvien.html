@@ -3,7 +3,7 @@
 
 {% block title %}Thông tin nhân viên - Punky Spa{% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'TK/thongtinnv.css' %}">
+<link rel="stylesheet" href="{% static 'TK/thongtinnhv.css' %}">
 
 <div class="container-profile">
   <!-- 🔹 Phần đầu -->
@@ -63,6 +63,9 @@
       <div class="update-container">
         <button type="submit" class="update-btn">
           <i class="fa fa-pen"></i> Cập nhật
+        </button>
+        <button type="button" class="cancel-btn"
+          onclick="window.history.back()">Hủy
         </button>
       </div>
     </div>
