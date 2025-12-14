@@ -40,6 +40,7 @@ class KhieuNaiForm(forms.ModelForm):
             'noi_dung': 'Nội dung khiếu nại',
             'minh_chung': 'Minh chứng (ảnh hoặc video)',
             'yeu_cau': 'Yêu cầu / mong muốn',
+            'nhan_vien_phu_trach': 'Nhân viên phụ trách',
             'trang_thai': 'Trạng thái xử lý',
             'phan_hoi': 'Phản hồi từ nhân viên',
         }
