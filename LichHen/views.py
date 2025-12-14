@@ -12,6 +12,7 @@ from TK.models import KhachHang, ThuCung
 from TB.models import ThongBao
 from django.contrib.auth.models import User
 from django.urls import reverse
+from TK.models import NhanVien
 
 def _kiem_tra_quyen_lich_hen(user, lich_hen):
     """Trả về tuple (được_phép, vai_tro, nhan_vien, khach_hang)."""
@@ -158,18 +159,22 @@ def tao_lich_hen(request):
                 link=f"/lich-hen/chi-tiet/{lich_hen.id}/"
             )
 
-            # 📨 Gửi cho admin
-            admin_user = User.objects.filter(is_staff=True).first()
-            if admin_user:
+            # 📨 Gửi cho admin/nv
+            staff_users = User.objects.filter(is_staff=True)
+
+            for user in staff_users:
                 ThongBao.objects.create(
                     tieu_de="Khách hàng mới đặt lịch",
-                    noi_dung=f"Khách hàng {request.user.username} vừa đặt lịch cho bé {thu_cung.ten_thucung} ({ten_dv}) lúc {timezone.localtime(lich_hen.thoi_gian).strftime('%H:%M %d/%m/%Y')}.",
+                    noi_dung=(
+                        f"Khách hàng {request.user.username} vừa đặt lịch "
+                        f"cho bé {thu_cung.ten_thucung} ({ten_dv}) lúc "
+                        f"{timezone.localtime(lich_hen.thoi_gian).strftime('%H:%M %d/%m/%Y')}."
+                    ),
                     loai='lich_hen',
                     nguoi_gui=request.user,
-                    nguoi_nhan=admin_user,
+                    nguoi_nhan=user,
                     doi_tuong_id=lich_hen.id,
                     link=reverse("chi_tiet_lich_hen", args=[lich_hen.id])
-
                 )
 
             return redirect('lich_hen_sap_toi')
@@ -208,38 +213,37 @@ def xoa_lich_hen(request, id):
         lich_hen.ly_do_huy = ly_do
         lich_hen.save()
 
-        admin_user = User.objects.filter(is_staff=True).first()
+        # Gửi cho admin + nhân viên
+        staff_users = User.objects.filter(is_staff=True)
 
-        if request.user.is_staff:
+        for user in staff_users:
             ThongBao.objects.create(
-                tieu_de="🚫 Lịch hẹn đã bị nhân viên hủy",
-                noi_dung=f"Lịch hẹn của bé {lich_hen.thu_cung.ten_thucung} đã bị nhân viên hủy. Lý do: {ly_do}.",
+                tieu_de="🚫 Khách hàng đã hủy lịch hẹn",
+                noi_dung=(
+                    f"Khách hàng {lich_hen.khach_hang.user.username} "
+                    f"đã hủy lịch của bé {lich_hen.thu_cung.ten_thucung}. "
+                    f"Lý do: {ly_do}."
+                ),
                 loai='lich_hen',
                 nguoi_gui=request.user,
-                nguoi_nhan=lich_hen.khach_hang.user,
+                nguoi_nhan=user,
                 doi_tuong_id=lich_hen.id,
                 link=f"/lich-hen/chi-tiet/{lich_hen.id}/"
             )
-        else:
-            ThongBao.objects.create(
-                tieu_de="❌ Xác nhận hủy lịch hẹn",
-                noi_dung=f"Bạn đã hủy lịch hẹn cho bé {lich_hen.thu_cung.ten_thucung} vào {timezone.localtime(lich_hen.thoi_gian).strftime('%H:%M %d/%m/%Y')}.",
-                loai='lich_hen',
-                nguoi_gui=request.user,
-                nguoi_nhan=request.user,
-                doi_tuong_id=lich_hen.id,
-                link=f"/lich-hen/chi-tiet/{lich_hen.id}/"
-            )
-            if admin_user:
-                ThongBao.objects.create(
-                    tieu_de="🚫 Khách hàng đã hủy lịch hẹn",
-                    noi_dung=f"Khách hàng {lich_hen.khach_hang.user.username} đã hủy lịch của bé {lich_hen.thu_cung.ten_thucung}.",
-                    loai='lich_hen',
-                    nguoi_gui=request.user,
-                    nguoi_nhan=admin_user,
-                    doi_tuong_id=lich_hen.id,
-                    link=f"/lich-hen/chi-tiet/{lich_hen.id}/"
-                )
+
+        # Gửi xác nhận cho khách
+        ThongBao.objects.create(
+            tieu_de="❌ Xác nhận hủy lịch hẹn",
+            noi_dung=(
+                f"Bạn đã hủy lịch hẹn cho bé {lich_hen.thu_cung.ten_thucung} "
+                f"vào {timezone.localtime(lich_hen.thoi_gian).strftime('%H:%M %d/%m/%Y')}."
+            ),
+            loai='lich_hen',
+            nguoi_gui=request.user,
+            nguoi_nhan=request.user,
+            doi_tuong_id=lich_hen.id,
+            link=f"/lich-hen/chi-tiet/{lich_hen.id}/"
+        )
 
         messages.success(request, "Lịch hẹn đã được hủy thành công!")
         return redirect('lich_da_huy')

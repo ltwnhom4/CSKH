@@ -74,10 +74,10 @@
   </div>
   {% if request.user.is_staff %}
   <div class="event-row" style="margin-top:10px;">
-            <a href="{% url 'KhieunaiDanhgia:xu_ly_khieu_nai' k.id %}"
+            <a href="{% url 'chi_tiet_khieu_nai' k.id %}"
                style="background:#ff4f7b;color:white;padding:6px 12px;border-radius:8px;
                       text-decoration:none;font-weight:600;">
-                Xử lý khiếu nại
+                Chi tiết khiếu nại
             </a>
   </div>
   {% endif %}

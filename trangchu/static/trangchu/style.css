@@ -946,3 +946,7 @@ nav a:hover {
     align-items: center;
     z-index: 100000;
 }
+.notify-item.chua-doc {
+    background-color: #ffe4ec;
+    border-left: 4px solid #ff5e88;
+}

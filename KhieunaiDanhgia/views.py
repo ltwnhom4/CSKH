@@ -189,10 +189,10 @@ def chi_tiet_khieu_nai(request, id):
     # NHÂN VIÊN → chỉ xem khi được phân công
     elif request.user.is_staff:
         if khieunai.nhan_vien_phu_trach != request.user:
-            return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
+            return redirect('danh_sach_khieu_nai')
 
     # KHÁCH → chỉ xem khiếu nại mình gửi
     elif khieunai.nguoi_gui != request.user:
-        return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
+        return redirect('danh_sach_khieu_nai')
         
     return render(request, 'TB/chi_tiet_khieu_nai.html', {'khieunai': khieunai})
