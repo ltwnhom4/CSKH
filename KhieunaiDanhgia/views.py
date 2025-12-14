@@ -194,10 +194,5 @@ def chi_tiet_khieu_nai(request, id):
     # KHÁCH → chỉ xem khiếu nại mình gửi
     elif khieunai.nguoi_gui != request.user:
         return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
-
-
-    # KHÁCH → chỉ xem khiếu nại mình gửi
-    elif khieunai.nguoi_gui != request.user:
-        return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
-
+        
     return render(request, 'TB/chi_tiet_khieu_nai.html', {'khieunai': khieunai})
