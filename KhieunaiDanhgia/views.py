@@ -98,7 +98,7 @@ def tao_khieu_nai(request, lich_hen_id):
         if is_responsible_staff:
             form.allow_staff_edit()
         if is_admin:
-            form.lock_admin_fields()
+            form.allow_admin_assign_staff()
         # Admin CHỈ sửa field “nhân viên phân công” → field này nằm ngoài form, ở admin site.
 
         return render(request, "KhieunaiDanhgia/khieunai.html", {
