@@ -34,7 +34,7 @@ function sendMessage() {
         return;
     }
 
-    appendMessage(text, "user"); // hiển thị KH gửi
+    appendMessage(text, "user"); // hiển thị KH gửi, thêm tin nhắn vào giao diện chat.
     chatInput.value = "";
 
     fetch("/chat/gui/", {
@@ -48,7 +48,6 @@ function sendMessage() {
     .then(res => res.json())
     .then(data => {
 
-        // ❗ Nếu backend không trả reply → KHÔNG append bot
         if (data.reply && data.reply.trim() !== "") {
             appendMessage(data.reply, "bot");
         }
@@ -92,25 +91,4 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function updateChatBadge() {
-    fetch("/chat/unread/")
-        .then(res => res.json())
-        .then(data => {
-            const badge = document.getElementById("badge-chat");
-            if (!badge) return;
-
-            if (data.count > 0) {
-                badge.style.display = "inline-block";
-                badge.textContent = data.count;
-            } else {
-                badge.style.display = "none";
-            }
-        });
-}
-
-// chạy khi load trang
-updateChatBadge();
-
-// cập nhật mỗi 3s
-setInterval(updateChatBadge, 3000);
 
