@@ -53,7 +53,7 @@ def lich_hen_sap_toi(request):
             diem_cong = int(tong_tien / 20000)
 
             # ✅ Lấy hoặc tạo bản ghi tích điểm
-            tich_diem, _ = TichDiem.objects.get_or_create(khach_hang=khach_hang)
+            tich_diem, create = TichDiem.objects.get_or_create(khach_hang=khach_hang)
             tich_diem.tong_diem += diem_cong
             tich_diem.cap_nhat_cap_bac()
             tich_diem.save()
@@ -286,7 +286,7 @@ def chi_tiet_lich_hen(request, id):
 
     # ⭐ ADMIN / NHÂN VIÊN → xem được tất cả lịch hẹn
     if request.user.is_staff:
-        dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen)
+        dich_vu_list = DV_LichHen.objects.filter(lich_hen=lich_hen) #Lấy tất cả dịch vụ thuộc lịch hẹn hiện tại
         return render(request, 'TB/chi_tiet_lich_hen.html', {
             'lich_hen': lich_hen,
             'dich_vu_list': dich_vu_list
