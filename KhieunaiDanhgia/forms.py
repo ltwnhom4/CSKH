@@ -35,7 +35,7 @@ class DanhGiaForm(forms.ModelForm):
 class KhieuNaiForm(forms.ModelForm):
     class Meta:
         model = KhieuNai
-        fields = ['noi_dung', 'minh_chung', 'yeu_cau', 'trang_thai', 'phan_hoi']
+        fields = ['noi_dung', 'minh_chung', 'yeu_cau', 'nhan_vien_phu_trach', 'trang_thai', 'phan_hoi']
         labels = {
             'noi_dung': 'Nội dung khiếu nại',
             'minh_chung': 'Minh chứng (ảnh hoặc video)',
