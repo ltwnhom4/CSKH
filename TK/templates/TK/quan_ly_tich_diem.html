@@ -50,7 +50,7 @@
           <td>
             <form method="post" style="display:flex; justify-content:center; gap:6px;"> <!--Form này dùng POST — vì nó đang THAY ĐỔI dữ liệu trong database-->
               {% csrf_token %}
-              <input type="hidden" name="sdt" value="{{ kh.so_dien_thoai }}">  <!--input ẩn để xác định khách hàng-->
+              <input type="hidden" name="khach_hang_id" value="{{ kh.id }}">  <!--input ẩn để xác định khách hàng-->
               <input type="number" name="diem_moi" placeholder="Nhập số điểm">
               <button type="submit">Cập nhật</button>
             </form>
