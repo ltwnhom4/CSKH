@@ -116,7 +116,8 @@ def thong_tin_nhanvien(request):
 
 
    return render(request, 'TK/thong_tin_nhanvien.html', {'form': form})
-
+    
+@login_required
 @user_passes_test(lambda u: u.is_staff or u.is_superuser)
 def quan_ly_tich_diem(request):
     query = request.GET.get('sdt', '')
