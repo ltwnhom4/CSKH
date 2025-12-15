@@ -54,31 +54,47 @@ class KhieuNaiAdmin(admin.ModelAdmin):
         # Cấm admin xóa khiếu nại
         return False
     def save_model(self, request, obj, form, change):
-        # Lấy trạng thái cũ trước khi lưu
         old_status = None
+        old_staff = None
+
         if obj.pk:
             old_obj = KhieuNai.objects.get(pk=obj.pk)
             old_status = old_obj.trang_thai
+            old_staff = old_obj.nhan_vien_phu_trach
 
-        # Nếu nhân viên nhập phản hồi -> tự chuyển sang "Đã phản hồi"
+        # Nếu nhân viên nhập phản hồi → tự chuyển trạng thái
         if obj.phan_hoi and obj.trang_thai != 'Đã phản hồi':
             obj.trang_thai = 'Đã phản hồi'
 
         super().save_model(request, obj, form, change)
 
-        # ========= ⭐ GỬI THÔNG BÁO SAU KHI LƯU ⭐ =========
-        # Nếu trạng thái thay đổi từ khác -> "Đã phản hồi"
+        # ===============================
+        # 🟢 1️⃣ ADMIN PHÂN CÔNG → BÁO NHÂN VIÊN
+        # ===============================
+        if obj.nhan_vien_phu_trach and obj.nhan_vien_phu_trach != old_staff:
+            ThongBao.objects.create(
+                tieu_de="📩 Bạn được phân công xử lý khiếu nại",
+                noi_dung=f"Bạn được phân công xử lý khiếu nại #{obj.id}",
+                loai="khieu_nai",
+                nguoi_gui=request.user,  # admin
+                nguoi_nhan=obj.nhan_vien_phu_trach,
+                doi_tuong_id=obj.id,
+                link=f"/khieu-nai/chi-tiet/{obj.id}/"
+            )
+
+        # ===============================
+        # 🟢 2️⃣ NHÂN VIÊN PHẢN HỒI → BÁO KHÁCH
+        # ===============================
         if old_status != obj.trang_thai and obj.trang_thai == "Đã phản hồi":
             ThongBao.objects.create(
                 tieu_de="📬 Khiếu nại của bạn đã được phản hồi",
                 noi_dung=f"Nhân viên {request.user.username} đã phản hồi khiếu nại của bạn.",
                 loai="khieu_nai",
-                nguoi_gui=request.user,  # người xử lý
-                nguoi_nhan=obj.nguoi_gui,  # khách hàng
+                nguoi_gui=request.user,
+                nguoi_nhan=obj.nguoi_gui,
                 doi_tuong_id=obj.id,
                 link=f"/khieu-nai/chi-tiet/{obj.id}/"
             )
-
 # Cấu hình hiển thị cho model Đánh giá
 @admin.register(DanhGia)
 class DanhGiaAdmin(admin.ModelAdmin):

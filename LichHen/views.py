@@ -251,7 +251,6 @@ def xoa_lich_hen(request, id):
 
     return render(request, 'lichhen/xoa_lich_hen.html', {'lich_hen': lich_hen, 'form': form})
 
-
 # 📋 Danh sách lịch đã hủy
 @login_required(login_url='/dangnhap/')
 def lich_da_huy(request):

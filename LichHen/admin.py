@@ -10,7 +10,6 @@ class DV_LichHenInline(admin.TabularInline):
     verbose_name = "Dịch vụ trong lịch hẹn"
     verbose_name_plural = "Danh sách dịch vụ" #Tiêu đề Inline:
 
-
 @admin.register(LichHen)
 class LichHenAdmin(admin.ModelAdmin):
     def _lay_nhan_vien(self, request):
