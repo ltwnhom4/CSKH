@@ -11,12 +11,9 @@ from django.db.models import Max
 from TK.models import KhachHang
 
 
-
 # Kiểm tra quyền nhân viên
 def la_nhan_vien(user):
     return user.is_staff or user.is_superuser
-
-
 
 # 2️⃣ Chi tiết thông báo
 @login_required
@@ -79,14 +76,12 @@ def tao_thong_bao(request):
             tb = form.save(commit=False)
             tb.nguoi_gui = request.user
             tb.save()
-            return redirect('danh_sach_thong_bao')
+            return redirect('trang_thong_bao')
     else:
         form = ThongBaoForm()
     return render(request, 'TB/tao_thong_bao.html', {'form': form})
 @login_required(login_url='/dangnhap/')
-@login_required(login_url='/dangnhap/')
 def trang_thong_bao(request):
-
     thongbao_lichhen = ThongBao.objects.filter(
         nguoi_nhan=request.user,
         loai='lich_hen'

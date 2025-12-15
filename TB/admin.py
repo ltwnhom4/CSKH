@@ -9,9 +9,11 @@ class ThongBaoAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
-    # ✔ Cho phép sửa
+    # ❌ Không cho sửa
     def has_change_permission(self, request, obj=None):
-        return True
+        return True if obj is None else False
+        # obj=None → cho xem danh sách
+        # obj!=None → cấm sửa chi tiết
 
     # ✔ Cho phép xem danh sách
     def has_view_permission(self, request, obj=None):

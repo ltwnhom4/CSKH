@@ -53,6 +53,7 @@ class KhieuNaiAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         # Cấm admin xóa khiếu nại
         return False
+
     def save_model(self, request, obj, form, change):
         old_status = None
         old_staff = None
@@ -95,6 +96,7 @@ class KhieuNaiAdmin(admin.ModelAdmin):
                 doi_tuong_id=obj.id,
                 link=f"/khieu-nai/chi-tiet/{obj.id}/"
             )
+
 # Cấu hình hiển thị cho model Đánh giá
 @admin.register(DanhGia)
 class DanhGiaAdmin(admin.ModelAdmin):
