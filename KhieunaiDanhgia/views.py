@@ -78,6 +78,7 @@ def tao_khieu_nai(request, lich_hen_id):
                     updated.noi_dung = original.noi_dung
                     updated.yeu_cau = original.yeu_cau
                     updated.minh_chung = original.minh_chung
+                    updated.nhan_vien_phu_trach = original.nhan_vien_phu_trach
 
                 # 🟣 Admin chỉ sửa nhân viên phụ trách → KHÔNG sửa các trường còn lại
                 if is_admin:

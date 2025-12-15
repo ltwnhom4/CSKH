@@ -79,7 +79,5 @@ class KhieuNaiForm(forms.ModelForm):
 
     # Hàm hỗ trợ admin CHỈ xem (không sửa)
     def allow_admin_assign_staff(self):
-        # Khóa hết
-        self.disable_all_fields()
         # Chỉ cho admin sửa nhân viên phụ trách
         self.fields['nhan_vien_phu_trach'].disabled = False
