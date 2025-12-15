@@ -48,7 +48,7 @@ def bot_auto_reply(text_raw):
     if "nhuộm" in text:
         return "🌸 <b>Nhuộm lông</b> khoảng 300,000 VND<br>👉 <a href='/dichvu/4/'>Xem chi tiết</a>"
 
-    if "tư vấn" in text or "sức khỏe" in text:
+    if "tư vấn sức khỏe" in text or "sức khỏe" in text:
         return "🩺 <b>Tư vấn sức khỏe</b> khoảng 100,000 VND<br>👉 <a href='/dichvu/5/'>Xem chi tiết</a>"
 
     if "tiêm" in text:
@@ -359,6 +359,7 @@ def danh_sach_khach(request):
             )
         )
         .distinct()
+        .order_by("-unread", "-last_time")
     )
 
     return render(request, "Chat/danh_sach_khach.html", {

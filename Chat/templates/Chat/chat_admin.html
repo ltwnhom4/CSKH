@@ -248,20 +248,7 @@ function sendAdminMsg() {
     });
 }
 
-// =====================================================
-// ⭐⭐ KHI MỞ CHAT → tự động đánh dấu tin KH đã đọc ⭐⭐
-// =====================================================
-fetch("/chat/clear-unread/", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": "{{ csrf_token }}",
-    },
-    body: JSON.stringify({
-        mode: "{{ mode }}",
-        to: "{{ send_to }}"
-    })
-});
+
 </script>
 
 </body>
