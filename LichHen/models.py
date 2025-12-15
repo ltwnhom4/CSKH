@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from DV.models import DichVu
 from django.core.validators import RegexValidator
-from TK.models import KhachHang, ThuCung,NhanVien
+from TK.models import KhachHang, ThuCung,NhanVien, TichDiem, LichSuTichDiem
 from django.contrib.auth.models import User
 
 
@@ -61,6 +61,35 @@ class LichHen(models.Model):
         self.tong_tien = tong
         self.save(update_fields=["tong_tien"])
         return tong
+    def xu_ly_tich_diem_khi_hoan_thanh(self):
+        """
+        Cộng điểm cho khách hàng khi lịch chuyển sang HOÀN THÀNH
+        Chỉ chạy 1 lần
+        """
+        if self.trang_thai != 'hoan_thanh':
+            return
+
+        tong_tien = self.tong_tien or 0
+
+        # Mỗi 20.000 = 1 điểm
+        diem_cong = int(tong_tien / 20000)
+        tich_diem, create = TichDiem.objects.get_or_create(khach_hang=self.khach_hang)
+
+        # tránh cộng trùng
+        if LichSuTichDiem.objects.filter(khach_hang=self.khach_hang,noi_dung__contains=f"#{self.id}").exists():
+            return
+
+        tich_diem.tong_diem += diem_cong
+        tich_diem.cap_nhat_cap_bac()
+        tich_diem.save()
+
+        LichSuTichDiem.objects.create(
+            khach_hang=self.khach_hang,
+            so_diem=diem_cong,
+            noi_dung=(
+                f"Hoàn thành lịch hẹn #{self.id} "
+                f"cho bé {self.thu_cung.ten_thucung} ({tong_tien:,}đ)")
+        )
     def __str__(self):
         return f"{self.khach_hang.ho_ten} - {self.thu_cung.ten_thucung}"
 class DV_LichHen(models.Model):

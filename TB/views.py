@@ -1,11 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q
 from .models import ThongBao
-from .forms import ThongBaoForm
 from .forms import KhuyenMaiForm
 from LichHen.models import LichHen, DV_LichHen
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Max
 from TK.models import KhachHang
@@ -66,20 +63,7 @@ def chi_tiet_thong_bao(request, id):
     # 🔁 Fallback
     return render(request, 'TB/chi_tiet_thong_bao.html', {'tb': tb})
 
-# 3️⃣ Nhân viên tạo thông báo
-@login_required
-@user_passes_test(la_nhan_vien)
-def tao_thong_bao(request):
-    if request.method == 'POST':
-        form = ThongBaoForm(request.POST)
-        if form.is_valid():
-            tb = form.save(commit=False)
-            tb.nguoi_gui = request.user
-            tb.save()
-            return redirect('trang_thong_bao')
-    else:
-        form = ThongBaoForm()
-    return render(request, 'TB/tao_thong_bao.html', {'form': form})
+
 @login_required(login_url='/dangnhap/')
 def trang_thong_bao(request):
     thongbao_lichhen = ThongBao.objects.filter(

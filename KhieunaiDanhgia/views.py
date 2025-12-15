@@ -7,6 +7,8 @@ from .models import KhieuNai
 from TB.models import ThongBao
 from django.contrib.auth.models import User
 from TK.models import KhachHang
+from django.http import HttpResponseForbidden
+
 
 # 🩵 Gửi ĐÁNH GIÁ
 @login_required
@@ -189,7 +191,7 @@ def chi_tiet_khieu_nai(request, id):
     # NHÂN VIÊN → chỉ xem khi được phân công
     elif request.user.is_staff:
         if khieunai.nhan_vien_phu_trach != request.user:
-            return redirect('danh_sach_khieu_nai')
+            return HttpResponseForbidden("Bạn không có quyền xem khiếu nại này")
 
     # KHÁCH → chỉ xem khiếu nại mình gửi
     elif khieunai.nguoi_gui != request.user:

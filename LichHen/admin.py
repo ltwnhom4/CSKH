@@ -149,9 +149,20 @@ class LichHenAdmin(admin.ModelAdmin):
         return []
 
     def save_model(self, request, obj, form, change):
+        # Lấy trạng thái cũ TRƯỚC khi lưu
+        old_status = None
+        if obj.pk:
+            old_status = LichHen.objects.filter(pk=obj.pk) \
+                .values_list('trang_thai', flat=True) \
+                .first()
+
         if not change:
             obj.nguoi_tao = request.user
         super().save_model(request, obj, form, change)
+
+        # ✅ SAU KHI LƯU → kiểm tra chuyển sang HOÀN THÀNH
+        if old_status != 'hoan_thanh' and obj.trang_thai == 'hoan_thanh':
+            obj.xu_ly_tich_diem_khi_hoan_thanh()
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)

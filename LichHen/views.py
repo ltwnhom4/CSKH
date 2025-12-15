@@ -45,25 +45,7 @@ def lich_hen_sap_toi(request):
     for lich in lich_qua_ngay:
         lich.trang_thai = 'hoan_thanh'
         lich.save()
-        # ✅ Lấy tổng tiền (nếu có)
-        tong_tien = getattr(lich, 'tong_tien', 0) or 0
 
-        if tong_tien > 0:
-            # Mỗi 20.000đ = 1 điểm
-            diem_cong = int(tong_tien / 20000)
-
-            # ✅ Lấy hoặc tạo bản ghi tích điểm
-            tich_diem, create = TichDiem.objects.get_or_create(khach_hang=khach_hang)
-            tich_diem.tong_diem += diem_cong
-            tich_diem.cap_nhat_cap_bac()
-            tich_diem.save()
-
-            # ✅ Ghi lịch sử (đúng field là `noi_dung`)
-            LichSuTichDiem.objects.create(
-                khach_hang=khach_hang,
-                so_diem=diem_cong,
-                noi_dung=f"Hoàn thành lịch hẹn cho bé {lich.thu_cung.ten_thucung} ({tong_tien:,}đ)."
-            )
     lich_hens = LichHen.objects.filter(
         khach_hang_id=khach_hang.id,
         trang_thai='sap_toi'

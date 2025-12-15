@@ -120,8 +120,7 @@ def thong_tin_nhanvien(request):
 @user_passes_test(lambda u: u.is_staff or u.is_superuser)
 def quan_ly_tich_diem(request):
     query = request.GET.get('sdt', '')
-    khach_hang_list = KhachHang.objects.all()
-
+    khach_hang_list = KhachHang.objects.filter(lichhen__isnull=False).distinct().order_by('-ngay_tham_gia')
     # Nếu có nhập số điện thoại thì lọc ra
     if query:
         khach_hang_list = khach_hang_list.filter(so_dien_thoai__icontains=query)
