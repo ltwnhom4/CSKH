@@ -359,7 +359,7 @@ def danh_sach_khach(request):
             )
         )
         .distinct()
-        .order_by("-unread", "-last_time")
+        .order_by( "-last_time")
     )
 
     return render(request, "Chat/danh_sach_khach.html", {
@@ -389,9 +389,9 @@ def chat_admin(request, khach_id):
         nguoi_gui="KH",
         da_doc=False
     ).update(da_doc=True)
-
+    target_name = kh.ho_ten or kh.user.username or "Khách hàng"
     return render(request, "Chat/chat_admin.html", {
-        "target": kh.ho_ten,
+        "target": target_name,
         "messages": messages,
         "mode": "khach",
         "send_to": kh.id

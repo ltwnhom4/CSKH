@@ -98,7 +98,7 @@
 
         <!-- Thông tin khách -->
         <div class="info">
-            <b>{{ k.ho_ten }}</b><br>
+            <b>{{ k.ho_ten|default:k.user.username }}</b>
             📞 {{ k.so_dien_thoai|default:"Không có số" }}<br>
             🕒 {{ k.last_time|date:"d/m/Y H:i" }}
         </div>
