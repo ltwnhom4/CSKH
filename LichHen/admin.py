@@ -10,6 +10,35 @@ class DV_LichHenInline(admin.TabularInline):
     verbose_name = "Dịch vụ trong lịch hẹn"
     verbose_name_plural = "Danh sách dịch vụ" #Tiêu đề Inline:
 
+    def has_add_permission(self, request, obj=None):
+        # 1️⃣ Tạo mới → cho phép thêm dịch vụ
+        if obj is None:
+            return True
+
+        # 2️⃣ Admin sửa lịch do chính mình tạo
+        if request.user.is_superuser and obj.nguoi_tao == request.user:
+            return True
+
+        # 3️⃣ Các trường hợp khác → cấm
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        # 1️⃣ Tạo mới → cho phép sửa inline
+        if obj is None:
+            return True
+
+        # 2️⃣ Admin sửa lịch do chính mình tạo
+        if request.user.is_superuser and obj.nguoi_tao == request.user:
+            return True
+
+        # 3️⃣ Các trường hợp khác → cấm
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        # Không cho xóa dịch vụ trong mọi trường hợp
+        return False
+
+
 @admin.register(LichHen)
 class LichHenAdmin(admin.ModelAdmin):
     def _lay_nhan_vien(self, request):
@@ -135,14 +164,24 @@ class LichHenAdmin(admin.ModelAdmin):
             if request.user.is_superuser:
                 return ['ly_do_huy', 'nguoi_tao', 'tong_tien']
             if request.user.is_staff:
-                return ['nhan_vien', 'ly_do_huy', 'nguoi_tao', 'tong_tien']
+                return [
+                    f.name for f in self.model._meta.fields
+                    if f.name != 'trang_thai'
+                ]
         if request.user.is_superuser and obj.nguoi_tao and obj.nguoi_tao != request.user:
             return [
                 f.name for f in self.model._meta.fields
                 if f.name not in ('nhan_vien', 'trang_thai')  # chỉ mở 2 trường
             ]
+        # Nhân viên ĐƯỢC PHÂN CÔNG
+        if request.user.is_staff and nhan_vien and obj.nhan_vien == nhan_vien:
+            # CHỈ cho sửa trạng thái
+            return [
+                f.name for f in self.model._meta.fields
+                if f.name != 'trang_thai']
 
-        # Nhân viên KHÔNG được phân công → chỉ được xem (không sửa gì)
+
+                # Nhân viên KHÔNG được phân công → chỉ được xem (không sửa gì)
         if request.user.is_staff and nhan_vien and obj.nhan_vien != nhan_vien:
             return [f.name for f in self.model._meta.fields]
 

@@ -128,10 +128,10 @@ def quan_ly_tich_diem(request):
 
     # Cập nhật điểm khi nhấn nút
     if request.method == "POST":
-        sdt = request.POST.get("sdt")
+        kh_id = request.POST.get("khach_hang_id")
         diem_moi = request.POST.get("diem_moi")
         try:
-            kh = KhachHang.objects.get(so_dien_thoai=sdt)
+            kh = KhachHang.objects.get(id=kh_id)
             tich_diem, created = TichDiem.objects.get_or_create(khach_hang=kh)
             diem_moi = int(diem_moi)
 
