@@ -48,7 +48,7 @@ class LichHenAdmin(admin.ModelAdmin):
     list_display = ('khach_hang', 'so_dien_thoai','thu_cung','nhan_vien', 'thoi_gian', 'trang_thai','hien_thi_dich_vu','ghi_chu', 'ly_do_huy')
     list_filter = ('trang_thai','nhan_vien','thoi_gian')
     search_fields = ('khach_hang__ho_ten','so_dien_thoai','thu_cung__ten_thucung','nhan_vien__ho_ten')
-    ordering = ('-thoi_gian',)
+    ordering = ('thoi_gian',)
     inlines = [DV_LichHenInline]
 
     # Khóa trường nhan_vien đối với STAFF
