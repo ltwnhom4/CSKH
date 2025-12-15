@@ -45,6 +45,7 @@ def lich_hen_sap_toi(request):
     for lich in lich_qua_ngay:
         lich.trang_thai = 'hoan_thanh'
         lich.save()
+        lich.xu_ly_tich_diem_khi_hoan_thanh()
 
     lich_hens = LichHen.objects.filter(
         khach_hang_id=khach_hang.id,
