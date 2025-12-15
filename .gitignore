@@ -20,3 +20,5 @@ Thumbs.db
 
 # Migrations cache
 */migrations/__pycache__/
+
+media/
