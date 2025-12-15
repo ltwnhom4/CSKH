@@ -18,21 +18,11 @@ class NhanVienAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
-    # Không cho xóa
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-    def has_view_permission(self, request, obj=None):
-        # Nếu là superuser → vẫn được xem (tùy bạn)
-        if request.user.is_superuser:
-            return True
-
 class KhachHangAdmin(admin.ModelAdmin):
    list_display = ('ho_ten', 'so_dien_thoai', 'dia_chi','email', 'gioi_tinh', 'ngay_sinh', 'ngay_tham_gia')
    search_fields = ( 'ho_ten', 'so_dien_thoai' )
    ordering = ('ngay_tham_gia',)
-   def has_add_permission(self, request):
-       return False
+
    # Không cho thêm
    def has_add_permission(self, request):
         return False
@@ -40,14 +30,6 @@ class KhachHangAdmin(admin.ModelAdmin):
     # Không cho chỉnh sửa
    def has_change_permission(self, request, obj=None):
         return False
-
-    # Không cho xóa
-   def has_delete_permission(self, request, obj=None):
-        return False
-
-    # Chỉ cho xem
-   def has_view_permission(self, request, obj=None):
-        return True
 
 class ThuCungAdmin(admin.ModelAdmin):
    list_display = ('ten_thucung', 'loai', 'tuoi', 'can_nang', 'ghi_chu','khach_hang')
@@ -60,14 +42,6 @@ class ThuCungAdmin(admin.ModelAdmin):
     # Không cho chỉnh sửa
    def has_change_permission(self, request, obj=None):
         return False
-
-    # Không cho xóa
-   def has_delete_permission(self, request, obj=None):
-        return False
-
-    # Chỉ cho xem
-   def has_view_permission(self, request, obj=None):
-        return True
 
 # Kế thừa UserAdmin mặc định để tùy chỉnh hành vi khi lưu
 class CustomUserAdmin(UserAdmin):
@@ -119,10 +93,6 @@ class LichSuTichDiemAdmin(admin.ModelAdmin):
     # Không cho xóa lịch sử
     def has_delete_permission(self, request, obj=None):
         return False
-
-    # Chỉ cho xem chi tiết
-    def has_view_permission(self, request, obj=None):
-        return True
 
 # Gỡ bỏ UserAdmin mặc định của Django
 admin.site.unregister(User)

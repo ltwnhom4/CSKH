@@ -3,186 +3,22 @@
 {% load static %}
 
 {% block content %}
-<style>
-.container-tichdiem {
-  max-width: 850px;
-  margin: 40px auto;
-  background: #fff5f7;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(255, 118, 160, 0.25);
-  padding: 25px 40px;
-}
-
-h2 {
-  text-align: center;
-  color: #a01940;
-  font-weight: 700;
-  margin-bottom: 25px;
-}
-
-input[type="text"] {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  width: 240px;
-}
-
-button, .btn-search {
-  background-color: #ff4f7b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 7px 16px;
-  cursor: pointer;
-}
-button:hover, .btn-search:hover {
-  background-color: #e4406e;
-}
-
-/* 🌸 Khung chứa bảng có thanh cuộn */
-.table-scroll {
-  max-height: 300px;        /* 🔹 Giới hạn chiều cao hiển thị */
-  overflow-y: auto;         /* 🔹 Bật thanh cuộn dọc */
-  overflow-x: hidden;
-  border-radius: 10px;
-  background: #fff;
-  margin-top: 20px;
-  box-shadow: 0 4px 15px rgba(255, 92, 141, 0.15);
-}
-
-/* 🌸 Thanh cuộn hồng pastel */
-.table-scroll::-webkit-scrollbar {
-  width: 8px;
-}
-.table-scroll::-webkit-scrollbar-track {
-  background: #ffeef4;
-  border-radius: 10px;
-}
-.table-scroll::-webkit-scrollbar-thumb {
-  background-color: #ff80a1;
-  border-radius: 10px;
-}
-.table-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #ff5c8d;
-}
-
-/* 🌸 Bảng dữ liệu */
-.table-scroll table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 16px;
-}
-.table-scroll th,
-.table-scroll td {
-  padding: 10px;
-  text-align: center;
-  border-bottom: 1px solid #ffdbe5;
-}
-.table-scroll th {
-  background-color: #ffd6de;
-  color: #a01940;
-  font-weight: 700;
-  position: sticky; /* 🔹 Giữ header dính khi cuộn */
-  top: 0;
-  z-index: 1;
-}
-.table-scroll tr:hover {
-  background-color: #fff0f4;
-}
-
-input[name="diem_moi"] {
-  width: 80px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 4px;
-  text-align: center;
-}
-
-.message-container {
-  text-align: center;
-  margin-bottom: 15px;
-  animation: fadeInMsg 0.5s ease-in-out;
-}
-
-.alert {
-  display: inline-block;
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-weight: 500;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-}
-
-.alert-success {
-  background-color: #e9f8ef;
-  border: 1px solid #9ed8b5;
-  color: #3d8758;
-}
-
-.alert-error {
-  background-color: #ffe6e6;
-  border: 1px solid #ff9999;
-  color: #b30000;
-}
-
-@keyframes fadeInMsg {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-    /* 🌸 Huy hiệu cấp bậc khách hàng */
-.rank-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #a01940;
-  background: #ffeaf1;
-  border: 1px solid #f7c4d4;
-}
-
-/* 🐾 Thành viên mới */
-.rank-newbie {
-  background: #ffeaf1;
-  color: #c2185b;
-}
-
-/* 🥈 Bạc */
-.rank-silver {
-  background: #f0f0f0;
-  color: #555;
-  border: 1px solid #ccc;
-}
-
-/* 🏆 Vàng */
-.rank-gold {
-  background: #fff8d6;
-  color: #b8860b;
-  border: 1px solid #f4d03f;
-}
-
-/* 💎 Kim cương */
-.rank-diamond {
-  background: #e0f7ff;
-  color: #006c9c;
-  border: 1px solid #8be0ff;
-}
-</style>
+<link rel="stylesheet" href="{% static 'TK/quanlytichdiem.css' %}">
 
 <div class="container-tichdiem">
- {% if messages %}
+ {% if messages %}  <!--Nếu có message từ Django → hiển thị lên giao diện.-->
  <div class="message-container">
     {% for message in messages %}
     <div class="alert
       {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-error{% endif %}">
-        {% if message.tags == 'success' %}{% else %}{% endif %} {{ message }}
+        {{ message }}
     </div>
    {% endfor %}
  </div>
  {% endif %}
   <h2>🎯 Điểm Tích Lũy Khách Hàng</h2>
 
-  <form method="get" style="text-align:center;">
+  <form method="get" style="text-align:center;">  <!--Dùng GET vì đây là thao tác lọc, không thay đổi dữ liệu.-->
     <input type="text" name="sdt" placeholder="Nhập số điện thoại..." value="{{ query }}">
     <button type="submit" class="btn-search">Tìm kiếm</button>
   </form>
@@ -212,9 +48,9 @@ input[name="diem_moi"] {
             {% elif kh.tich_diem.cap_bac == 'Kim cương 💎' %}rank-diamond
             {% endif %}">{{ kh.tich_diem.cap_bac }}</span></td>
           <td>
-            <form method="post" style="display:flex; justify-content:center; gap:6px;">
+            <form method="post" style="display:flex; justify-content:center; gap:6px;"> <!--Form này dùng POST — vì nó đang THAY ĐỔI dữ liệu trong database-->
               {% csrf_token %}
-              <input type="hidden" name="sdt" value="{{ kh.so_dien_thoai }}">
+              <input type="hidden" name="sdt" value="{{ kh.so_dien_thoai }}">  <!--input ẩn để xác định khách hàng-->
               <input type="number" name="diem_moi" placeholder="Nhập số điểm">
               <button type="submit">Cập nhật</button>
             </form>

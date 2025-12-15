@@ -98,7 +98,7 @@ def tao_khieu_nai(request, lich_hen_id):
         if is_responsible_staff:
             form.allow_staff_edit()
         if is_admin:
-            form.lock_admin_fields()
+            form.allow_admin_assign_staff()
         # Admin CHỈ sửa field “nhân viên phân công” → field này nằm ngoài form, ở admin site.
 
         return render(request, "KhieunaiDanhgia/khieunai.html", {
@@ -120,15 +120,15 @@ def tao_khieu_nai(request, lich_hen_id):
             new_kn.nguoi_gui = request.user
             new_kn.save()
             # === YOUR ADDED CODE — GỬI THÔNG BÁO ===
-            # 🔔 Gửi thông báo cho nhân viên
-            nhan_viens = User.objects.filter(is_staff=True)
-            for nv in nhan_viens:
+            # 🔔 GỬI THÔNG BÁO CHO ADMIN
+            admins = User.objects.filter(is_superuser=True)
+            for admin in admins:
                 ThongBao.objects.create(
                     tieu_de="📣 Có khiếu nại mới",
                     noi_dung=f"Khách hàng {request.user.username} đã gửi khiếu nại.",
                     loai="khieu_nai",
                     nguoi_gui=request.user,
-                    nguoi_nhan=nv,
+                    nguoi_nhan=admin,
                     doi_tuong_id=new_kn.id,
                     link=f"/khieu-nai/chi-tiet/{new_kn.id}/"
                 )
@@ -189,10 +189,10 @@ def chi_tiet_khieu_nai(request, id):
     # NHÂN VIÊN → chỉ xem khi được phân công
     elif request.user.is_staff:
         if khieunai.nhan_vien_phu_trach != request.user:
-            return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
+            return redirect('danh_sach_khieu_nai')
 
     # KHÁCH → chỉ xem khiếu nại mình gửi
     elif khieunai.nguoi_gui != request.user:
-        return redirect('KhieunaiDanhgia:danh_sach_khieu_nai')
-        
+        return redirect('danh_sach_khieu_nai')
+
     return render(request, 'TB/chi_tiet_khieu_nai.html', {'khieunai': khieunai})

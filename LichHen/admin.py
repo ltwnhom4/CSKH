@@ -10,7 +10,6 @@ class DV_LichHenInline(admin.TabularInline):
     verbose_name = "Dịch vụ trong lịch hẹn"
     verbose_name_plural = "Danh sách dịch vụ" #Tiêu đề Inline:
 
-
 @admin.register(LichHen)
 class LichHenAdmin(admin.ModelAdmin):
     def _lay_nhan_vien(self, request):
@@ -19,11 +18,37 @@ class LichHenAdmin(admin.ModelAdmin):
             return NhanVien.objects.get(user=request.user)
         except NhanVien.DoesNotExist:
             return None
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+
+        # Admin xem tất cả
+        if request.user.is_superuser:
+            return qs
+
+        # Nhân viên xem lịch do mình phụ trách
+        if request.user.is_staff:
+                nv = self._lay_nhan_vien(request)
+                if nv is None:
+                    return qs.none()  # nhân viên chưa có profile NhanVien → không thấy lịch nào
+                return qs.filter(nhan_vien=nv)
+
+        # Khách thì không có quyền vào admin
+        return qs.none()
+
+    # Hiển thị DV
+    def hien_thi_dich_vu(self, obj):
+        dich_vus = obj.dv_lichhen_set.select_related('dich_vu').all()
+        return ", ".join([dv.dich_vu.ten_dich_vu for dv in dich_vus]) if dich_vus else "(chưa chọn)"
+
+        hien_thi_dich_vu.short_description = "Dịch vụ"
+
+    # lọc tất car các dịch vụ trong bảng lịch vụ lịch hẹn gán với object , trả về chuỗi tên dv cách bởi dấu ",", nếu kh có thì hiện chưa chon
+    # Quyền sửa readonly fields
 
     list_display = ('khach_hang', 'so_dien_thoai','thu_cung','nhan_vien', 'thoi_gian', 'trang_thai','hien_thi_dich_vu','ghi_chu', 'ly_do_huy')
     list_filter = ('trang_thai','nhan_vien','thoi_gian')
     search_fields = ('khach_hang__ho_ten','so_dien_thoai','thu_cung__ten_thucung','nhan_vien__ho_ten')
-    ordering = ('-thoi_gian',)
+    ordering = ('thoi_gian',)
     inlines = [DV_LichHenInline]
 
     # Khóa trường nhan_vien đối với STAFF
@@ -83,33 +108,30 @@ class LichHenAdmin(admin.ModelAdmin):
 
         nhan_vien = self._lay_nhan_vien(request)
         return request.user.is_staff and nhan_vien is not None
-    # Hiển thị DV
-    def hien_thi_dich_vu(self, obj):
-        dich_vus = obj.dv_lichhen_set.select_related('dich_vu').all()
-        return ", ".join([dv.dich_vu.ten_dich_vu for dv in dich_vus]) if dich_vus else "(chưa chọn)"
-    hien_thi_dich_vu.short_description = "Dịch vụ"
-# lọc tất car các dịch vụ trong bảng lịch vụ lịch hẹn gán với object , trả về chuỗi tên dv cách bởi dấu ",", nếu kh có thì hiện chưa chon
-    # Quyền sửa readonly fields
     def get_readonly_fields(self, request, obj=None):
-
+        nhan_vien = self._lay_nhan_vien(request)
         # Tạo mới
         if obj is None:
             if request.user.is_superuser:
                 return ['ly_do_huy', 'nguoi_tao', 'tong_tien']
             if request.user.is_staff:
-                return ['tong_tien', 'ly_do_huy', 'nguoi_tao','nhan_vien']
+                return ['tong_tien', 'ly_do_huy', 'nguoi_tao', 'nhan_vien']
             return [f.name for f in self.model._meta.fields]
 
         # Lịch khách tạo
         if obj.nguoi_tao is None:
             if request.user.is_superuser:
-                return ['khach_hang', 'thu_cung', 'so_dien_thoai', 'thoi_gian', 'ghi_chu', 'tong_tien', 'ly_do_huy','nguoi_tao']
+                return ['khach_hang', 'thu_cung', 'so_dien_thoai', 'thoi_gian', 'ghi_chu', 'tong_tien', 'ly_do_huy',
+                        'nguoi_tao']
+            if request.user.is_staff and nhan_vien and obj.nhan_vien != nhan_vien:
+                return [f.name for f in self.model._meta.fields]
             if request.user.is_staff:
-                return ['khach_hang', 'thu_cung', 'nhan_vien', 'so_dien_thoai', 'thoi_gian', 'ghi_chu','tong_tien', 'ly_do_huy','nguoi_tao']
+                return ['khach_hang', 'thu_cung', 'nhan_vien', 'so_dien_thoai', 'thoi_gian', 'ghi_chu', 'tong_tien',
+                        'ly_do_huy', 'nguoi_tao']
 
         # Lịch do chính user tạo
         if obj.nguoi_tao == request.user:
-        # Lịch do nhân viên tạo → admin có thể phân công nhân viên và điều chỉnh trạng thái
+            # Lịch do nhân viên tạo → admin có thể phân công nhân viên và điều chỉnh trạng thái
             if request.user.is_superuser:
                 return ['ly_do_huy', 'nguoi_tao', 'tong_tien']
             if request.user.is_staff:
@@ -120,8 +142,8 @@ class LichHenAdmin(admin.ModelAdmin):
                 if f.name not in ('nhan_vien', 'trang_thai')  # chỉ mở 2 trường
             ]
 
-        # Nhân viên khác xem lịch do người khác tạo → chỉ được xem (không sửa gì)
-        if request.user.is_staff and obj.nguoi_tao != request.user:
+        # Nhân viên KHÔNG được phân công → chỉ được xem (không sửa gì)
+        if request.user.is_staff and nhan_vien and obj.nhan_vien != nhan_vien:
             return [f.name for f in self.model._meta.fields]
 
         return []
@@ -135,23 +157,6 @@ class LichHenAdmin(admin.ModelAdmin):
         super().save_related(request, form, formsets, change)
         obj = form.instance
         obj.tinh_tong_tien()
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-
-        # Admin xem tất cả
-        if request.user.is_superuser:
-            return qs
-
-        # Nhân viên xem lịch do mình phụ trách
-        if request.user.is_staff:
-                nv = self._lay_nhan_vien(request)
-                if nv is None:
-                    return qs.none()  # nhân viên chưa có profile NhanVien → không thấy lịch nào
-                return qs.filter(nhan_vien=nv)
-
-        # Khách thì không có quyền vào admin
-        return qs.none()
 
 
 @admin.register(DV_LichHen)

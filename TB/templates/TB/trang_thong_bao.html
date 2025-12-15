@@ -205,7 +205,7 @@
             <p>{{ tb.noi_dung }}</p>
             <small>{{ tb.ngay_tao|date:"d/m/Y H:i" }}</small>
           </div>
-          <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
+          <a href="{% url 'TB:xem_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
         </div>
       {% empty %}
         <p class="no-data">Không có thông báo lịch hẹn nào.</p>
@@ -248,7 +248,7 @@
             <p>{{ tb.noi_dung|truncatechars:140  }}</p>
             <small>{{ tb.ngay_tao|date:"d/m/Y H:i" }}</small>
           </div>
-          <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
+          <a href="{% url 'TB:xem_thong_bao' tb.id %}" class="tb-detail">Xem chi tiết</a>
         </div>
       {% empty %}
         <p class="no-data">Không có thông báo khuyến mãi nào.</p>
@@ -267,7 +267,7 @@
           </div>
 
           <!-- 🔥 Xem chi tiết khiếu nại -->
-          <a href="{% url 'TB:chi_tiet_thong_bao' tb.id %}" class="tb-detail">
+          <a href="{% url 'TB:xem_thong_bao' tb.id %}" class="tb-detail">
             Xem chi tiết
           </a>
         </div>
